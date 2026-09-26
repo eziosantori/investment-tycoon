@@ -160,8 +160,12 @@ Real price data is the main risk for this phase. Summary (not legal advice):
 | Index-level public data (Shiller S&P dataset, FRED) | Free | M11 index replays | Monthly/daily granularity varies by series |
 
 Plan:
+- **The GitHub repo is public, so real price data is never committed.** Only
+  case metadata (`content/casefiles/*.json`) lives in git. The price data is
+  fetched locally by `scripts/fetch-case` into `content/casefiles/data/`, which
+  is gitignored.
 - **Develop with free data, keep real-data content behind a private build flag**
-  (M8), and keep the GitHub repo private while it contains real data.
+  (M8), so public deploys never include it.
 - Decide on a licensed provider before the first public release of Phase 2.
 - Store only what the game needs (split-adjusted daily OHLCV + volume, weekly
   aggregates), in compact JSON.
