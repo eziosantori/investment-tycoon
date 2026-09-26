@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#07090B;} a{color:#A395F7;} a:hover{color:#C3B9FA;}</style>
+</helmet>
+<div data-screen-label="04 Terminal grows" style="width:1440px;height:900px;background:#0B0E11;color:#E4E7EB;font-family:Inter,sans-serif;font-size:12px;display:flex;flex-direction:column;gap:32px;padding:56px 64px;box-sizing:border-box;overflow:hidden;">
+  <div style="display:flex;flex-direction:column;gap:10px;">
+    <div style="font-size:10px;font-weight:600;letter-spacing:.1em;color:#A395F7;">PROGRESSION</div>
+    <div style="font-size:34px;font-weight:700;letter-spacing:-.02em;">The terminal grows</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;">
+    <!-- RETAIL -->
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <span style="font-size:13px;font-weight:700;">Retail <span style="color:#7D8794;font-weight:500;">· start</span></span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7D8794;">3 panels</span>
+      </div>
+      <div style="aspect-ratio:16/10;border:1px solid #2A313B;border-radius:6px;background:#0B0E11;overflow:hidden;display:grid;grid-template-rows:22px 1fr;box-shadow:0 20px 40px rgba(0,0,0,.4);">
+        <div style="display:flex;align-items:center;gap:8px;padding:0 10px;border-bottom:1px solid #1E242C;background:#0E1216;">
+          <div style="width:10px;height:10px;border-radius:2px;background:#8F7EF3;"></div>
+          <div style="width:70px;height:5px;border-radius:1px;background:#2A313B;"></div>
+          <div style="flex:1;"></div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#C9CED5;">$100,000.00</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 150px;gap:0;min-height:0;">
+          <div style="position:relative;padding:40px 36px;">
+            <div style="position:relative;width:100%;height:100%;">{{ chartRetail }}</div>
+          </div>
+          <div style="border-left:1px solid #1E242C;padding:40px 14px;display:flex;flex-direction:column;gap:8px;background:#0E1216;">
+            <div style="width:50px;height:5px;border-radius:1px;background:#2A313B;"></div>
+            <div style="height:26px;border-radius:3px;background:#26A69A;display:grid;place-items:center;font-size:10px;font-weight:700;color:#06110F;">Buy</div>
+            <div style="height:26px;border-radius:3px;border:1px solid #6B2E2E;display:grid;place-items:center;font-size:10px;font-weight:600;color:#EF5350;">Sell</div>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:#9AA3AE;line-height:1.5;">One weekly chart with its 30-week MA, one ticker, buy and sell. Room to think.</div>
+    </div>
+
+    <!-- SCALING -->
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <span style="font-size:13px;font-weight:700;">Scaling <span style="color:#7D8794;font-weight:500;">· late</span></span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7D8794;">11 panels</span>
+      </div>
+      <div style="aspect-ratio:16/10;border:1px solid #2A313B;border-radius:6px;background:#0B0E11;overflow:hidden;display:grid;grid-template-rows:22px 26px 1fr;box-shadow:0 20px 40px rgba(0,0,0,.4);">
+        <div style="display:flex;align-items:center;gap:8px;padding:0 10px;border-bottom:1px solid #1E242C;background:#0E1216;">
+          <div style="width:10px;height:10px;border-radius:2px;background:#8F7EF3;"></div>
+          <div style="width:70px;height:5px;border-radius:1px;background:#2A313B;"></div>
+          <div style="width:40px;height:5px;border-radius:1px;background:#1E242C;"></div>
+          <div style="flex:1;"></div>
+          <div style="width:30px;height:10px;border-radius:2px;background:#1A2027;"></div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#C9CED5;">$4.82M</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:4px 6px;border-bottom:1px solid #1E242C;background:#0E1216;">
+          <div style="display:flex;flex-direction:column;justify-content:center;gap:3px;"><div style="height:3px;width:40%;background:#2A313B;"></div><div style="height:4px;border-radius:1px;background:linear-gradient(90deg,#26A69A 62%,#1A2027 62%);"></div></div>
+          <div style="display:flex;flex-direction:column;justify-content:center;gap:3px;"><div style="height:3px;width:40%;background:#2A313B;"></div><div style="height:4px;border-radius:1px;background:linear-gradient(90deg,#26A69A 80%,#2A1719 80%);"></div></div>
+          <div style="display:flex;flex-direction:column;justify-content:center;gap:3px;"><div style="height:3px;width:40%;background:#2A313B;"></div><div style="height:4px;border-radius:1px;background:linear-gradient(90deg,#F2A93B 48%,#2A1719 48%);"></div></div>
+          <div style="display:flex;flex-direction:column;justify-content:center;gap:3px;"><div style="height:3px;width:40%;background:#2A313B;"></div><div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:#26A69A;">FIRM +2.4%</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:92px 1fr 1fr 104px;grid-template-rows:1fr 1fr 70px;gap:1px;background:#1E242C;min-height:0;">
+          <div style="grid-row:span 3;background:#0E1216;padding:6px;display:flex;flex-direction:column;gap:4px;">
+            <div style="display:grid;grid-template-columns:1fr 14px 22px;gap:2px;font-size:7px;font-weight:700;letter-spacing:.06em;color:#7D8794;"><span>WATCH</span><span>ST</span><span style="text-align:right;">RS</span></div>
+            <sc-for list="{{ watch }}" as="w" hint-placeholder-count="10">
+              <div style="display:grid;grid-template-columns:1fr 14px 22px;gap:2px;font-family:'JetBrains Mono',monospace;font-size:7px;"><span style="color:#C9CED5;">{{ w.t }}</span><span style="color:#7D8794;">{{ w.s }}</span><span style="color:{{ w.c }};text-align:right;">{{ w.rs }}</span></div>
+            </sc-for>
+          </div>
+          <div style="grid-column:span 2;background:#0B0E11;position:relative;padding:14px 6px 4px;">
+            <div style="position:absolute;top:3px;left:6px;font-family:'JetBrains Mono',monospace;font-size:7px;color:#7D8794;">KRVX W · MA 10/30w · Vol · RS</div>
+            <div style="position:relative;width:100%;height:100%;">{{ chartMain }}</div>
+          </div>
+          <div style="grid-row:span 2;background:#0E1216;padding:6px;display:flex;flex-direction:column;gap:2px;">
+            <div style="font-size:7px;font-weight:700;letter-spacing:.08em;color:#7D8794;margin-bottom:2px;">SECTOR RS</div>
+            <sc-for list="{{ sectors }}" as="s" hint-placeholder-count="7">
+              <div style="display:flex;flex-direction:column;gap:1px;"><span style="font-size:6px;color:#9AA3AE;">{{ s.n }}</span><div style="height:4px;background:#1A2027;position:relative;"><div style="position:absolute;left:0;top:0;bottom:0;width:{{ s.w }};background:{{ s.c }};"></div></div></div>
+            </sc-for>
+            <div style="height:1px;background:#2A313B;margin:3px 0;"></div>
+            <div style="font-size:7px;font-weight:700;letter-spacing:.08em;color:#7D8794;">BREADTH</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:#C9CED5;">% &gt; 30w MA <span style="color:#26A69A;">64%</span></div>
+          </div>
+          <div style="background:#0B0E11;position:relative;padding:12px 6px 4px;">
+            <div style="position:absolute;top:3px;left:6px;font-family:'JetBrains Mono',monospace;font-size:7px;color:#7D8794;">OMNX · D</div>
+            <div style="position:relative;width:100%;height:100%;">{{ chartB }}</div>
+          </div>
+          <div style="background:#0B0E11;position:relative;padding:12px 6px 4px;">
+            <div style="position:absolute;top:3px;left:6px;font-family:'JetBrains Mono',monospace;font-size:7px;color:#7D8794;">TALR · 65m</div>
+            <div style="position:relative;width:100%;height:100%;">{{ chartC }}</div>
+          </div>
+          <div style="grid-column:span 2;background:#0E1216;padding:6px;display:flex;flex-direction:column;gap:3px;">
+            <div style="font-size:7px;font-weight:700;letter-spacing:.08em;color:#7D8794;">POSITIONS · 6</div>
+            <div style="height:4px;width:90%;background:#1A2027;"></div><div style="height:4px;width:80%;background:#1A2027;"></div><div style="height:4px;width:85%;background:#1A2027;"></div>
+          </div>
+          <div style="background:#14132A;padding:6px;display:flex;flex-direction:column;gap:3px;grid-column:span 1;">
+            <div style="font-size:7px;font-weight:700;letter-spacing:.08em;color:#A395F7;">STAGE ALERTS · 2</div>
+            <div style="font-size:7px;color:#C9CED5;line-height:1.3;">TALR: 30w MA rolling over</div>
+            <div style="font-size:7px;color:#9AA3AE;line-height:1.3;">BRQE: base breakout on 3.1× vol</div>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:#9AA3AE;line-height:1.5;">Watchlist with stage + RS, W / D / 65m charts, sector RS, breadth, stage alerts, firm capital.</div>
+    </div>
+  </div>
+
+  <div style="flex:1;"></div>
+  <div style="display:flex;align-items:center;gap:20px;">
+    <div style="font-size:22px;font-weight:600;letter-spacing:-.01em;">Every unlock adds a panel. Your terminal is your progress.</div>
+    <div style="flex:1;height:1px;background:#1E242C;"></div>
+    <div style="display:flex;gap:6px;font-size:11px;">
+      <span style="padding:3px 8px;border:1px solid #2A313B;border-radius:3px;color:#C9CED5;">Phase 2 · Sector RS, Breadth</span>
+      <span style="padding:3px 8px;border:1px solid #2A313B;border-radius:3px;color:#C9CED5;">Phase 3 · Watchlist, Daily + 65m</span>
+      <span style="padding:3px 8px;border:1px dashed #2A313B;border-radius:3px;color:#5E6873;">Firm · Stage scanner, Desks</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  mini(seed, n, drift) {
+    const e = React.createElement;
+    let a = seed; const r = () => { a = (a * 16807) % 2147483647; return a / 2147483647; };
+    let p = 50; const bars = [];
+    for (let i = 0; i < n; i++) { const o = p; p += (r() - 0.5 + drift) * 1.4; bars.push({ o, c: p, h: Math.max(o, p) + r() * 0.6, l: Math.min(o, p) - r() * 0.6 }); }
+    const hi = Math.max(...bars.map(b => b.h)), lo = Math.min(...bars.map(b => b.l));
+    const W = 100, H = 60, y = v => (hi - v) / (hi - lo) * H, bw = W / n;
+    const k = [];
+    bars.forEach((b, i) => {
+      const x = (i + 0.5) * bw, c = b.c >= b.o ? '#26A69A' : '#EF5350';
+      k.push(e('line', { key: 'w' + i, x1: x, x2: x, y1: y(b.h), y2: y(b.l), stroke: c, strokeWidth: 0.3, vectorEffect: 'non-scaling-stroke' }));
+      k.push(e('rect', { key: 'b' + i, x: x - bw * 0.3, y: y(Math.max(b.o, b.c)), width: bw * 0.6, height: Math.max(0.4, Math.abs(y(b.o) - y(b.c))), fill: c }));
+    });
+    const ma = bars.map((b, i) => { const s = bars.slice(Math.max(0, i - 11), i + 1); return s.reduce((a, x) => a + x.c, 0) / s.length; });
+    k.push(e('path', { key: 'ma', d: ma.map((v, i) => (i ? 'L' : 'M') + ((i + 0.5) * bw).toFixed(2) + ' ' + y(v).toFixed(2)).join(' '), fill: 'none', stroke: '#E4E7EB', strokeWidth: 1.25, vectorEffect: 'non-scaling-stroke' }));
+    return e('svg', { viewBox: `0 0 ${W} ${H}`, preserveAspectRatio: 'none', style: { position: 'absolute', inset: 0, width: '100%', height: '100%' } }, k);
+  }
+  renderVals() {
+    const tk = ['KRVX','OMNX','TALR','BRQE','VANT','HELO','SYRN','PAXM','QUDA','LUMR','OSTK','DRVA'];
+    const st = [2,2,3,1,2,4,1,2,3,4,2,1];
+    const watch = tk.map((t, i) => { const v = Math.sin(i * 2.3) * 4; return { t, s: 'S' + st[i], rs: (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(1), c: v >= 0 ? '#26A69A' : '#EF5350' }; });
+    const sectors = [['Tech',82,'#26A69A'],['Industr.',70,'#26A69A'],['Energy',58,'#26A69A'],['Health',46,'#7D8794'],['Finance',38,'#7D8794'],['Retail',24,'#EF5350'],['Utilities',14,'#EF5350']].map(([n,w,c]) => ({ n, w: w + '%', c }));
+    return {
+      chartRetail: this.mini(7, 40, 0.08), chartMain: this.mini(48213, 70, 0.05),
+      chartB: this.mini(91, 36, -0.05), chartC: this.mini(333, 36, 0.1),
+      watch, sectors
+    };
+  }
+}
+</script>
+</body>
+</html>

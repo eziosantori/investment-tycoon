@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#07090B;} a{color:#A395F7;} a:hover{color:#C3B9FA;}</style>
+</helmet>
+<div data-screen-label="03 Briefing" style="width:1440px;height:900px;background:#0B0E11;color:#E4E7EB;font-family:Inter,sans-serif;font-size:12px;display:flex;flex-direction:column;overflow:hidden;">
+  <div style="height:44px;display:flex;align-items:center;gap:16px;padding:0 14px;border-bottom:1px solid #1E242C;background:#0E1216;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div style="width:20px;height:20px;border-radius:3px;background:#8F7EF3;display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;color:#0B0E11;">IT</div>
+      <div style="font-weight:700;font-size:13px;">Investment Tycoon</div>
+    </div>
+    <div style="width:1px;height:20px;background:#232A33;"></div>
+    <div style="font-size:11px;color:#7D8794;">Career <span style="color:#3A424D;">/</span> <span style="color:#C9CED5;">Phase 1 Challenge</span></div>
+  </div>
+
+  <div style="flex:1;display:grid;grid-template-columns:1fr 760px 1fr;padding:36px 0 24px;min-height:0;">
+    <div></div>
+    <div style="display:flex;flex-direction:column;gap:24px;">
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:.1em;color:#A395F7;">BRIEFING · PHASE 1</div>
+        <div style="font-size:34px;font-weight:700;letter-spacing:-.02em;line-height:1.1;">Prove you can grow an account without blowing it up.</div>
+        <div style="font-size:14px;color:#9AA3AE;line-height:1.5;max-width:620px;text-wrap:pretty;">Find stocks entering Stage 2 and hit the profit target before the weeks run out. Break either loss limit and the run ends on the spot.</div>
+      </div>
+
+      <div style="border:1px solid #1E242C;border-radius:4px;background:#0E1216;overflow:hidden;">
+        <div style="display:grid;grid-template-columns:200px 150px 1fr;align-items:center;padding:16px 20px;border-bottom:1px solid #1E242C;background:#11161B;">
+          <span style="color:#9AA3AE;font-size:13px;">Starting account</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-size:22px;font-weight:700;">$100,000</span>
+          <span style="color:#7D8794;font-size:12px;line-height:1.45;">Simulated firm capital. Every rule below is a percentage of it.</span>
+        </div>
+        <div style="display:grid;grid-template-columns:200px 150px 1fr;align-items:center;padding:14px 20px;border-bottom:1px solid #1E242C;">
+          <span style="display:flex;align-items:center;gap:8px;font-size:13px;"><span style="width:8px;height:8px;border-radius:1px;background:#26A69A;"></span>Profit target</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:#26A69A;">+10%</span>
+          <span style="color:#9AA3AE;font-size:12px;line-height:1.45;">Shows you can find an edge, not just get lucky on one trade.</span>
+        </div>
+        <div style="display:grid;grid-template-columns:200px 150px 1fr;align-items:center;padding:14px 20px;border-bottom:1px solid #1E242C;">
+          <span style="display:flex;align-items:center;gap:8px;font-size:13px;"><span style="width:8px;height:8px;border-radius:1px;background:#F2A93B;"></span>Max daily loss</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:#F2A93B;">−5%</span>
+          <span style="color:#9AA3AE;font-size:12px;line-height:1.45;">Stops one bad day, or one bad mood, from spiralling.</span>
+        </div>
+        <div style="display:grid;grid-template-columns:200px 150px 1fr;align-items:center;padding:14px 20px;border-bottom:1px solid #1E242C;">
+          <span style="display:flex;align-items:center;gap:8px;font-size:13px;"><span style="width:8px;height:8px;border-radius:1px;background:#EF5350;"></span>Max total loss</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:#EF5350;">−10%</span>
+          <span style="color:#9AA3AE;font-size:12px;line-height:1.45;">The firm's hard floor. Survival comes before profit.</span>
+        </div>
+        <div style="display:grid;grid-template-columns:200px 150px 1fr;align-items:center;padding:14px 20px;border-bottom:1px solid #1E242C;">
+          <span style="display:flex;align-items:center;gap:8px;font-size:13px;"><span style="width:8px;height:8px;border-radius:1px;background:#5E6873;"></span>Min trading weeks</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;">4</span>
+          <span style="color:#9AA3AE;font-size:12px;line-height:1.45;">One lucky week isn't a track record.</span>
+        </div>
+        <div style="display:grid;grid-template-columns:200px 150px 1fr;align-items:center;padding:14px 20px;">
+          <span style="display:flex;align-items:center;gap:8px;font-size:13px;"><span style="width:8px;height:8px;border-radius:1px;background:#5E6873;"></span>Max trading weeks</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;">10</span>
+          <span style="color:#9AA3AE;font-size:12px;line-height:1.45;">An edge should show up in a reasonable time.</span>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#1E242C;border:1px solid #1E242C;border-radius:4px;overflow:hidden;">
+        <div style="background:#0E1216;padding:12px 16px;display:flex;flex-direction:column;gap:4px;"><span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">UNIVERSE</span><span style="font-size:13px;">12 fictional stocks · TYX index</span></div>
+        <div style="background:#0E1216;padding:12px 16px;display:flex;flex-direction:column;gap:4px;"><span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">TIMEFRAMES</span><span style="font-family:'JetBrains Mono',monospace;font-size:13px;">W · D · 65m</span></div>
+        <div style="background:#0E1216;padding:12px 16px;display:flex;flex-direction:column;gap:4px;"><span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">TOOLS</span><span style="font-size:13px;">MA 10/30w · Volume · RS</span></div>
+      </div>
+
+      <div style="display:flex;align-items:flex-end;gap:16px;">
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">MARKET SEED</span>
+          <div style="display:flex;gap:6px;">
+            <div style="display:flex;padding:3px;background:#151A20;border-radius:4px;gap:3px;font-size:12px;">
+              <div style="height:32px;padding:0 14px;display:grid;place-items:center;border-radius:3px;background:#232A33;color:#E4E7EB;font-weight:600;">Random</div>
+              <div style="height:32px;padding:0 14px;display:grid;place-items:center;border-radius:3px;color:#7D8794;">Custom</div>
+            </div>
+            <div style="height:38px;width:130px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#0E1216;border:1px solid #2A313B;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:14px;box-sizing:border-box;"><span>48213</span><span style="color:#5E6873;font-size:13px;">↻</span></div>
+          </div>
+        </div>
+        <div style="flex:1;"></div>
+        <div style="height:48px;padding:0 24px;border-radius:4px;background:#8F7EF3;color:#0B0E11;display:flex;align-items:center;gap:12px;font-weight:700;font-size:15px;">Start challenge <span style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 6px;border-radius:3px;background:rgba(0,0,0,.15);">↵</span></div>
+      </div>
+
+      <div style="flex:1;"></div>
+      <div style="font-size:11px;color:#5E6873;padding-top:14px;border-top:1px solid #161B21;">Educational game. Fictional markets, no real money, not financial advice.</div>
+    </div>
+    <div></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}"></script>
+</body>
+</html>

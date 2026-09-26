@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#07090B;} a{color:#A395F7;} a:hover{color:#C3B9FA;}
+@keyframes itPulse{0%,100%{opacity:1}50%{opacity:.55}}</style>
+</helmet>
+<div data-screen-label="05 Tokens" style="width:1440px;background:#0B0E11;color:#E4E7EB;font-family:Inter,sans-serif;font-size:12px;display:flex;flex-direction:column;gap:40px;padding:56px 64px 64px;box-sizing:border-box;">
+  <div style="display:flex;flex-direction:column;gap:10px;">
+    <div style="font-size:10px;font-weight:600;letter-spacing:.1em;color:#A395F7;">INVESTMENT TYCOON · M0</div>
+    <div style="font-size:34px;font-weight:700;letter-spacing:-.02em;">Design tokens</div>
+    <div style="font-size:13px;color:#9AA3AE;">Color carries meaning, never decoration. Always pair it with a sign and an arrow: <span style="font-family:'JetBrains Mono',monospace;color:#26A69A;">+1.2% ▲</span> <span style="font-family:'JetBrains Mono',monospace;color:#EF5350;">−0.8% ▼</span></div>
+  </div>
+
+  <!-- COLORS -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;">
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">SURFACES &amp; TEXT</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+        <div style="display:flex;flex-direction:column;gap:6px;"><div style="height:56px;border-radius:4px;background:#0B0E11;border:1px solid #2A313B;"></div><span style="font-weight:600;">bg</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">#0B0E11</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px;"><div style="height:56px;border-radius:4px;background:#0E1216;border:1px solid #2A313B;"></div><span style="font-weight:600;">panel</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">#0E1216</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px;"><div style="height:56px;border-radius:4px;background:#11161B;border:1px solid #2A313B;"></div><span style="font-weight:600;">panel-raised</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">#11161B</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px;"><div style="height:56px;border-radius:4px;background:#1E242C;"></div><span style="font-weight:600;">border</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">#1E242C</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px;"><div style="height:56px;border-radius:4px;background:#E4E7EB;"></div><span style="font-weight:600;">text</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">#E4E7EB</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px;"><div style="height:56px;border-radius:4px;background:#9AA3AE;"></div><span style="font-weight:600;">text-2</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">#9AA3AE</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px;"><div style="height:56px;border-radius:4px;background:#7D8794;"></div><span style="font-weight:600;">label</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">#7D8794</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px;"><div style="height:56px;border-radius:4px;background:#8F7EF3;"></div><span style="font-weight:600;">accent · interactive</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">#8F7EF3</span></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">SEMANTIC · DEFAULT vs COLORBLIND</div>
+      <div style="display:grid;grid-template-columns:110px 1fr 1fr;gap:8px 12px;align-items:center;">
+        <span></span><span style="font-size:11px;color:#7D8794;">Default</span><span style="font-size:11px;color:#7D8794;">Colorblind-safe</span>
+        <span style="font-weight:600;">up / profit</span>
+        <div style="display:flex;align-items:center;gap:10px;"><div style="width:40px;height:32px;border-radius:4px;background:#26A69A;"></div><span style="font-family:'JetBrains Mono',monospace;color:#26A69A;font-weight:600;">+1.2% ▲</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">#26A69A</span></div>
+        <div style="display:flex;align-items:center;gap:10px;"><div style="width:40px;height:32px;border-radius:4px;background:#4C9AFF;"></div><span style="font-family:'JetBrains Mono',monospace;color:#4C9AFF;font-weight:600;">+1.2% ▲</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">#4C9AFF</span></div>
+        <span style="font-weight:600;">down / loss</span>
+        <div style="display:flex;align-items:center;gap:10px;"><div style="width:40px;height:32px;border-radius:4px;background:#EF5350;"></div><span style="font-family:'JetBrains Mono',monospace;color:#EF5350;font-weight:600;">−0.8% ▼</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">#EF5350</span></div>
+        <div style="display:flex;align-items:center;gap:10px;"><div style="width:40px;height:32px;border-radius:4px;background:#FF8A3D;"></div><span style="font-family:'JetBrains Mono',monospace;color:#FF8A3D;font-weight:600;">−0.8% ▼</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">#FF8A3D</span></div>
+        <span style="font-weight:600;">risk ramp</span>
+        <div style="display:flex;align-items:center;gap:4px;"><div style="width:40px;height:32px;border-radius:4px;background:#7D8794;"></div><div style="width:40px;height:32px;border-radius:4px;background:#F2A93B;"></div><div style="width:40px;height:32px;border-radius:4px;background:#F2703B;"></div><div style="width:40px;height:32px;border-radius:4px;background:#EF5350;"></div></div>
+        <div style="display:flex;align-items:center;gap:4px;"><div style="width:40px;height:32px;border-radius:4px;background:#7D8794;"></div><div style="width:40px;height:32px;border-radius:4px;background:#F2D03B;"></div><div style="width:40px;height:32px;border-radius:4px;background:#E05BB8;"></div><div style="width:40px;height:32px;border-radius:4px;background:#D6336C;"></div></div>
+      </div>
+      <div style="font-size:11px;color:#5E6873;line-height:1.5;">In colorblind mode risk shifts to yellow → magenta so it never collides with the orange loss color.</div>
+    </div>
+  </div>
+
+  <!-- STAGE ANALYSIS -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;">
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">CHART STUDIES · neutral grays, weight = importance</div>
+      <div style="display:flex;flex-direction:column;gap:10px;border:1px solid #1E242C;border-radius:4px;padding:14px 16px;">
+        <div style="display:grid;grid-template-columns:60px 140px 1fr;align-items:center;gap:12px;"><div style="height:2.5px;background:#E4E7EB;"></div><span style="font-weight:600;">MA 30-week</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">#E4E7EB · 2.25px · the stage line</span></div>
+        <div style="display:grid;grid-template-columns:60px 140px 1fr;align-items:center;gap:12px;"><div style="height:1.5px;background:#7D8794;"></div><span style="font-weight:600;">MA 10-week</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">#7D8794 · 1.25px</span></div>
+        <div style="display:grid;grid-template-columns:60px 140px 1fr;align-items:center;gap:12px;"><div style="height:0;border-top:1px dashed #9AA3AE;"></div><span style="font-weight:600;">Volume 10w avg</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">#9AA3AE · 1px dashed · bars up/down @ 30%</span></div>
+        <div style="display:grid;grid-template-columns:60px 140px 1fr;align-items:center;gap:12px;"><div style="height:1.5px;background:#C9CED5;"></div><span style="font-weight:600;">RS (Mansfield)</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">#C9CED5 · zero line #3A424D dashed</span></div>
+        <div style="display:grid;grid-template-columns:60px 140px 1fr;align-items:center;gap:12px;"><div style="height:0;border-top:1px dashed #8F7EF3;"></div><span style="font-weight:600;">Player drawings</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">accent · editable, so interactive</span></div>
+        <div style="display:flex;gap:6px;padding-top:4px;font-family:'JetBrains Mono',monospace;font-size:11px;"><span style="padding:3px 8px;border-radius:3px;background:#1A2027;color:#E4E7EB;font-weight:600;">W</span><span style="padding:3px 8px;color:#7D8794;">D</span><span style="padding:3px 8px;color:#7D8794;">65m</span><span style="font-family:Inter,sans-serif;color:#5E6873;padding:3px 0 0 6px;">timeframes · 65m is the floor</span></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">STAGE BANDS · post-mortem reveal only</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+        <div style="display:flex;flex-direction:column;gap:6px;"><div style="height:56px;border-radius:4px;background:#1B2029;border:1px solid #333B48;"></div><span style="font-weight:600;">Stage 1 · Base</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">#1B2029</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px;"><div style="height:56px;border-radius:4px;background:#16302C;border:1px solid #24524B;"></div><span style="font-weight:600;">Stage 2 · Advance</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">#16302C</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px;"><div style="height:56px;border-radius:4px;background:#2B2718;border:1px solid #4E4526;"></div><span style="font-weight:600;">Stage 3 · Top</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">#2B2718</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px;"><div style="height:56px;border-radius:4px;background:#321A1C;border:1px solid #5A2A2D;"></div><span style="font-weight:600;">Stage 4 · Decline</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;font-size:11px;">#321A1C</span></div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;font-size:11px;color:#9AA3AE;">Stage tag <span style="font-family:'JetBrains Mono',monospace;padding:0 4px;border:1px solid #2A313B;border-radius:2px;color:#C9CED5;">S2</span><span style="font-family:'JetBrains Mono',monospace;padding:0 4px;border:1px solid #5A4020;border-radius:2px;color:#F2A93B;">S3</span><span style="font-family:'JetBrains Mono',monospace;padding:0 4px;border:1px solid #5A2427;border-radius:2px;color:#EF5350;">S4</span><span style="color:#5E6873;">S3/S4 on a long entry use the risk colors</span></div>
+      <div style="font-size:11px;color:#5E6873;line-height:1.5;">During play the player makes the stage call; true stages stay hidden until the run ends.</div>
+    </div>
+  </div>
+
+  <!-- TYPE / SPACING / RADII -->
+  <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:40px;">
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">TYPE SCALE · Inter (labels) · JetBrains Mono tabular (numbers)</div>
+      <div style="display:flex;flex-direction:column;border:1px solid #1E242C;border-radius:4px;">
+        <div style="display:grid;grid-template-columns:120px 1fr;align-items:baseline;padding:12px 16px;border-bottom:1px solid #1E242C;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7D8794;">display 34/700</span><span style="font-size:34px;font-weight:700;letter-spacing:-.02em;">Challenge failed</span></div>
+        <div style="display:grid;grid-template-columns:120px 1fr;align-items:baseline;padding:12px 16px;border-bottom:1px solid #1E242C;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7D8794;">num-xl 22/700</span><span style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;">$102,601.82</span></div>
+        <div style="display:grid;grid-template-columns:120px 1fr;align-items:baseline;padding:12px 16px;border-bottom:1px solid #1E242C;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7D8794;">num-lg 15/700</span><span style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#26A69A;">+3.2% ▲</span></div>
+        <div style="display:grid;grid-template-columns:120px 1fr;align-items:baseline;padding:12px 16px;border-bottom:1px solid #1E242C;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7D8794;">body 14/400</span><span style="font-size:14px;color:#C9CED5;">Your stop is 3× wider than your last trade.</span></div>
+        <div style="display:grid;grid-template-columns:120px 1fr;align-items:baseline;padding:12px 16px;border-bottom:1px solid #1E242C;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7D8794;">ui 12/500</span><span style="font-size:12px;">Take-profit · Market · Flatten</span></div>
+        <div style="display:grid;grid-template-columns:120px 1fr;align-items:baseline;padding:12px 16px;border-bottom:1px solid #1E242C;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7D8794;">num 11/400</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-variant-numeric:tabular-nums;">42.48  43.17  1,200</span></div>
+        <div style="display:grid;grid-template-columns:120px 1fr;align-items:baseline;padding:12px 16px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7D8794;">label 10/600 +8%</span><span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">DAILY LOSS LIMIT</span></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:28px;">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">SPACING · 2px base</div>
+        <div style="display:flex;align-items:flex-end;gap:14px;">
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center;"><div style="width:2px;height:2px;background:#8F7EF3;"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#7D8794;">2</span></div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center;"><div style="width:4px;height:4px;background:#8F7EF3;"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#7D8794;">4</span></div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center;"><div style="width:6px;height:6px;background:#8F7EF3;"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#7D8794;">6</span></div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center;"><div style="width:8px;height:8px;background:#8F7EF3;"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#7D8794;">8</span></div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center;"><div style="width:12px;height:12px;background:#8F7EF3;"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#7D8794;">12</span></div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center;"><div style="width:16px;height:16px;background:#8F7EF3;"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#7D8794;">16</span></div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center;"><div style="width:24px;height:24px;background:#8F7EF3;"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#7D8794;">24</span></div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center;"><div style="width:32px;height:32px;background:#8F7EF3;"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#7D8794;">32</span></div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center;"><div style="width:48px;height:48px;background:#8F7EF3;"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#7D8794;">48</span></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">RADII</div>
+        <div style="display:flex;gap:16px;">
+          <div style="display:flex;flex-direction:column;gap:6px;"><div style="width:64px;height:40px;border:1px solid #3A424D;border-radius:2px;background:#11161B;"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#7D8794;">2 · bars, tags</span></div>
+          <div style="display:flex;flex-direction:column;gap:6px;"><div style="width:64px;height:40px;border:1px solid #3A424D;border-radius:3px;background:#11161B;"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#7D8794;">3 · inputs</span></div>
+          <div style="display:flex;flex-direction:column;gap:6px;"><div style="width:64px;height:40px;border:1px solid #3A424D;border-radius:4px;background:#11161B;"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#7D8794;">4 · panels</span></div>
+          <div style="display:flex;flex-direction:column;gap:6px;"><div style="width:64px;height:40px;border:1px solid #3A424D;border-radius:6px;background:#11161B;"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#7D8794;">6 · windows</span></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">BORDERS</div>
+        <div style="font-size:12px;color:#9AA3AE;">1px solid <span style="font-family:'JetBrains Mono',monospace;color:#C9CED5;">#1E242C</span> everywhere. Dashed only for locked or unset states.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEALTH BAR -->
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    <div style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">HEALTH BAR · fill = limit remaining · 10 segments</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+      <div style="border:1px solid #1E242C;border-radius:4px;background:#0E1216;padding:14px 16px;display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">SAFE</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7D8794;"><span style="color:#C9CED5;font-weight:700;font-size:15px;">−0.8%</span> of −5.0%</span></div>
+        <div style="position:relative;height:10px;background:#2A1719;border-radius:2px;overflow:hidden;"><div style="position:absolute;left:0;top:0;bottom:0;width:84%;background:#7D8794;"></div><div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),#0E1216 calc(10% - 1px) 10%);"></div></div>
+        <div style="font-size:10px;color:#5E6873;font-family:'JetBrains Mono',monospace;">&gt; 60% left · neutral gray</div>
+      </div>
+      <div style="border:1px solid #1E242C;border-radius:4px;background:#0E1216;padding:14px 16px;display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#F2A93B;">WARNING</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7D8794;"><span style="color:#F2A93B;font-weight:700;font-size:15px;">−2.1%</span> of −5.0%</span></div>
+        <div style="position:relative;height:10px;background:#2A1719;border-radius:2px;overflow:hidden;"><div style="position:absolute;left:0;top:0;bottom:0;width:58%;background:#F2A93B;"></div><div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),#0E1216 calc(10% - 1px) 10%);"></div></div>
+        <div style="font-size:10px;color:#5E6873;font-family:'JetBrains Mono',monospace;">60–30% left · amber</div>
+      </div>
+      <div style="border:1px solid #5A2427;border-radius:4px;background:#140F10;padding:14px 16px;display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#EF5350;">CRITICAL</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7D8794;"><span style="color:#EF5350;font-weight:700;font-size:15px;">−4.2%</span> of −5.0%</span></div>
+        <div style="position:relative;height:10px;background:#2A1719;border-radius:2px;overflow:hidden;"><div style="position:absolute;left:0;top:0;bottom:0;width:16%;background:#EF5350;animation:itPulse 1s ease-in-out infinite;"></div><div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),#0E1216 calc(10% - 1px) 10%);"></div></div>
+        <div style="font-size:10px;color:#5E6873;font-family:'JetBrains Mono',monospace;">&lt; 30% left · red, pulses 1s</div>
+      </div>
+      <div style="border:1px solid #EF5350;border-radius:4px;background:#1A1113;padding:14px 16px;display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="font-size:10px;font-weight:700;letter-spacing:.08em;color:#EF5350;">BREACHED</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7D8794;"><span style="color:#EF5350;font-weight:700;font-size:15px;">−5.2%</span> of −5.0%</span></div>
+        <div style="position:relative;height:10px;background:#2A1719;border-radius:2px;overflow:hidden;"><div style="position:absolute;inset:0;background:repeating-linear-gradient(135deg,#EF5350 0 4px,#7A2A2B 4px 8px);"></div></div>
+        <div style="font-size:10px;color:#E8A09E;font-family:'JetBrains Mono',monospace;">0% left · hatched · run ends</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+      <div style="border:1px solid #1E242C;border-radius:4px;background:#0E1216;padding:14px 16px;display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">PROGRESS · TARGET</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7D8794;"><span style="color:#26A69A;font-weight:700;font-size:15px;">+3.2%</span> of +10.0%</span></div>
+        <div style="position:relative;height:10px;background:#1A2027;border-radius:2px;overflow:hidden;"><div style="position:absolute;left:0;top:0;bottom:0;width:32%;background:#26A69A;"></div><div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),#0E1216 calc(10% - 1px) 10%);"></div></div>
+        <div style="font-size:10px;color:#5E6873;font-family:'JetBrains Mono',monospace;">fills up · profit color</div>
+      </div>
+      <div style="grid-column:span 3;font-size:12px;color:#9AA3AE;line-height:1.6;align-self:center;padding-left:8px;">Loss limits read like health: the bar drains as you lose. Track color is a dark red so the empty part always reads as damage. Profit target is the only bar that fills up.</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1700}}"></script>
+</body>
+</html>

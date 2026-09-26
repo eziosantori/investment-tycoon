@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#07090B;} a{color:#A395F7;} a:hover{color:#C3B9FA;}</style>
+</helmet>
+<div data-screen-label="02 Failed" style="--up:{{ up }};--down:{{ down }};width:1440px;height:900px;background:#0B0E11;color:#E4E7EB;font-family:Inter,sans-serif;font-size:12px;display:flex;flex-direction:column;overflow:hidden;">
+  <div style="height:44px;display:flex;align-items:center;gap:16px;padding:0 14px;border-bottom:1px solid #1E242C;background:#0E1216;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div style="width:20px;height:20px;border-radius:3px;background:#8F7EF3;display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;color:#0B0E11;">IT</div>
+      <div style="font-weight:700;font-size:13px;">Investment Tycoon</div>
+    </div>
+    <div style="width:1px;height:20px;background:#232A33;"></div>
+    <div style="padding:3px 8px;border:1px solid #2A313B;border-radius:3px;font-weight:600;font-size:11px;color:#C9CED5;">Phase 1 Challenge</div>
+    <div style="font-size:11px;color:#7D8794;">Run review · Seed <span style="font-family:'JetBrains Mono',monospace;color:#C9CED5;">48213</span></div>
+  </div>
+
+  <div style="flex:1;display:flex;flex-direction:column;gap:22px;padding:30px 48px 32px;min-height:0;">
+    <!-- header -->
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;">
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:112px;height:10px;background:#2A1719;border-radius:2px;position:relative;overflow:hidden;">
+            <div style="position:absolute;inset:0;background:repeating-linear-gradient(135deg,#EF5350 0 4px,#7A2A2B 4px 8px);opacity:.9;"></div>
+          </div>
+          <span style="font-size:10px;font-weight:700;letter-spacing:.1em;color:#EF5350;">LIMIT BREACHED</span>
+        </div>
+        <div style="font-size:34px;font-weight:700;letter-spacing:-.02em;line-height:1.1;">Challenge failed: Max daily loss breached</div>
+        <div style="display:flex;gap:18px;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-size:13px;color:#9AA3AE;">
+          <span>Week 6 · Tue · 14:20</span>
+          <span>Final equity <span style="color:#E4E7EB;font-weight:600;">$94,870.00</span></span>
+          <span>Day <span style="color:var(--down);font-weight:600;">−5.2% ▼</span> vs limit −5.0%</span>
+        </div>
+      </div>
+      <div style="font-size:13px;color:#7D8794;max-width:300px;text-align:right;line-height:1.5;text-wrap:pretty;">Most funded traders fail a challenge first. This run tells you exactly why.</div>
+    </div>
+
+    <!-- what happened -->
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">WHAT HAPPENED</div>
+      <div style="display:grid;grid-template-columns:1fr 36px 1fr 36px 1fr 36px 300px;align-items:stretch;">
+        <div style="border:1px solid #1E242C;border-radius:4px;background:#11161B;padding:14px 16px;display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;color:#7D8794;"><span>1 · #22 OMNX · Mon</span><span style="color:#9AA3AE;">stopped out</span></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--down);">−1.8% ▼</div>
+          <div style="font-size:12px;color:#9AA3AE;line-height:1.45;">Stage 2 breakout that failed. Stop hit exactly where planned: a normal, acceptable loss.</div>
+          <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#9AA3AE;"><span style="width:5px;height:5px;border-radius:50%;background:var(--up);"></span>Followed plan</div>
+        </div>
+        <div style="display:grid;place-items:center;color:#3A424D;font-size:16px;">→</div>
+        <div style="border:1px solid #5A4020;border-radius:4px;background:#17140F;padding:14px 16px;display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;color:#7D8794;"><span>2 · #23 VANT · Tue</span><span>next morning</span></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:#F2A93B;">3× size</div>
+          <div style="font-size:12px;color:#C9B89A;line-height:1.45;">Bought 3× the usual size, on a stock below a falling 30-wk MA with RS at −4.1.</div>
+          <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#F2A93B;font-weight:600;"><span style="width:5px;height:5px;background:#F2A93B;transform:rotate(45deg);"></span>Revenge trade · Stage 4 entry</div>
+        </div>
+        <div style="display:grid;place-items:center;color:#3A424D;font-size:16px;">→</div>
+        <div style="border:1px solid #5A2427;border-radius:4px;background:#1A1113;padding:14px 16px;display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;color:#7D8794;"><span>3 · #23 VANT · Tue 14:20</span><span>no stop</span></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--down);">−3.4% ▼</div>
+          <div style="font-size:12px;color:#D8AEAD;line-height:1.45;">No stop-loss. Stage 4 stocks keep falling: it broke the prior low and went through the daily limit.</div>
+          <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#EF5350;font-weight:600;"><span style="width:5px;height:5px;background:#EF5350;"></span>Limit breached</div>
+        </div>
+        <div style="display:grid;place-items:center;color:#3A424D;font-size:16px;">→</div>
+        <div style="border:1px solid #3A3268;border-radius:4px;background:#14132A;padding:14px 16px;display:flex;flex-direction:column;gap:10px;justify-content:center;">
+          <div style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#A395F7;">CONCEPTS TO LEARN</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:16px;font-weight:600;">
+            <a href="#" style="color:#E4E7EB;text-decoration:underline;text-decoration-color:#8F7EF3;text-underline-offset:4px;">Position sizing</a>
+            <a href="#" style="color:#E4E7EB;text-decoration:underline;text-decoration-color:#8F7EF3;text-underline-offset:4px;">Revenge trading</a>
+            <a href="#" style="color:#E4E7EB;text-decoration:underline;text-decoration-color:#8F7EF3;text-underline-offset:4px;">Never buy Stage 4</a>
+          </div>
+          <div style="font-size:11px;color:#9AA3AE;">3 short lessons · 6 min</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- curve + stats -->
+    <div style="flex:1;display:grid;grid-template-columns:1fr 300px;gap:16px;min-height:0;">
+      <div style="border:1px solid #1E242C;border-radius:4px;background:#0E1216;display:flex;flex-direction:column;min-height:0;">
+        <div style="display:flex;align-items:center;gap:16px;padding:10px 14px;border-bottom:1px solid #1E242C;">
+          <span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">EQUITY CURVE · FULL RUN</span>
+          <div style="flex:1;"></div>
+          <span style="font-size:10px;color:#7D8794;letter-spacing:.06em;font-weight:600;">HIDDEN STAGES REVEALED · TYX INDEX</span>
+          <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:#C9CED5;"><span style="width:10px;height:10px;border-radius:2px;background:#16302C;border:1px solid #24524B;"></span>Stage 2 · Advance</span>
+          <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:#C9CED5;"><span style="width:10px;height:10px;border-radius:2px;background:#2B2718;border:1px solid #4E4526;"></span>Stage 3 · Top</span>
+          <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:#C9CED5;"><span style="width:10px;height:10px;border-radius:2px;background:#321A1C;border:1px solid #5A2A2D;"></span>Stage 4 · Decline</span>
+        </div>
+        <div style="position:relative;flex:1;min-height:0;">{{ curve }}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:1px;background:#1E242C;border:1px solid #1E242C;border-radius:4px;overflow:hidden;font-variant-numeric:tabular-nums;">
+        <div style="background:#0E1216;padding:12px 14px;display:flex;flex-direction:column;gap:4px;justify-content:center;"><span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">WIN RATE</span><span style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;">58%</span></div>
+        <div style="background:#0E1216;padding:12px 14px;display:flex;flex-direction:column;gap:4px;justify-content:center;"><span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">TRADES</span><span style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;">23</span></div>
+        <div style="background:#0E1216;padding:12px 14px;display:flex;flex-direction:column;gap:4px;justify-content:center;"><span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">AVG WIN</span><span style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--up);">+0.9R</span></div>
+        <div style="background:#0E1216;padding:12px 14px;display:flex;flex-direction:column;gap:4px;justify-content:center;"><span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">AVG LOSS</span><span style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--down);">−1.4R</span></div>
+        <div style="background:#140F10;padding:12px 14px;display:flex;flex-direction:column;gap:4px;justify-content:center;"><span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">EXPECTANCY</span><span style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--down);">−0.07R ▼</span><span style="font-size:10px;color:#7D8794;">losses outweigh wins</span></div>
+        <div style="background:#0E1216;padding:12px 14px;display:flex;flex-direction:column;gap:4px;justify-content:center;"><span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">PROFIT FACTOR</span><span style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--down);">0.91</span></div>
+        <div style="background:#0E1216;padding:12px 14px;display:flex;flex-direction:column;gap:4px;justify-content:center;"><span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">MAX DRAWDOWN</span><span style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--down);">−5.1% ▼</span></div>
+        <div style="background:#0E1216;padding:12px 14px;display:flex;flex-direction:column;gap:4px;justify-content:center;"><span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">STAGE 2 ENTRIES</span><span style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;">9 / 23</span><span style="font-size:10px;color:#7D8794;">6 entries in Stage 4</span></div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="height:42px;padding:0 20px;border-radius:4px;background:#8F7EF3;color:#0B0E11;display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px;">Retry with new seed <span style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 6px;border-radius:3px;background:rgba(0,0,0,.15);">↵</span></div>
+      <div style="height:42px;padding:0 18px;border-radius:4px;border:1px solid #2A313B;color:#E4E7EB;display:flex;align-items:center;font-weight:600;font-size:13px;">Replay this run</div>
+      <div style="height:42px;padding:0 18px;border-radius:4px;color:#9AA3AE;display:flex;align-items:center;font-weight:600;font-size:13px;">Back to career</div>
+      <div style="flex:1;"></div>
+      <div style="font-size:11px;color:#5E6873;">Replay uses seed 48213 · same market, same stages</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;colorblind&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  curve() {
+    const e = React.createElement;
+    const W = 1060, H = 330, L = 58, R = 16, T = 18, B = 26;
+    const pts = [[0,100000],[0.5,100600],[1,101200],[1.5,101500],[2,102100],[2.4,102500],[2.7,101900],[3,101400],[3.4,101800],[3.7,101100],[4,100900],[4.3,101300],[4.6,100500],[5,100080],[5.55,98280],[5.62,98280],[5.72,94870]];
+    const vMin = 94000, vMax = 103000;
+    const x = s => L + s / 6 * (W - L - R), y = v => T + (vMax - v) / (vMax - vMin) * (H - T - B);
+    const k = [];
+    [[0,2.5,'#16302C','Stage 2 · Advance'],[2.5,4.5,'#2B2718','Stage 3 · Top'],[4.5,6,'#321A1C','Stage 4 · Decline']].forEach(([a,b,c,n],i) => {
+      k.push(e('rect', { key: 'rg' + i, x: x(a), y: T, width: x(b) - x(a), height: H - T - B, fill: c, opacity: 0.85 }));
+      k.push(e('text', { key: 'rgt' + i, x: x(a) + 8, y: T + 14, fill: '#7D8794', fontSize: 10, fontFamily: 'Inter', fontWeight: 600 }, n.toUpperCase()));
+    });
+    for (let v = 94000; v <= 103000; v += 2000) {
+      k.push(e('line', { key: 'g' + v, x1: L, x2: W - R, y1: y(v), y2: y(v), stroke: '#FFFFFF', opacity: 0.04 }));
+      k.push(e('text', { key: 'gt' + v, x: L - 8, y: y(v) + 4, fill: '#5E6873', fontSize: 10, fontFamily: 'JetBrains Mono', textAnchor: 'end' }, (v / 1000).toFixed(0) + 'k'));
+    }
+    k.push(e('line', { key: 'start', x1: L, x2: W - R, y1: y(100000), y2: y(100000), stroke: '#5E6873', strokeDasharray: '3 3' }));
+    k.push(e('line', { key: 'tgt', x1: L, x2: W - R, y1: y(110000), y2: y(110000), stroke: 'var(--up)' }));
+    k.push(e('line', { key: 'dl', x1: x(5), x2: W - R, y1: y(95080), y2: y(95080), stroke: '#EF5350', strokeDasharray: '4 3' }));
+    k.push(e('text', { key: 'dlt', x: x(5) + 6, y: y(95080) - 5, fill: '#EF5350', fontSize: 10, fontFamily: 'JetBrains Mono' }, 'daily limit 95,080'));
+    for (let s = 1; s <= 6; s++) {
+      k.push(e('line', { key: 's' + s, x1: x(s), x2: x(s), y1: T, y2: H - B, stroke: '#0B0E11', strokeWidth: 1 }));
+      k.push(e('text', { key: 'st' + s, x: x(s - 0.5), y: H - 8, fill: '#5E6873', fontSize: 10, fontFamily: 'JetBrains Mono', textAnchor: 'middle' }, 'W' + s));
+    }
+    const d = pts.map((p, i) => (i ? 'L' : 'M') + x(p[0]).toFixed(1) + ' ' + y(p[1]).toFixed(1)).join(' ');
+    k.push(e('path', { key: 'eq', d, fill: 'none', stroke: '#E4E7EB', strokeWidth: 1.75, strokeLinejoin: 'round' }));
+    const trades = [0.2,0.45,0.7,0.9,1.2,1.4,1.75,1.95,2.2,2.55,2.8,3.1,3.3,3.55,3.8,4.1,4.35,4.55,4.75,4.9,5.2,5.55,5.72];
+    const interpV = s => { for (let i = 0; i < pts.length - 1; i++) if (s >= pts[i][0] && s <= pts[i+1][0]) return pts[i][1] + (pts[i+1][1] - pts[i][1]) * (s - pts[i][0]) / (pts[i+1][0] - pts[i][0]); return pts[pts.length-1][1]; };
+    const losers = new Set([3,6,9,10,13,15,17,19,21,22]);
+    trades.forEach((s, i) => {
+      const cx = x(s), cy = y(interpV(s)), c = losers.has(i) ? 'var(--down)' : 'var(--up)';
+      if (i === 22) {
+        k.push(e('circle', { key: 'tx', cx, cy, r: 9, fill: 'none', stroke: '#EF5350', strokeWidth: 1.5 }));
+        k.push(e('text', { key: 'txl', x: cx - 12, y: cy + 4, fill: '#EF5350', fontSize: 10, fontFamily: 'JetBrains Mono', textAnchor: 'end', fontWeight: 700 }, '#23 ✕'));
+      }
+      if (i === 21) k.push(e('text', { key: 'l22', x: cx - 10, y: cy - 10, fill: '#9AA3AE', fontSize: 10, fontFamily: 'JetBrains Mono', textAnchor: 'end' }, '#22'));
+      k.push(e('circle', { key: 't' + i, cx, cy, r: i === 22 ? 4 : 3, fill: c, stroke: '#0B0E11', strokeWidth: 1.5 }));
+    });
+    return e('svg', { viewBox: `0 0 ${W} ${H}`, preserveAspectRatio: 'xMidYMid meet', style: { position: 'absolute', inset: 0, width: '100%', height: '100%', display: 'block' } }, k);
+  }
+  renderVals() {
+    const cb = !!this.props.colorblind;
+    return { up: cb ? '#4C9AFF' : '#26A69A', down: cb ? '#FF8A3D' : '#EF5350', curve: this.curve() };
+  }
+}
+</script>
+</body>
+</html>

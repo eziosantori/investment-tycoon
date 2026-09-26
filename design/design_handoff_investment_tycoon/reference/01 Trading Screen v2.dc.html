@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#07090B;}
+a{color:#A395F7;} a:hover{color:#C3B9FA;}
+@keyframes itPulse{0%,100%{opacity:1}50%{opacity:.55}}
+@keyframes itGlow{0%,100%{box-shadow:0 0 0 0 rgba(242,169,59,0)}50%{box-shadow:0 0 0 3px rgba(242,169,59,.18)}}
+</style>
+</helmet>
+<div data-screen-label="01 Trading" style="--up:{{ up }};--down:{{ down }};width:1440px;height:900px;background:#0B0E11;color:#E4E7EB;font-family:Inter,sans-serif;font-size:12px;display:grid;grid-template-rows:44px 76px 1fr;overflow:hidden;position:relative;">
+
+  <div style="display:flex;align-items:center;gap:16px;padding:0 14px;border-bottom:1px solid #1E242C;background:#0E1216;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div style="width:20px;height:20px;border-radius:3px;background:#8F7EF3;display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;color:#0B0E11;">IT</div>
+      <div style="font-weight:700;font-size:13px;letter-spacing:.01em;">Investment Tycoon</div>
+    </div>
+    <div style="width:1px;height:20px;background:#232A33;"></div>
+    <div style="padding:3px 8px;border:1px solid #2A313B;border-radius:3px;font-weight:600;font-size:11px;color:#C9CED5;">Phase 1 Challenge</div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="color:#7D8794;font-size:11px;">Week</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums;">4 / 10</span>
+      <div style="display:flex;gap:2px;">
+        <div style="width:10px;height:6px;border-radius:1px;background:#5A6470;"></div>
+        <div style="width:10px;height:6px;border-radius:1px;background:#5A6470;"></div>
+        <div style="width:10px;height:6px;border-radius:1px;background:#5A6470;"></div>
+        <div style="width:10px;height:6px;border-radius:1px;background:#8F7EF3;"></div>
+        <div style="width:10px;height:6px;border-radius:1px;background:#1E242C;"></div>
+        <div style="width:10px;height:6px;border-radius:1px;background:#1E242C;"></div>
+        <div style="width:10px;height:6px;border-radius:1px;background:#1E242C;"></div>
+        <div style="width:10px;height:6px;border-radius:1px;background:#1E242C;"></div>
+        <div style="width:10px;height:6px;border-radius:1px;background:#1E242C;"></div>
+        <div style="width:10px;height:6px;border-radius:1px;background:#1E242C;"></div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#7D8794;">Seed <span style="font-family:'JetBrains Mono',monospace;color:#C9CED5;background:#151A20;padding:2px 6px;border-radius:3px;">48213</span></div>
+    <div style="flex:1;"></div>
+    <div style="display:flex;align-items:center;gap:2px;padding:2px;background:#151A20;border:1px solid #1E242C;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:11px;">
+      <div style="width:28px;height:24px;display:grid;place-items:center;border-radius:3px;color:#E4E7EB;">❚❚</div>
+      <div style="width:1px;height:14px;background:#2A313B;"></div>
+      <div style="padding:0 8px;height:24px;display:grid;place-items:center;border-radius:3px;color:#7D8794;">1×</div>
+      <div style="padding:0 8px;height:24px;display:grid;place-items:center;border-radius:3px;color:#0B0E11;background:#8F7EF3;font-weight:600;">2×</div>
+      <div style="padding:0 8px;height:24px;display:grid;place-items:center;border-radius:3px;color:#7D8794;">5×</div>
+      <div style="width:1px;height:14px;background:#2A313B;"></div>
+      <div style="padding:0 8px;height:24px;display:flex;align-items:center;gap:6px;border-radius:3px;color:#C9CED5;font-family:Inter,sans-serif;">Next day <span style="font-family:'JetBrains Mono',monospace;">▸|</span></div>
+      <div style="padding:0 8px;height:24px;display:flex;align-items:center;gap:6px;border-radius:3px;color:#C9CED5;font-family:Inter,sans-serif;">Skip week <span style="font-family:'JetBrains Mono',monospace;">▸▸|</span></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding-left:6px;">
+      <div style="width:6px;height:6px;border-radius:50%;background:var(--up);animation:itPulse 1.6s ease-in-out infinite;"></div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;">Week 4 · Thu · 14:40</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1.1fr 1fr 1fr 1.25fr;border-bottom:1px solid #1E242C;background:#0E1216;">
+    <div style="padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:8px;border-right:1px solid #1E242C;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">PROFIT TARGET</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-size:11px;color:#7D8794;"><span style="color:var(--up);font-weight:700;font-size:15px;">+2.6%</span> of +10.0%</span>
+      </div>
+      <div style="position:relative;height:10px;background:#1A2027;border-radius:2px;overflow:hidden;">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:26%;background:var(--up);"></div>
+        <div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),#0E1216 calc(10% - 1px) 10%);"></div>
+      </div>
+      <div style="font-size:10px;color:#5E6873;font-family:'JetBrains Mono',monospace;">$7,398 to go · 6 weeks left</div>
+    </div>
+    <div style="padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:8px;border-right:1px solid #1E242C;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">DAILY LOSS LIMIT</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-size:11px;color:#7D8794;"><span style="color:#F2A93B;font-weight:700;font-size:15px;">−2.1%</span> of −5.0% used</span>
+      </div>
+      <div style="position:relative;height:10px;background:#2A1719;border-radius:2px;overflow:hidden;">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:58%;background:#F2A93B;"></div>
+        <div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),#0E1216 calc(10% - 1px) 10%);"></div>
+      </div>
+      <div style="font-size:10px;color:#5E6873;font-family:'JetBrains Mono',monospace;display:flex;justify-content:space-between;"><span>2.9% left today</span><span>resets at open</span></div>
+    </div>
+    <div style="padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:8px;border-right:1px solid #1E242C;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">MAX LOSS LIMIT</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-size:11px;color:#7D8794;"><span style="color:#F2A93B;font-weight:700;font-size:15px;">−4.3%</span> of −10.0% used</span>
+      </div>
+      <div style="position:relative;height:10px;background:#2A1719;border-radius:2px;overflow:hidden;animation:itGlow 1.8s ease-in-out infinite;">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:57%;background:#F2A93B;animation:itPulse 1.8s ease-in-out infinite;"></div>
+        <div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),#0E1216 calc(10% - 1px) 10%);"></div>
+      </div>
+      <div style="font-size:10px;color:#5E6873;font-family:'JetBrains Mono',monospace;display:flex;justify-content:space-between;"><span>5.7% left · floor $90,000</span><span>from peak</span></div>
+    </div>
+    <div style="padding:10px 18px;display:grid;grid-template-columns:auto 1fr 1fr;column-gap:22px;align-items:center;">
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">EQUITY</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-size:22px;font-weight:700;letter-spacing:-.01em;">$102,601.82</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px;">
+        <span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">BALANCE</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-size:13px;color:#C9CED5;">$102,410.00</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px;">
+        <span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">OPEN P&amp;L</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-size:13px;font-weight:700;color:var(--up);">+$191.82 ▲</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 320px;min-height:0;">
+    <div style="display:grid;grid-template-rows:36px 1fr 196px;min-width:0;min-height:0;border-right:1px solid #1E242C;">
+      <div style="display:flex;align-items:center;gap:14px;padding:0 12px;border-bottom:1px solid #1E242C;white-space:nowrap;">
+        <div style="display:flex;align-items:baseline;gap:8px;flex-shrink:0;">
+          <span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;">KRVX</span>
+          <span style="color:#7D8794;font-size:11px;">fictional</span>
+        </div>
+        <div style="display:flex;gap:2px;font-family:'JetBrains Mono',monospace;font-size:11px;flex-shrink:0;">
+          <span style="padding:3px 8px;border-radius:3px;background:#1A2027;color:#E4E7EB;font-weight:600;">W</span>
+          <span style="padding:3px 8px;border-radius:3px;color:#7D8794;">D</span>
+          <span style="padding:3px 8px;border-radius:3px;color:#7D8794;">65m</span>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-size:11px;color:#7D8794;display:flex;gap:10px;align-items:center;flex-shrink:0;">
+          <span>C <span style="color:#C9CED5;">43.17</span></span>
+          <span style="color:var(--up);font-weight:600;">{{ chg }}</span>
+          <span style="display:flex;align-items:center;gap:5px;"><span style="width:14px;height:1.5px;background:#7D8794;"></span>MA10w <span style="color:#C9CED5;">{{ ma10 }}</span></span>
+          <span style="display:flex;align-items:center;gap:5px;"><span style="width:14px;height:2.5px;background:#E4E7EB;"></span>MA30w <span style="color:#C9CED5;">{{ ma30 }} {{ ma30Slope }}</span></span>
+        </div>
+        <div style="flex:1;"></div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px;flex-shrink:0;">
+          <span style="padding:3px 8px;border:1px solid #2A313B;border-radius:3px;color:#C9CED5;">MA</span>
+          <span style="padding:3px 8px;border:1px solid #2A313B;border-radius:3px;color:#C9CED5;">Vol</span>
+          <span style="padding:3px 8px;border:1px solid #2A313B;border-radius:3px;color:#C9CED5;">RS</span>
+          <span style="padding:3px 8px;border:1px dashed #262D36;border-radius:3px;color:#4E5762;display:flex;align-items:center;gap:5px;"><span style="font-family:'JetBrains Mono',monospace;font-size:10px;">⚿</span>Sector RS</span>
+          <span style="padding:3px 8px;border:1px dashed #262D36;border-radius:3px;color:#4E5762;display:flex;align-items:center;gap:5px;"><span style="font-family:'JetBrains Mono',monospace;font-size:10px;">⚿</span>Breadth</span>
+          
+        </div>
+      </div>
+      <div style="position:relative;min-height:0;overflow:hidden;">{{ chart }}</div>
+      <div style="display:grid;grid-template-columns:330px 1fr;border-top:1px solid #1E242C;min-height:0;">
+        <div style="padding:14px 16px;border-right:1px solid #1E242C;display:flex;flex-direction:column;gap:10px;background:#0D1115;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:18px;height:18px;border-radius:50%;border:1px solid #8F7EF3;display:grid;place-items:center;font-size:10px;font-weight:700;color:#A395F7;">A</div>
+            <span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">ADVISOR</span>
+            <span style="font-size:10px;color:#4E5762;font-family:'JetBrains Mono',monospace;">Mon</span>
+          </div>
+          <div style="font-size:14px;line-height:1.5;color:#C9CED5;text-wrap:pretty;">Clean breakout on 2.4× volume, but RS is still below zero. The strongest Stage 2 moves usually start with RS already positive. See <a href="#" style="color:#A395F7;text-decoration:underline;text-underline-offset:3px;">relative strength</a>.</div>
+          <div style="flex:1;"></div>
+          <div style="display:flex;gap:6px;font-size:11px;">
+            <span style="padding:3px 8px;border-radius:3px;background:#161B21;color:#9AA3AE;">Got it</span>
+            <span style="padding:3px 8px;border-radius:3px;color:#5E6873;">Mute tips this week</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;min-width:0;">
+          <div style="display:flex;align-items:center;gap:14px;padding:0 14px;height:30px;border-bottom:1px solid #1E242C;font-size:11px;">
+            <span style="font-weight:600;color:#E4E7EB;">Trade log</span>
+            <span style="color:#5E6873;">Orders</span>
+            <span style="color:#5E6873;">Rules</span>
+            <div style="flex:1;"></div>
+            <span style="font-family:'JetBrains Mono',monospace;color:#7D8794;">13 closed · <span style="color:var(--up);">+$2,410.00</span> · Stage 2 entries <span style="color:#C9CED5;">8/13</span></span>
+          </div>
+          <div style="display:grid;grid-template-columns:28px 58px 46px 44px 40px 52px 52px 76px 54px 1fr;column-gap:4px;padding:0 14px;height:26px;align-items:center;font-size:10px;font-weight:600;letter-spacing:.06em;color:#5E6873;">
+            <span>#</span><span>DATE</span><span>TICKER</span><span>SIDE</span><span style="text-align:right;">QTY</span><span style="text-align:right;">ENTRY</span><span style="text-align:right;">EXIT</span><span style="text-align:right;">P&amp;L</span><span style="text-align:right;">R</span><span style="padding-left:14px;">STAGE · FLAGS</span>
+          </div>
+          <div style="display:flex;flex-direction:column;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-size:11px;">
+            <div style="display:grid;grid-template-columns:28px 58px 46px 44px 40px 52px 52px 76px 54px 1fr;column-gap:4px;padding:0 14px;height:26px;align-items:center;background:#11161B;">
+              <span style="color:#5E6873;">14</span><span style="color:#9AA3AE;">W4 Mon</span><span>KRVX</span><span style="color:var(--up);font-weight:600;">LONG</span><span style="text-align:right;">278</span><span style="text-align:right;">42.48</span><span style="text-align:right;color:#5E6873;">open</span><span style="text-align:right;color:var(--up);">+$191.82</span><span style="text-align:right;color:var(--up);">+0.19R</span>
+              <span style="padding-left:14px;display:flex;gap:8px;align-items:center;font-family:Inter,sans-serif;font-size:10px;"><span style="font-family:'JetBrains Mono',monospace;padding:0 4px;border:1px solid #2A313B;border-radius:2px;color:#C9CED5;">S2</span><span style="display:flex;align-items:center;gap:4px;color:#9AA3AE;"><span style="width:5px;height:5px;border-radius:50%;background:var(--up);"></span>Breakout · vol 2.4×</span></span>
+            </div>
+            <div style="display:grid;grid-template-columns:28px 58px 46px 44px 40px 52px 52px 76px 54px 1fr;column-gap:4px;padding:0 14px;height:26px;align-items:center;">
+              <span style="color:#5E6873;">13</span><span style="color:#9AA3AE;">W3 Wed</span><span>OMNX</span><span style="color:var(--up);font-weight:600;">LONG</span><span style="text-align:right;">190</span><span style="text-align:right;">61.20</span><span style="text-align:right;">66.35</span><span style="text-align:right;color:var(--up);">+$978.50</span><span style="text-align:right;color:var(--up);">+1.02R</span>
+              <span style="padding-left:14px;display:flex;gap:8px;align-items:center;font-family:Inter,sans-serif;font-size:10px;"><span style="font-family:'JetBrains Mono',monospace;padding:0 4px;border:1px solid #2A313B;border-radius:2px;color:#C9CED5;">S2</span><span style="display:flex;align-items:center;gap:4px;color:#9AA3AE;"><span style="width:5px;height:5px;border-radius:50%;background:var(--up);"></span>Followed plan</span></span>
+            </div>
+            <div style="display:grid;grid-template-columns:28px 58px 46px 44px 40px 52px 52px 76px 54px 1fr;column-gap:4px;padding:0 14px;height:26px;align-items:center;">
+              <span style="color:#5E6873;">12</span><span style="color:#9AA3AE;">W2 Thu</span><span>TALR</span><span style="color:var(--up);font-weight:600;">LONG</span><span style="text-align:right;">410</span><span style="text-align:right;">18.90</span><span style="text-align:right;">17.62</span><span style="text-align:right;color:var(--down);">−$524.80</span><span style="text-align:right;color:var(--down);">−0.52R</span>
+              <span style="padding-left:14px;display:flex;gap:8px;align-items:center;font-family:Inter,sans-serif;font-size:10px;"><span style="font-family:'JetBrains Mono',monospace;padding:0 4px;border:1px solid #5A4020;border-radius:2px;color:#F2A93B;">S3</span><span style="display:flex;align-items:center;gap:4px;color:#F2A93B;"><span style="width:5px;height:5px;background:#F2A93B;transform:rotate(45deg);"></span>30w MA flattening</span></span>
+            </div>
+            <div style="display:grid;grid-template-columns:28px 58px 46px 44px 40px 52px 52px 76px 54px 1fr;column-gap:4px;padding:0 14px;height:26px;align-items:center;">
+              <span style="color:#5E6873;">11</span><span style="color:#9AA3AE;">W2 Mon</span><span>BRQE</span><span style="color:var(--down);font-weight:600;">SHORT</span><span style="text-align:right;">240</span><span style="text-align:right;">27.40</span><span style="text-align:right;">28.95</span><span style="text-align:right;color:var(--down);">−$372.00</span><span style="text-align:right;color:var(--down);">−1.00R</span>
+              <span style="padding-left:14px;display:flex;gap:8px;align-items:center;font-family:Inter,sans-serif;font-size:10px;"><span style="font-family:'JetBrains Mono',monospace;padding:0 4px;border:1px solid #2A313B;border-radius:2px;color:#C9CED5;">S4</span><span style="display:flex;align-items:center;gap:4px;color:#9AA3AE;"><span style="width:5px;height:5px;border-radius:50%;background:var(--up);"></span>Stopped · per plan</span></span>
+            </div>
+            <div style="display:grid;grid-template-columns:28px 58px 46px 44px 40px 52px 52px 76px 54px 1fr;column-gap:4px;padding:0 14px;height:26px;align-items:center;">
+              <span style="color:#5E6873;">10</span><span style="color:#9AA3AE;">W1 Tue</span><span>VANT</span><span style="color:var(--up);font-weight:600;">LONG</span><span style="text-align:right;">150</span><span style="text-align:right;">88.10</span><span style="text-align:right;">84.00</span><span style="text-align:right;color:var(--down);">−$615.00</span><span style="text-align:right;color:var(--down);">−0.60R</span>
+              <span style="padding-left:14px;display:flex;gap:8px;align-items:center;font-family:Inter,sans-serif;font-size:10px;"><span style="font-family:'JetBrains Mono',monospace;padding:0 4px;border:1px solid #5A2427;border-radius:2px;color:#EF5350;">S4</span><span style="display:flex;align-items:center;gap:4px;color:#F2A93B;"><span style="width:5px;height:5px;background:#F2A93B;transform:rotate(45deg);"></span>Bought below 30w MA</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;padding:12px 14px;background:#0E1216;min-height:0;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;padding:3px;background:#151A20;border-radius:4px;gap:3px;">
+        <div style="height:28px;display:grid;place-items:center;border-radius:3px;background:color-mix(in oklab,var(--up) 22%,transparent);color:var(--up);font-weight:700;box-shadow:inset 0 0 0 1px var(--up);">Buy</div>
+        <div style="height:28px;display:grid;place-items:center;border-radius:3px;color:#7D8794;font-weight:600;">Sell (Short)</div>
+      </div>
+
+      <div style="border:1px solid #1E242C;border-radius:4px;background:#11161B;">
+        <div style="padding:8px 10px;border-bottom:1px solid #1E242C;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">YOUR STAGE CALL</span>
+          <div style="display:flex;gap:2px;font-family:'JetBrains Mono',monospace;font-size:11px;">
+            <span style="width:24px;height:20px;display:grid;place-items:center;border-radius:2px;color:#7D8794;border:1px solid #232A33;">1</span>
+            <span style="width:24px;height:20px;display:grid;place-items:center;border-radius:2px;color:#0B0E11;background:#8F7EF3;font-weight:700;">2</span>
+            <span style="width:24px;height:20px;display:grid;place-items:center;border-radius:2px;color:#7D8794;border:1px solid #232A33;">3</span>
+            <span style="width:24px;height:20px;display:grid;place-items:center;border-radius:2px;color:#7D8794;border:1px solid #232A33;">4</span>
+          </div>
+        </div>
+        <div style="padding:8px 10px;display:flex;flex-direction:column;gap:6px;font-size:11px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;"><span style="display:flex;gap:7px;align-items:center;color:#C9CED5;"><span style="font-family:'JetBrains Mono',monospace;color:var(--up);width:10px;">✓</span>Price above 30-wk MA</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;">{{ above }}</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;"><span style="display:flex;gap:7px;align-items:center;color:#C9CED5;"><span style="font-family:'JetBrains Mono',monospace;color:var(--up);width:10px;">✓</span>30-wk MA turning up</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;">{{ ma30Slope }}</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;"><span style="display:flex;gap:7px;align-items:center;color:#C9CED5;"><span style="font-family:'JetBrains Mono',monospace;color:var(--up);width:10px;">✓</span>Breakout volume ≥ 2× avg</span><span style="font-family:'JetBrains Mono',monospace;color:#7D8794;">2.4×</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;"><span style="display:flex;gap:7px;align-items:center;color:#F2A93B;"><span style="font-family:'JetBrains Mono',monospace;width:10px;">✕</span>RS above zero</span><span style="font-family:'JetBrains Mono',monospace;color:#F2A93B;">−0.4 ↗</span></div>
+        </div>
+      </div>
+
+      <div style="border:1px solid #1E242C;border-radius:4px;background:#11161B;">
+        <div style="padding:8px 10px;border-bottom:1px solid #1E242C;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">POSITION SIZE</span>
+          <div style="display:flex;gap:2px;font-size:10px;">
+            <span style="padding:2px 6px;border-radius:2px;background:#1A2027;color:#E4E7EB;">Market</span>
+            <span style="padding:2px 6px;border-radius:2px;color:#7D8794;">Limit</span>
+            <span style="padding:2px 6px;border-radius:2px;color:#7D8794;">Stop</span>
+          </div>
+        </div>
+        <div style="padding:9px 10px;display:flex;flex-direction:column;gap:7px;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;">
+          <div style="display:grid;grid-template-columns:1fr 64px 18px 60px;align-items:center;gap:4px;">
+            <span style="font-family:Inter,sans-serif;color:#9AA3AE;">Account risk</span>
+            <span style="height:22px;display:flex;align-items:center;justify-content:flex-end;padding:0 7px;background:#0B0E11;border:1px solid #2A313B;border-radius:3px;">1.0%</span>
+            <span style="color:#4E5762;text-align:center;">→</span>
+            <span style="text-align:right;color:#C9CED5;">$1,026</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 64px 18px 60px;align-items:center;gap:4px;">
+            <span style="font-family:Inter,sans-serif;color:#9AA3AE;">Stop distance</span>
+            <span style="height:22px;display:flex;align-items:center;justify-content:flex-end;padding:0 7px;background:#0B0E11;border:1px solid #2A313B;border-radius:3px;">{{ stopDist }}</span>
+            <span style="color:#4E5762;text-align:center;">→</span>
+            <span style="text-align:right;color:#5E6873;font-size:10px;">per share</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;padding-top:7px;border-top:1px dashed #232A33;">
+            <span style="font-family:Inter,sans-serif;color:#9AA3AE;">Quantity</span>
+            <span><span style="font-size:20px;font-weight:700;">278</span> <span style="color:#7D8794;font-size:11px;">shares</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div style="border:1px solid #1E242C;border-radius:4px;background:#11161B;">
+        <div style="padding:8px 10px;border-bottom:1px solid #1E242C;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">BRACKET</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#C9CED5;">R:R <span style="font-weight:700;">{{ rr }}</span></span>
+        </div>
+        <div style="padding:9px 10px;display:flex;flex-direction:column;gap:7px;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;">
+          <div style="display:grid;grid-template-columns:80px 1fr 50px;align-items:center;gap:6px;">
+            <span style="font-family:Inter,sans-serif;color:#9AA3AE;">Stop-loss</span>
+            <sc-if value="{{ hasStop }}" hint-placeholder-val="{{ true }}">
+              <span style="height:22px;display:flex;align-items:center;justify-content:flex-end;padding:0 7px;background:#0B0E11;border:1px solid color-mix(in oklab,var(--down) 55%,#2A313B);border-radius:3px;color:var(--down);">38.80</span>
+              <span style="text-align:right;color:var(--down);">−1.0R</span>
+            </sc-if>
+            <sc-if value="{{ noStop }}" hint-placeholder-val="{{ false }}">
+              <span style="height:22px;display:flex;align-items:center;justify-content:flex-end;padding:0 7px;background:#0B0E11;border:1px dashed #3A424D;border-radius:3px;color:#4E5762;">not set</span>
+              <span style="text-align:right;color:#4E5762;">—</span>
+            </sc-if>
+          </div>
+          <div style="display:grid;grid-template-columns:80px 1fr 50px;align-items:center;gap:6px;">
+            <span style="font-family:Inter,sans-serif;color:#9AA3AE;">Take-profit</span>
+            <span style="height:22px;display:flex;align-items:center;justify-content:flex-end;padding:0 7px;background:#0B0E11;border:1px solid color-mix(in oklab,var(--up) 55%,#2A313B);border-radius:3px;color:var(--up);">49.84</span>
+            <span style="text-align:right;color:var(--up);">+2.0R</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-family:Inter,sans-serif;font-size:11px;padding-top:2px;">
+            <span style="color:#9AA3AE;">Trail stop under 30-wk MA</span>
+            <div style="width:28px;height:16px;border-radius:8px;background:#8F7EF3;position:relative;"><div style="position:absolute;right:2px;top:2px;width:12px;height:12px;border-radius:50%;background:#0B0E11;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <sc-if value="{{ hasStop }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:4px;background:#11161B;border:1px solid #1E242C;">
+          <span style="color:#9AA3AE;">Risk at entry</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-weight:700;font-size:13px;">$1,023 <span style="color:#7D8794;font-weight:500;">(1.0%)</span></span>
+        </div>
+      </sc-if>
+      <sc-if value="{{ noStop }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:5px;padding:8px 10px;border-radius:4px;background:#1F1214;border:1px solid #5A2427;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="color:#F2B8B6;">Risk at entry</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:18px;color:#EF5350;line-height:1;">∞</span>
+          </div>
+          <div style="display:flex;gap:6px;align-items:flex-start;font-size:11px;color:#E8A09E;line-height:1.4;"><span style="font-weight:700;">!</span><span>No stop set. A close back into the base could exceed your 2.9% daily limit.</span></div>
+        </div>
+      </sc-if>
+
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="height:42px;border-radius:4px;background:var(--up);color:#06110F;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-weight:700;font-size:14px;">
+          <span>Buy 278 KRVX</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 6px;border-radius:3px;background:rgba(0,0,0,.18);">B</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+          <div style="height:32px;border-radius:4px;border:1px solid color-mix(in oklab,var(--down) 60%,transparent);color:var(--down);display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-weight:600;">
+            <span>Sell</span><span style="font-family:'JetBrains Mono',monospace;font-size:10px;padding:1px 5px;border-radius:3px;background:#1A2027;color:#9AA3AE;">S</span>
+          </div>
+          <div style="height:32px;border-radius:4px;border:1px solid #2A313B;color:#C9CED5;display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-weight:600;">
+            <span>Flatten</span><span style="font-family:'JetBrains Mono',monospace;font-size:10px;padding:1px 5px;border-radius:3px;background:#1A2027;color:#9AA3AE;">F</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="flex:1;"></div>
+      <div style="border:1px solid #1E242C;border-radius:4px;background:#11161B;overflow:hidden;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-bottom:1px solid #1E242C;">
+          <span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:#7D8794;">OPEN POSITION</span>
+          <span style="font-size:10px;color:#5E6873;font-family:'JetBrains Mono',monospace;">4 days · S2</span>
+        </div>
+        <div style="padding:9px 10px;display:flex;flex-direction:column;gap:7px;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <span><span style="color:var(--up);font-weight:700;">LONG</span> 278 KRVX</span>
+            <span style="color:#7D8794;">@ 42.48</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <span style="color:#7D8794;">Last <span style="color:#E4E7EB;">43.17</span></span>
+            <span style="color:var(--up);font-weight:700;font-size:16px;">+$192 ▲</span>
+          </div>
+          <div style="position:relative;height:6px;background:#1A2027;border-radius:2px;">
+            <div style="position:absolute;left:33.3%;top:-3px;bottom:-3px;width:1px;background:#5E6873;"></div>
+            <div style="position:absolute;left:33.3%;top:0;bottom:0;width:6.3%;background:var(--up);border-radius:0 2px 2px 0;"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:#5E6873;"><span>SL −1R</span><span style="color:var(--up);">+0.19R</span><span>TP +2R</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;colorblind&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;noStop&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  interp(kp, i) { for (let k = 0; k < kp.length - 1; k++) { const [a, pa] = kp[k], [b, pb] = kp[k + 1]; if (i >= a && i <= b) return pa + (pb - pa) * (i - a) / (b - a); } return i < kp[0][0] ? kp[0][1] : kp[kp.length - 1][1]; }
+  data() {
+    if (this._d) return this._d;
+    const r = this.rng(48213), N = 108, PRE = 30, all = [];
+    const kp = [[-30,47],[-10,55],[0,58],[8,61],[14,57],[24,50],[34,43],[44,37],[50,38.5],[56,36.4],[64,40.4],[70,37.8],[78,41.2],[84,38.6],[92,41.4],[98,39.6],[103,41.3],[104,41.6],[105,42.9],[106,42.84],[107,43.17]];
+    const rsk = [[-30,2],[0,2.5],[15,0.5],[30,-3],[45,-5.6],[60,-4.2],[80,-2.6],[100,-1.3],[107,-0.4]];
+    let prev = 47;
+    for (let i = -PRE; i < N; i++) {
+      let c = this.interp(kp, i) + (r() - 0.5) * 1.6;
+      if (i >= 56 && i <= 104) c = Math.min(c, 41.8);
+      if (i >= 104) c = this.interp(kp, i);
+      const o = i === 105 ? 41.7 : prev + (r() - 0.5) * 0.5;
+      let h = Math.max(o, c) + r() * 1.1, l = Math.min(o, c) - r() * 1.1;
+      if (i >= 56 && i <= 104) h = Math.min(h, 42.15);
+      const decline = i > 10 && i < 50 ? 1.25 : 1, base = i >= 50 && i < 104 ? 0.75 : 1;
+      let v = decline * base * (0.7 + r() * 0.6);
+      all.push({ i, o, c, h, l, v, rs: this.interp(rsk, i) + (i === 107 ? 0 : (r() - 0.5) * 0.5) });
+      prev = c;
+    }
+    const sma = (k, n, f) => { let s = 0; for (let j = k - n + 1; j <= k; j++) s += all[Math.max(0, j)][f]; return s / n; };
+    all.forEach((b, k) => { b.ma10 = sma(k, 10, 'c'); b.ma30 = sma(k, 30, 'c'); b.av = sma(k, 10, 'v'); });
+    const b105 = all[PRE + 105]; b105.v = b105.av * 2.4 / 0.85;
+    const b106 = all[PRE + 106]; b106.v = b106.av * 1.5;
+    all[PRE + 107].v = all[PRE + 107].av * 0.7;
+    this._d = { all, bars: all.slice(PRE), PRE };
+    return this._d;
+  }
+  chart(noStop) {
+    const e = React.createElement, { bars: B } = this.data();
+    const W = 1120, H = 548, padR = 70;
+    const pT = 26, pB = 332, vT = 342, vB = 412, rT = 424, rB = 522;
+    const pMin = 33, pMax = 64, y = p => pT + (pMax - p) / (pMax - pMin) * (pB - pT);
+    const vMax = Math.max(...B.map(b => b.v)) * 1.05, yv = v => vB - v / vMax * (vB - vT);
+    const rMin = -7, rMax = 4, yr = v => rT + (rMax - v) / (rMax - rMin) * (rB - rT);
+    const slots = 116, plotW = W - padR - 10, bw = plotW / slots, xOf = i => 8 + (i + 0.5) * bw;
+    const up = 'var(--up)', dn = 'var(--down)', k = [];
+    const lbl = (key, x, yy, t, fill, anchor, extra) => e('text', Object.assign({ key, x, y: yy, fill: fill || '#5E6873', fontSize: 10, fontFamily: 'JetBrains Mono', textAnchor: anchor || 'start' }, extra || {}), t);
+    for (let p = 35; p <= 60; p += 5) { k.push(e('line', { key: 'g' + p, x1: 0, x2: W - padR, y1: y(p), y2: y(p), stroke: '#161B21' })); k.push(lbl('gt' + p, W - padR + 8, y(p) + 4, p.toFixed(2))); }
+    [[pB + 5], [vB + 6]].forEach(([yy], j) => k.push(e('line', { key: 'sep' + j, x1: 0, x2: W, y1: yy, y2: yy, stroke: '#1E242C' })));
+    k.push(e('text', { key: 'vl', x: 10, y: vT + 10, fill: '#5E6873', fontSize: 10, fontFamily: 'Inter', fontWeight: 600, letterSpacing: '.06em' }, 'VOLUME · 10w avg'));
+    k.push(e('text', { key: 'rl', x: 10, y: rT + 10, fill: '#5E6873', fontSize: 10, fontFamily: 'Inter', fontWeight: 600, letterSpacing: '.06em' }, 'RS (MANSFIELD) vs TYX INDEX'));
+    B.forEach(b => {
+      const x = xOf(b.i), col = b.c >= b.o ? up : dn, hl = b.i === 105;
+      k.push(e('line', { key: 'w' + b.i, x1: x, x2: x, y1: y(b.h), y2: y(b.l), stroke: col }));
+      const yt = y(Math.max(b.o, b.c)), yb = y(Math.min(b.o, b.c));
+      k.push(e('rect', { key: 'b' + b.i, x: x - bw * 0.32, y: yt, width: bw * 0.64, height: Math.max(1, yb - yt), fill: col }));
+      k.push(e('rect', { key: 'v' + b.i, x: x - bw * 0.32, y: yv(b.v), width: bw * 0.64, height: vB - yv(b.v), fill: col, opacity: hl ? 0.95 : 0.3 }));
+      if (b.i % 13 === 0) k.push(lbl('x' + b.i, x, H - 8, 'Y' + (1 + Math.floor(b.i / 52)) + ' Q' + (1 + Math.floor((b.i % 52) / 13)), '#5E6873', 'middle'));
+    });
+    const path = (f, sy) => B.map((b, j) => (j ? 'L' : 'M') + xOf(b.i).toFixed(1) + ' ' + sy(b[f]).toFixed(1)).join(' ');
+    k.push(e('path', { key: 'ma10', d: path('ma10', y), fill: 'none', stroke: '#7D8794', strokeWidth: 1.25 }));
+    k.push(e('path', { key: 'ma30', d: path('ma30', y), fill: 'none', stroke: '#E4E7EB', strokeWidth: 2.25 }));
+    k.push(e('path', { key: 'av', d: path('av', yv), fill: 'none', stroke: '#9AA3AE', strokeWidth: 1, strokeDasharray: '3 2' }));
+    const bb = B[105];
+    k.push(lbl('vx', xOf(105), yv(bb.v) - 4, '2.4×', '#E4E7EB', 'end', { fontWeight: 700 }));
+    k.push(e('line', { key: 'r0', x1: 0, x2: W - padR, y1: yr(0), y2: yr(0), stroke: '#3A424D', strokeDasharray: '4 3' }));
+    k.push(lbl('r0t', W - padR + 8, yr(0) + 4, '0.0'));
+    const rsd = path('rs', yr);
+    k.push(e('path', { key: 'rsa', d: rsd + ` L${xOf(107)} ${yr(0)} L${xOf(0)} ${yr(0)} Z`, fill: '#C9CED5', opacity: 0.06 }));
+    k.push(e('path', { key: 'rs', d: rsd, fill: 'none', stroke: '#C9CED5', strokeWidth: 1.5 }));
+    k.push(e('rect', { key: 'rsr', x: W - padR + 2, y: yr(-0.4) - 9 + 12, width: padR - 6, height: 18, rx: 2, fill: '#F2A93B' }));
+    k.push(lbl('rst', W - padR + 8, yr(-0.4) + 16, '−0.40', '#0B0E11', 'start', { fontWeight: 700 }));
+    const bx0 = xOf(56), bx1 = xOf(104);
+    k.push(e('rect', { key: 'base', x: bx0, y: y(42.2), width: bx1 - bx0, height: y(36.2) - y(42.2), fill: '#FFFFFF', opacity: 0.025 }));
+    k.push(e('line', { key: 'res', x1: bx0, x2: W - padR, y1: y(42.2), y2: y(42.2), stroke: '#8F7EF3', strokeWidth: 1, strokeDasharray: '6 3' }));
+    k.push(e('circle', { key: 'resh1', cx: bx0, cy: y(42.2), r: 3, fill: '#8F7EF3' }));
+    k.push(lbl('rest', bx0 + 6, y(42.2) - 6, 'your line · base top 42.20', '#A395F7'));
+    const ex = xOf(105);
+    const tag = (key, p, fill, txt, w, handle, dash) => {
+      const yy = y(p), g = [], lx0 = W - padR - w - 6;
+      g.push(e('line', { key: key + 'l', x1: ex, x2: W - padR, y1: yy, y2: yy, stroke: fill, strokeDasharray: dash }));
+      if (handle) { g.push(e('rect', { key: key + 'h', x: lx0 - 26, y: yy - 9, width: 20, height: 18, rx: 3, fill: '#0B0E11', stroke: fill })); [0, 1, 2].forEach(j => g.push(e('line', { key: key + 'hl' + j, x1: lx0 - 20 + j * 4, x2: lx0 - 20 + j * 4, y1: yy - 4, y2: yy + 4, stroke: fill }))); }
+      g.push(e('rect', { key: key + 'r', x: lx0, y: yy - 9, width: w, height: 18, rx: 2, fill }));
+      g.push(e('text', { key: key + 't', x: lx0 + 7, y: yy + 4, fill: '#0B0E11', fontSize: 10.5, fontWeight: 700, fontFamily: 'JetBrains Mono' }, txt));
+      return g;
+    };
+    k.push(e('rect', { key: 'zu', x: ex, y: y(49.84), width: W - padR - ex, height: y(42.48) - y(49.84), fill: up, opacity: 0.06 }));
+    if (!noStop) k.push(e('rect', { key: 'zd', x: ex, y: y(42.48), width: W - padR - ex, height: y(38.8) - y(42.48), fill: dn, opacity: 0.07 }));
+    k.push(...tag('tp', 49.84, up, 'TP 49.84 · +2.0R', 118, true, '5 3'));
+    k.push(...tag('en', 42.48, '#7D8794', 'ENTRY 42.48', 88, false, '1 3'));
+    if (!noStop) k.push(...tag('sl', 38.8, dn, 'SL 38.80 · −1.0R', 118, true, '5 3'));
+    k.push(e('path', { key: 'mk', d: `M${ex} ${y(bb.l) + 8} l-5 8 h10 z`, fill: up }));
+    k.push(lbl('mkt', ex, y(bb.l) + 28, 'B 278', '#C9CED5', 'middle'));
+    k.push(e('rect', { key: 'lpr', x: W - padR + 2, y: y(43.17) - 9 - 12, width: padR - 6, height: 18, rx: 2, fill: up }));
+    k.push(lbl('lpt', W - padR + 8, y(43.17) + 4 - 12, '43.17', '#06110F', 'start', { fontWeight: 700 }));
+    k.push(e('line', { key: 'ax', x1: W - padR, x2: W - padR, y1: 0, y2: H, stroke: '#1E242C' }));
+    return e('svg', { width: '100%', height: '100%', viewBox: `0 0 ${W} ${H}`, preserveAspectRatio: 'none', style: { display: 'block', position: 'absolute', inset: 0 } }, k);
+  }
+  renderVals() {
+    const cb = !!this.props.colorblind, noStop = !!this.props.noStop;
+    const { bars } = this.data(), last = bars[107], prev = bars[106], m4 = bars[103];
+    const d = last.c - prev.c, pct = d / prev.c * 100, sl = (last.ma30 - m4.ma30) / m4.ma30 * 100;
+    const sg = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(2);
+    return {
+      up: cb ? '#4C9AFF' : '#26A69A', down: cb ? '#FF8A3D' : '#EF5350',
+      hasStop: !noStop, noStop,
+      stopDist: noStop ? '—' : '$3.68', rr: noStop ? '— : 2.0' : '1 : 2.0',
+      chg: sg(d) + ' ' + sg(pct) + '% ' + (d >= 0 ? '▲' : '▼'),
+      above: '+' + ((last.c / last.ma30 - 1) * 100).toFixed(1) + '%',
+      ma10: last.ma10.toFixed(2), ma30: last.ma30.toFixed(2), ma30Slope: (sl >= 0 ? '↗ +' : '↘ −') + Math.abs(sl).toFixed(1) + '%/4w',
+      chart: this.chart(noStop)
+    };
+  }
+}
+</script>
+</body>
+</html>

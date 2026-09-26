@@ -1,0 +1,16 @@
+node_modules/
+dist/
+coverage/
+.vite/
+*.log
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Design export archive (extracted copy is committed)
+design/*.zip
