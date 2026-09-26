@@ -17,7 +17,7 @@ section wins**:
   Timeframes are Weekly, Daily and 65m. RSI/MACD are dropped. The player
   **calls the stage** before entering, and the true stages are revealed in the
   post-mortem. This replaces the generic "regimes + indicators" idea of §1.5:
-  the hidden regime *is* the stage cycle, and the edge comes from reading it
+  the hidden regime _is_ the stage cycle, and the edge comes from reading it
   correctly.
 - **Visual direction: v3 "game HUD"**, not a sober terminal. XP, levels, HP bars
   for the loss limits, a mission bar, side quests, a battle log, and a mentor
@@ -43,13 +43,13 @@ check that the challenge doesn't reward abandoning the method.
 
 ### 1.1 Five campaigns is really three, plus a meta-layer
 
-| Brief item | Verdict | Why |
-|---|---|---|
-| 1. Value investing | **Keep**, it's a pillar | It has its own mechanic (investigating) and its own time scale (years). |
-| 2. Technical trading | **Merge with 5** | It needs a win/lose frame, and the prop challenge *is* that frame. On its own it's a sandbox with no goal. |
-| 3. Fundamental + trading hybrid | **Cut as a campaign**, keep as a layer | "Earnings season, guidance surprises, sector rotation" are *events*, not a mechanic. They make the value desk and the trading desk more interesting, but they don't make a third game. Ship them as the shared news/event system (M15). |
-| 4. Macro / portfolio | **Keep, build last** | It's a different mechanic (allocation and correlation, not picking), but it's the hardest to make fun (see §4). |
-| 5. Prop firm challenge | **Make it the frame for trading** | Fixed targets, hard drawdown limits, instant clear failure: it's the most "game-native" idea in the brief. |
+| Brief item                      | Verdict                                | Why                                                                                                                                                                                                                                     |
+| ------------------------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1. Value investing              | **Keep**, it's a pillar                | It has its own mechanic (investigating) and its own time scale (years).                                                                                                                                                                 |
+| 2. Technical trading            | **Merge with 5**                       | It needs a win/lose frame, and the prop challenge _is_ that frame. On its own it's a sandbox with no goal.                                                                                                                              |
+| 3. Fundamental + trading hybrid | **Cut as a campaign**, keep as a layer | "Earnings season, guidance surprises, sector rotation" are _events_, not a mechanic. They make the value desk and the trading desk more interesting, but they don't make a third game. Ship them as the shared news/event system (M15). |
+| 4. Macro / portfolio            | **Keep, build last**                   | It's a different mechanic (allocation and correlation, not picking), but it's the hardest to make fun (see §4).                                                                                                                         |
+| 5. Prop firm challenge          | **Make it the frame for trading**      | Fixed targets, hard drawdown limits, instant clear failure: it's the most "game-native" idea in the brief.                                                                                                                              |
 
 That leaves three desks (**Trading**, **Value**, **Macro**) under one **Firm**
 meta-layer (AUM, clients, staff, reputation), plus the **Strategy Builder** as the
@@ -83,15 +83,15 @@ Retail account → Prop challenge → Funded trader → Scaling plan
 If cheap stocks reliably converge to a known fair value, the best strategy is
 "buy the biggest discount and wait". There are no decisions left to make. To fix it:
 
-- **True intrinsic value is hidden.** The player only ever sees an *estimate*
+- **True intrinsic value is hidden.** The player only ever sees an _estimate_
   built from the statements, and its accuracy depends on how much research they did.
 - **Value traps exist.** Some cheap stocks are cheap for a reason (hidden red
-  flags), and their intrinsic value *falls* over time.
+  flags), and their intrinsic value _falls_ over time.
 - **How fast prices converge is random**, and some convergence waits on catalysts.
   Being right but early is a real, felt cost.
 - **Client patience pushes the other way.** Underperform the benchmark for too
-  long and clients redeem. The real tension in value investing is *conviction
-  vs. career risk*. That's the lesson, and it's also the game.
+  long and clients redeem. The real tension in value investing is _conviction
+  vs. career risk_. That's the lesson, and it's also the game.
 
 ### 1.4 Don't make players compute ratios by hand
 
@@ -114,10 +114,10 @@ Computing P/E by hand is arithmetic homework, not investing. The skill is
 
 If the price generator is a pure random walk, indicators have zero edge, and the
 game quietly teaches that TA doesn't work. If we plant patterns so indicators
-*always* work, we teach something false and dangerous. Resolution:
+_always_ work, we teach something false and dangerous. Resolution:
 
 - The generator has **hidden regimes** (trending, mean-reverting, choppy,
-  volatile). Indicators have an edge *only in the matching regime*. Trend tools
+  volatile). Indicators have an edge _only in the matching regime_. Trend tools
   work in trends and bleed in chop. RSI mean-reversion works in ranges and gets
   run over in trends.
 - The core skill isn't prediction. It's **risk management plus recognizing when
@@ -128,7 +128,7 @@ game quietly teaches that TA doesn't work. If we plant patterns so indicators
 
 ### 1.6 A forced stop-loss removes the lesson
 
-The brief says stop-loss is mandatory *and* that breaking risk rules ends the
+The brief says stop-loss is mandatory _and_ that breaking risk rules ends the
 run. If the UI forces stops, the player can never make the mistake, so they never
 learn why it's a mistake. Instead:
 
@@ -147,13 +147,14 @@ players learn to dismiss the popups. The stronger teaching moment comes **right
 after a mistake**:
 
 > "You lost 4.1% on one trade. Your stop was 3× wider than usual, but you kept
-> the same share size, so the risk per trade tripled. This is what *position
-> sizing* protects against."
+> the same share size, so the risk per trade tripled. This is what _position
+> sizing_ protects against."
 
 So the advisor has two modes:
+
 1. **First-use explanations**: short, one line, dismissable, with the term
    underlined and clickable forever after.
-2. **Post-mortems**: triggered by *behavior detectors* (oversizing, no stop,
+2. **Post-mortems**: triggered by _behavior detectors_ (oversizing, no stop,
    moving the stop further away, revenge trading, averaging down, concentration).
    This is the most important teaching system in the game.
 
@@ -168,7 +169,7 @@ tool and a mild collection mechanic.
   offset, and use historical data mainly for **backtesting** (endgame), where
   known history is a feature, not a spoiler.
 - **Data licensing:** "real data with anonymized names" doesn't remove licensing
-  issues. The *price data itself* can be licensed. Safe sources exist for
+  issues. The _price data itself_ can be licensed. Safe sources exist for
   **index-level** data (e.g. Robert Shiller's public S&P dataset, FRED series,
   public-domain Dow history). Single-stock history back to 1929 is hard to get
   cleanly. Plan: real index/sector data, with synthetic "constituents" generated
@@ -217,7 +218,7 @@ Why this one first:
    challenge doesn't make players want to hit "retry" right away, we need to
    know that before building four more modes.
 
-The honest counter-argument is that the value desk is the more *distinctive*
+The honest counter-argument is that the value desk is the more _distinctive_
 idea: there are plenty of trading sims and very few good value investing games.
 That's why it's v2, and why v1's engine is designed with it in mind.
 
@@ -230,7 +231,7 @@ That's why it's v2, and why v1's engine is designed with it in mind.
 1. **The terminal grows with you.** This is the tycoon visual payoff. At the
    start the screen is nearly empty: one chart, a buy/sell panel, a balance.
    Every unlock (indicators, order types, watchlists, the screener, the
-   correlation matrix, analyst panels) adds a *panel* to the workspace. Seeing
+   correlation matrix, analyst panels) adds a _panel_ to the workspace. Seeing
    a sparse screen turn into a full Bloomberg-style wall is the equivalent of
    watching your rail network spread. Progressive disclosure also keeps beginners
    from getting overwhelmed.
@@ -244,6 +245,7 @@ That's why it's v2, and why v1's engine is designed with it in mind.
    firm" feel abstract.
 
 Visual specifics:
+
 - Monospace with tabular numerals for all numbers (e.g. JetBrains Mono / IBM
   Plex Mono). Sans-serif (e.g. Inter) for prose and advisor text.
 - Strict color meaning: P&L up/down, risk (amber → red), neutral data (gray), and
@@ -257,14 +259,14 @@ Visual specifics:
 
 ## 4. Fun-risk assessment per campaign
 
-| Mode | Fun risk | Main danger | How to keep it a game |
-|---|---|---|---|
-| **Prop challenge** | 🟢 Low | Grinding sameness across seeds | Regime variety, rulesets (swing/intraday/news-heavy), daily seed, career ladder |
-| **Technical trading** (inside prop) | 🟡 Medium | Teaching false edge; watching candles is tiring | Regime-conditional edge (§1.5), speed control and pause, skip-to-next-day |
-| **Value investing** | 🟠 Medium-high | Spreadsheet homework; slow feedback | Research-time budget, value traps, thesis checking, time-skip turns, client pressure |
-| **Hybrid / earnings** | ⚪ n/a | Redundant as a mode | Becomes the shared event layer |
-| **Macro / portfolio** | 🔴 High | **Most likely to become a "quiz with a chart on top."** Rules like "rates up → growth down" either get memorized as answers or taught as deterministic laws (both bad). | Build on a factor model where relationships are *probabilistic and regime-dependent*. Frame it as *scenario survival* ("build a portfolio that survives these 5 hidden scenarios") rather than "predict the Fed". Correlations that break in a crisis are the key moment. |
-| **Strategy builder** | 🟡 Medium | Niche appeal; overfitting makes everything look great | Mandatory in-sample / out-of-sample split. Watching a "perfect" backtest fail out of sample is the best lesson the endgame has. |
+| Mode                                | Fun risk       | Main danger                                                                                                                                                             | How to keep it a game                                                                                                                                                                                                                                                     |
+| ----------------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Prop challenge**                  | 🟢 Low         | Grinding sameness across seeds                                                                                                                                          | Regime variety, rulesets (swing/intraday/news-heavy), daily seed, career ladder                                                                                                                                                                                           |
+| **Technical trading** (inside prop) | 🟡 Medium      | Teaching false edge; watching candles is tiring                                                                                                                         | Regime-conditional edge (§1.5), speed control and pause, skip-to-next-day                                                                                                                                                                                                 |
+| **Value investing**                 | 🟠 Medium-high | Spreadsheet homework; slow feedback                                                                                                                                     | Research-time budget, value traps, thesis checking, time-skip turns, client pressure                                                                                                                                                                                      |
+| **Hybrid / earnings**               | ⚪ n/a         | Redundant as a mode                                                                                                                                                     | Becomes the shared event layer                                                                                                                                                                                                                                            |
+| **Macro / portfolio**               | 🔴 High        | **Most likely to become a "quiz with a chart on top."** Rules like "rates up → growth down" either get memorized as answers or taught as deterministic laws (both bad). | Build on a factor model where relationships are _probabilistic and regime-dependent_. Frame it as _scenario survival_ ("build a portfolio that survives these 5 hidden scenarios") rather than "predict the Fed". Correlations that break in a crisis are the key moment. |
+| **Strategy builder**                | 🟡 Medium      | Niche appeal; overfitting makes everything look great                                                                                                                   | Mandatory in-sample / out-of-sample split. Watching a "perfect" backtest fail out of sample is the best lesson the endgame has.                                                                                                                                           |
 
 **Bottom line:** the prop challenge is naturally fun, value needs careful
 design, and macro is the one to treat as a research project. Don't commit to it

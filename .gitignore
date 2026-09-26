@@ -17,3 +17,6 @@ design/*.zip
 
 # Real historical price data: never committed (licensing, see docs/MODEL_BOOK.md §5)
 content/casefiles/data/
+
+# Cloudflare local state
+.wrangler/

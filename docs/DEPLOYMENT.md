@@ -10,27 +10,27 @@ static site with local saves.
 
 ### Choice: Cloudflare (static assets)
 
-| Option | Free tier | Private repo | Preview per branch/PR | Backend later on same platform | Notes |
-|---|---|---|---|---|---|
-| **Cloudflare Pages / Workers static assets** | Generous, unlimited bandwidth | ✅ | ✅ | ✅ Workers, D1, KV, R2 | **Recommended** |
-| GitHub Pages | Free | Public repo only (free plan) | ❌ | ❌ | Fine for a demo, limited |
-| Netlify | OK | ✅ | ✅ | Functions | Bandwidth/build-minute limits |
-| Vercel (Hobby) | OK | ✅ | ✅ | Functions | Hobby plan is non-commercial only |
+| Option                                       | Free tier                     | Private repo                 | Preview per branch/PR | Backend later on same platform | Notes                             |
+| -------------------------------------------- | ----------------------------- | ---------------------------- | --------------------- | ------------------------------ | --------------------------------- |
+| **Cloudflare Pages / Workers static assets** | Generous, unlimited bandwidth | ✅                           | ✅                    | ✅ Workers, D1, KV, R2         | **Recommended**                   |
+| GitHub Pages                                 | Free                          | Public repo only (free plan) | ❌                    | ❌                             | Fine for a demo, limited          |
+| Netlify                                      | OK                            | ✅                           | ✅                    | Functions                      | Bandwidth/build-minute limits     |
+| Vercel (Hobby)                               | OK                            | ✅                           | ✅                    | Functions                      | Hobby plan is non-commercial only |
 
 Why Cloudflare: free, preview deploys for every branch (useful for playtesting a
 milestone before merging), no bandwidth worries if a link spreads, and room to
 add a small backend on the same platform later if we want.
 
-> Cloudflare is steering new projects from *Pages* toward *Workers with static
-> assets*. For a Vite static build either works; check the current
+> Cloudflare is steering new projects from _Pages_ toward _Workers with static
+> assets_. For a Vite static build either works; check the current
 > recommendation when setting up M0.
 
 ### Environments
 
-| Env | Trigger | URL | Use |
-|---|---|---|---|
-| **Preview** | every push to a branch / PR | `<branch>.<project>.pages.dev` | Playtest a milestone before merging |
-| **Production** | merge to `main` | `<project>.pages.dev` → custom domain later | Public build |
+| Env            | Trigger                     | URL                                         | Use                                 |
+| -------------- | --------------------------- | ------------------------------------------- | ----------------------------------- |
+| **Preview**    | every push to a branch / PR | `<branch>.<project>.pages.dev`              | Playtest a milestone before merging |
+| **Production** | merge to `main`             | `<project>.pages.dev` → custom domain later | Public build                        |
 
 Build is `npm run build` → `dist/`. CI (GitHub Actions) runs lint + test + build;
 Cloudflare deploys only if CI is green.
@@ -55,9 +55,9 @@ interface SaveStore {
   loadProfile(): Promise<SaveFile | null>;
   saveProfile(save: SaveFile): Promise<void>;
   listRuns(): Promise<RunSummary[]>;
-  loadRun(id: string): Promise<RunRecord | null>;   // seed + command log (+ snapshot)
+  loadRun(id: string): Promise<RunRecord | null>; // seed + command log (+ snapshot)
   saveRun(run: RunRecord): Promise<void>;
-  exportAll(): Promise<Blob>;                       // JSON backup file
+  exportAll(): Promise<Blob>; // JSON backup file
   importAll(file: Blob): Promise<void>;
 }
 ```
@@ -67,12 +67,12 @@ fits later without changing callers.
 
 ### 2.2 What goes where
 
-| Data | v1 storage | Size |
-|---|---|---|
-| Profile (career, unlocks, concepts, settings) | `localStorage` | a few KB |
-| Active run (seed + command log + periodic snapshot) | `localStorage` | tens of KB |
-| Run history (summaries) | `localStorage` | small |
-| Full logs of finished runs (for replays) | **IndexedDB** (M7, only if we keep them) | can grow |
+| Data                                                | v1 storage                               | Size       |
+| --------------------------------------------------- | ---------------------------------------- | ---------- |
+| Profile (career, unlocks, concepts, settings)       | `localStorage`                           | a few KB   |
+| Active run (seed + command log + periodic snapshot) | `localStorage`                           | tens of KB |
+| Run history (summaries)                             | `localStorage`                           | small      |
+| Full logs of finished runs (for replays)            | **IndexedDB** (M7, only if we keep them) | can grow   |
 
 Autosave: on every session end, on pass/fail, and on `visibilitychange` →
 hidden (tab closed or switched). Not on every tick.
@@ -91,9 +91,9 @@ hidden (tab closed or switched). Not on every tick.
 
 ```ts
 interface SaveFile {
-  saveVersion: number;     // schema version → migrations[saveVersion] upgrade chain
+  saveVersion: number; // schema version → migrations[saveVersion] upgrade chain
   appVersion: string;
-  engineVersion: number;   // simulation behavior version
+  engineVersion: number; // simulation behavior version
   // ...profile, activeRun, history (see ARCHITECTURE §6)
 }
 ```
@@ -114,6 +114,7 @@ interface SaveFile {
 first-time players, and nothing in Phase 1 needs a server.
 
 A backend becomes worth it for exactly two features:
+
 1. **Cloud save / cross-device play.**
 2. **Daily-seed leaderboards** (needs server-side validation).
 
@@ -122,12 +123,12 @@ time after v1.0.
 
 ### 3.1 Recommended backend: Supabase
 
-| Need | Supabase | Cloudflare-only alternative |
-|---|---|---|
-| Auth | Built in: email magic link, Google/GitHub OAuth, **anonymous sign-in with later account linking** | Workers + an auth library you wire yourself |
-| Database | Postgres + Row Level Security | D1 (SQLite) |
-| Server code | Edge Functions (Deno, runs TS) | Workers (runs TS) |
-| Effort | Low | Medium–high |
+| Need        | Supabase                                                                                          | Cloudflare-only alternative                 |
+| ----------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| Auth        | Built in: email magic link, Google/GitHub OAuth, **anonymous sign-in with later account linking** | Workers + an auth library you wire yourself |
+| Database    | Postgres + Row Level Security                                                                     | D1 (SQLite)                                 |
+| Server code | Edge Functions (Deno, runs TS)                                                                    | Workers (runs TS)                           |
+| Effort      | Low                                                                                               | Medium–high                                 |
 
 Supabase wins on auth effort. Hosting stays on Cloudflare; the frontend calls
 Supabase directly. (Caveat: free-tier projects pause after a period of
@@ -172,6 +173,7 @@ create table saves (
 ```
 
 **Sync / conflicts:** the client remembers the last `revision` it saw.
+
 - Upload with `revision = seen + 1` only if the server is still at `seen`.
 - If the server moved on (played on another device), show both saves (career
   stage, capital, last played) and **let the player pick**. No automatic merging
@@ -185,11 +187,12 @@ Client-side scores are trivially fakeable. Instead, the client submits
 **`{ seed, ruleSetId, engineVersion, commandLog }`**, not a score.
 
 An Edge Function / Worker:
+
 1. checks the seed is today's daily seed and `engineVersion` is current,
 2. **replays the command log with the same engine**,
 3. computes the score itself and writes it to the leaderboard.
 
-Cheating would require a *valid* sequence of trades, which is just… playing well.
+Cheating would require a _valid_ sequence of trades, which is just… playing well.
 (A bot could still play perfectly with foreknowledge of the seed, so daily seeds
 are revealed only at the start of the day and the leaderboard is for fun, not
 prizes.)

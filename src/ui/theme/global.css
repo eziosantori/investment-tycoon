@@ -1,0 +1,122 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--bg-deep);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 12px;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  height: 100%;
+}
+
+a {
+  color: var(--accent-light);
+}
+a:hover {
+  color: var(--accent-hover);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-light);
+  outline-offset: 2px;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+/* Animations (handoff "Interactions & Behavior") */
+@keyframes gPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+@keyframes gGlow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px rgba(143, 126, 243, 0.5),
+      0 0 18px rgba(143, 126, 243, 0.25);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(143, 126, 243, 0.9),
+      0 0 28px rgba(143, 126, 243, 0.45);
+  }
+}
+@keyframes gBuy {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 transparent,
+      0 4px 0 var(--up-shadow);
+  }
+  50% {
+    box-shadow:
+      0 0 22px 2px color-mix(in oklab, var(--up) 35%, transparent),
+      0 4px 0 var(--up-shadow);
+  }
+}
+@keyframes gFloat {
+  0% {
+    transform: translateY(6px);
+    opacity: 0;
+  }
+  15% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+}
+@keyframes gWarn {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.35);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

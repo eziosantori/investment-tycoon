@@ -1,0 +1,101 @@
+/*
+ * Design tokens: v3 "game HUD" direction.
+ * Source: design/design_handoff_investment_tycoon/README.md ("Design Tokens").
+ * The game is dark-only by design; the colorblind palette swaps --up/--down and the risk ramp.
+ */
+:root {
+  /* Surfaces */
+  --bg: #0a0b12;
+  --bg-glow: #141630;
+  --bg-deep: #05060a;
+  --panel: #11122099;
+  --panel-solid: #111220;
+  --panel-danger: #1a111899;
+  --chart-bg: #0c0d18;
+  --raised: #1a1930;
+  --raised-2: #25244a;
+  --selected: #1e1a40;
+  --border: #23254a;
+  --border-strong: #26244a;
+  --border-danger: #4a2a2e;
+  --border-locked: #33315a;
+  --divider: #1b1c33;
+  --grid: #15162a;
+
+  /* Text */
+  --text: #e6e8f0;
+  --text-2: #c9c4f5;
+  --text-muted: #8c88b5;
+  --text-xp: #9a95c9;
+  --text-dim: #6e6a96;
+  --text-disabled: #4e4b78;
+  --text-axis: #5a5785;
+  --text-on-accent: #0a0b12;
+
+  /* Semantic: strict meaning, always paired with sign and ▲/▼ */
+  --up: #26a69a;
+  --up-top: #34c2b3;
+  --up-shadow: #0f5a53;
+  --up-ink: #04201d;
+  --down: #ef5350;
+  --down-soft: #ff9a9a;
+  --risk-0: #7d8794;
+  --risk-1: #f2a93b;
+  --risk-2: #f2703b;
+  --risk-3: #ef5350;
+  --damage: #2a1520;
+  --track: #1b2233;
+  --accent: #8f7ef3;
+  --accent-light: #b3a6ff;
+  --accent-deep: #5b4bc4;
+  --accent-hover: #d2caff;
+  --reward: #f5c542;
+
+  /* Chips */
+  --chip-good-bg: #153530;
+  --chip-good: #6fe0cf;
+  --chip-warn-bg: #33281a;
+  --chip-warn: #f2a93b;
+  --chip-bad-bg: #3a1a1f;
+  --chip-bad: #ff8a8a;
+
+  /* Stage bands (post-mortem only) */
+  --stage-1: #1b2029;
+  --stage-2: #16302c;
+  --stage-3: #2b2718;
+  --stage-4: #321a1c;
+
+  /* Chart studies */
+  --ma30: #e6e8f0;
+  --ma10: #6e6a96;
+  --avg-vol: #8c88b5;
+  --rs-line: #c9c4f5;
+  --rs-zero: #33315a;
+
+  /* Type */
+  --font-display: 'Chakra Petch', system-ui, sans-serif;
+  --font-body: Inter, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Radii */
+  --r-seg: 2px;
+  --r-btn: 4px;
+  --r-card: 6px;
+  --r-bubble: 8px;
+  --r-pill: 12px;
+
+  /* Layout */
+  --gutter: 16px;
+  --gap: 10px;
+}
+
+:root[data-palette='colorblind'] {
+  --up: #4c9aff;
+  --up-top: #6aadff;
+  --up-shadow: #1d4f94;
+  --up-ink: #041a33;
+  --down: #ff8a3d;
+  --risk-1: #f2d03b;
+  --risk-2: #e05bb8;
+  --risk-3: #d6336c;
+}
