@@ -24,3 +24,17 @@ market, later historical case files. Plan and rationale live in `docs/`
 - Every milestone ends deployable; see the Definition of Done in `docs/ROADMAP.md`.
 - In this Windows setup, avoid `cd` in Bash (an fnm hook fails); the working
   directory is already the repo root.
+
+## Agent skills
+
+### Issue tracker
+
+GitHub Issues on `eziosantori/investment-tycoon` (via the `gh` CLI). See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Default five-role vocabulary (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: `GLOSSARY.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
