@@ -10,13 +10,18 @@ half-wired state. Rationale is in [DESIGN.md](DESIGN.md), technical details in
 10-week MAs, volume vs its average, and Mansfield RS vs the index. Timeframes are
 Weekly, Daily and 65m. The player calls the stage before entering.
 
+**Progression: the chart grows with you.** The player does not see all of
+that on day one. Level 1 is a bare price line; each level adds one tool
+(30w MA, stops, candles, volume, RS…) together with the concept it teaches.
+See [Levels](#levels-the-chart-grows) below and DESIGN §3.
+
 ## Definition of Done (every milestone)
 
 - [ ] Deployed to the static host; the milestone's **demo script** works on the live build
 - [ ] `npm run build`, `npm run lint`, `npm test` pass in CI
 - [ ] Engine changes have unit tests; determinism test (`replay(seed, log) == live`) still passes
 - [ ] No dead-end UI: every visible control either works or isn't shown
-- [ ] UI matches the design handoff (`design/design_handoff_investment_tycoon/`) where a screen exists
+- [ ] UI matches the Design canvas (`design/README.md`) where a screen exists
 - [ ] `CHANGELOG.md` updated; any new concept has mentor text in `content/concepts`
 - [ ] Short playtest (even solo): note one thing that felt good and one that didn't
 
@@ -35,6 +40,41 @@ Estimates assume one developer working part-time; with Claude writing the code
 they shrink a lot and playtesting becomes the bottleneck. **S** ≈ a few evenings ·
 **M** ≈ 1–2 weeks · **L** ≈ 2–3 weeks.
 
+## Levels: the chart grows
+
+RPG-style progression for Phase 1. Every level unlocks **one** tool on the
+chart or in the loadout, and the concept that goes with it. The UI mockups are
+in the Design canvas (see `design/README.md`).
+
+| Lv  | Rank             | Unlocks                                                | Teaches                     | Trial to level up                              |
+| --- | ---------------- | ------------------------------------------------------ | --------------------------- | ---------------------------------------------- |
+| 1   | Rookie           | Weekly **price line**, 1 ticker, market Buy/Sell       | trend, P&L                  | Hold one winner for 6+ weeks                   |
+| 2   | Apprentice       | **30w MA** + **Call the Stage** cards                  | Stage 1–4, the stage line   | 3 correct stage calls in a row                 |
+| 3   | Junior Trader    | **Stop, target, sizing** (Loadout), R-multiples        | stop-loss, position size, R | 5 trades with risk ≤ 1% and the stop respected |
+| 4   | Trader           | **Candles** (OHLC); stops now fill intra-bar, gaps     | wicks, gaps, slippage       | Pass a Phase 1 challenge                       |
+| 5   | Senior Trader    | **Volume** + 10w average volume                        | breakout confirmation       | Buy 2 breakouts on ≥ 2× volume                 |
+| 6   | Stage Analyst    | **10w MA** + **Mansfield RS**; full setup rating (4/4) | relative strength           | 3 entries rated 4/4                            |
+| 7   | Portfolio Trader | Watchlist (all 12), **short**, **Daily** timeframe     | selection, short selling    | A profitable Stage 4 short; pass Phase 2       |
+| 8   | Pro              | **65m**, Sector RS, Breadth, stage alerts              | timing, market context      | (Funded track, M7)                             |
+
+Rules:
+
+- **The engine doesn't change.** The market always generates full OHLCV,
+  MAs and RS (same seed, same market). Levels only gate what the player _sees_
+  and which orders they can place.
+- **Trials gate the level-up; XP fills the bar.** XP alone never levels you
+  up, so there's no grinding: you prove the skill the next tool depends on.
+- **No candles, no intra-bar stops.** Below Lv4 stops fill on the weekly
+  close, so a stop never triggers on a low the player can't see. The Lv4
+  unlock _is_ the lesson: "in reality your stop gets hit by the wick".
+- **The setup checklist grows too:** Lv2 shows only "above 30w MA" and "30w MA
+  rising"; volume joins at Lv5, RS at Lv6.
+- **Challenge rules scale with level.** Lv1–2 have only the −10% total limit;
+  the −5% daily limit arrives with stops at Lv3.
+- **Locked tools are teased:** dashed chip with a padlock and "Lv N".
+- **Placement test** for people who already know Weinstein: a short quiz that
+  can skip straight to Lv4 or Lv6. A dev flag `?level=` overrides everything.
+
 ---
 
 ## Phase 0: Foundation
@@ -42,8 +82,9 @@ they shrink a lot and playtesting becomes the bottleneck. **S** ≈ a few evenin
 ### Pre-M0: UI mockup · S · ✅ done
 
 Claude Design handoff in `design/design_handoff_investment_tycoon/`. The approved
-direction is **01 Trading Screen v3 (game HUD)**. Screens 02–05 still need the v3
-treatment when implemented.
+direction is **01 Trading Screen v3 (game HUD)**. All screens have since been
+rebuilt in v3 on the Design canvas (`design/README.md`), plus the Lv1 Rookie
+screen, the level ladder and the Challenge Passed screen.
 
 ### M0: Project skeleton & design system · S · ✅ done
 
@@ -73,8 +114,9 @@ treatment when implemented.
 - Aggregation 65m → D → W; studies: MA 10w/30w, avg volume 10w, **Mansfield RS**
 - Timeframe chips W / D / 65m; ticker switcher (a minimal watchlist)
 - Dev-only overlay of the hidden stages (for tuning)
+- Chart layers split by level (price line / 30w MA / candles / volume / 10w MA + RS), with a dev `?level=` switch; the default view is Lv1
 
-**Demo:** press play and watch weeks unfold; bases form, some break out on volume, leaders top and roll over. Switch W/D/65m and switch tickers.
+**Demo:** press play and watch weeks unfold; bases form, some break out on volume, leaders top and roll over. Switch W/D/65m and switch tickers. `?level=1` shows only the price line, `?level=6` the full chart.
 **Teaches:** _stage analysis_, _30-week MA_, _relative strength_, _volume confirmation_.
 
 ### M2: Trading & accounting · M
@@ -97,6 +139,7 @@ treatment when implemented.
 - **Loadout panel**: risk % meter (0.5–2.5%), stop/target tiles, size = floor(equity × risk% / |entry − stop|), "if stopped out −$X"
 - **Draggable** stop/target lines on the chart, updating the loadout live; player-drawn resistance line
 - Profit/risk zones and R tags on the chart; **NO SHIELD** variant when there's no stop
+- Stop fill mode by level: on the weekly close below Lv4 (no candles visible), intra-bar from Lv4
 
 **Demo:** set 1% risk, drag the stop under the base, see size update; get stopped for exactly −1R; a gap through the stop fills worse and is explained.
 **Teaches:** _stop-loss_, _position sizing_, _R-multiple_, _slippage_, _gap risk_.
@@ -109,15 +152,16 @@ treatment when implemented.
 - **Mission bar + Daily HP + Account HP** with all states (safe / warning / critical / breached), week pips
 - **Briefing screen (03)** with v3 treatment; seed random/custom
 - Breach → liquidate → basic fail screen; target after min weeks → basic pass screen; retry with new seed
+- **Levels framework**: the run starts at the player's level, tools are gated per the [Levels](#levels-the-chart-grows) table, rules scale with level; trials for Lv1→2 and Lv2→3; a level-up screen that shows the new tool
 
-**Demo:** a stranger opens the link, reads the briefing, plays ~10 min, passes or fails with a clear reason, and hits retry.
+**Demo:** a stranger opens the link, reads the briefing, plays ~10 min at Lv1 with only the price line, passes or fails with a clear reason, and hits retry. Holding a winner for 6 weeks levels them up and the 30w MA appears.
 **Teaches:** _drawdown_, _daily loss limit_, _prop firm_.
 
 ### M5: Stage call & post-mortem · M
 
 **Goal:** the method becomes the gameplay, and losing teaches.
 
-- **Call the Stage** cards (required before Buy); setup rating from the 4 checks + checklist
+- **Call the Stage** cards (Lv2+, required before Buy); setup rating from the 4 checks + checklist, with checks shown only once their tool is unlocked
 - No-look-ahead **stage classifier** to score calls fairly; hidden true stages revealed after the run
 - Behavior detectors: `no-stop`, `oversized`, `stop-widened`, `revenge-trade`, `stage4-buy`, `rs-negative-entry`, `averaging-down`
 - **Challenge Failed screen (02)** with v3 treatment: causal chain, equity curve with stage bands, stats grid, replay
@@ -130,7 +174,8 @@ treatment when implemented.
 
 **Goal:** reward the process, not the P&L.
 
-- XP for process only (followed plan, stop respected, right stage call, quest done); levels and rank badge
+- XP for process only (followed plan, stop respected, right stage call, quest done); rank badge and XP bar
+- Trials for every level up to Lv6 (XP fills the bar, the trial unlocks the level); placement test to skip ahead
 - Side quests (e.g. "Risk ≤ 1% on 5 trades", "No Stage 4 buys this week"); discipline streak
 - Battle log with flag chips and XP per trade
 - **Mentor Margo**: rule-based triggers, underlined terms → short lessons, "Teach me · +XP"; terms-learned log
@@ -144,11 +189,11 @@ treatment when implemented.
 **Goal:** a reason to come back.
 
 - Career: Phase 1 → Phase 2 → Phase 3 → Funded; stricter rules per phase
-- **"Terminal grows" unlocks (04)**: Sector RS, Breadth (% > 30w MA), Daily + 65m timeframes, full watchlist, stage alerts
+- **Lv7–8 unlocks**: full watchlist, short, Daily, then 65m, Sector RS, Breadth (% > 30w MA), stage alerts; level and trials persisted
 - `SaveStore` over localStorage, autosave, `storage.persist()`, **export/import JSON**, versioned saves
 - Daily seed challenge; settings (colorblind, sound, reduced motion, speed)
 
-**Demo:** close the tab mid-career, reopen, continue. Pass Phase 1 and unlock Sector RS as a new panel.
+**Demo:** close the tab mid-career, reopen, continue at the same level. Reach Lv8 and Sector RS appears as a new panel.
 
 > **v1.0 checkpoint:** playtest with 3–5 people. Do they retry after failing? Can they explain why they failed? Can they call a Stage 2 breakout?
 

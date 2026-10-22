@@ -2,7 +2,8 @@
 
 Educational browser game: Stage Analysis (Weinstein) trading on a generated
 market, later historical case files. Plan and rationale live in `docs/`
-(start with `docs/ROADMAP.md`); the UI spec is the Claude Design handoff in
+(start with `docs/ROADMAP.md`); the UI spec is the Design canvas linked in
+`design/README.md`, with pixel specs for screen 01 in
 `design/design_handoff_investment_tycoon/README.md`.
 
 ## Commands

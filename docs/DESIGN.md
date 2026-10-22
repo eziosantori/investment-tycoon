@@ -235,6 +235,11 @@ That's why it's v2, and why v1's engine is designed with it in mind.
    a sparse screen turn into a full Bloomberg-style wall is the equivalent of
    watching your rail network spread. Progressive disclosure also keeps beginners
    from getting overwhelmed.
+   **This starts inside the chart itself.** Level 1 is a bare weekly price
+   line: no candles, no volume, no indicators. Each level adds one tool (30w
+   MA, stops and sizing, candles, volume, RS…) at the moment the player is
+   ready to understand it, and a trial (not XP alone) gates each level-up. The
+   full ladder and its rules are in ROADMAP, "Levels: the chart grows".
 2. **Game feel on top of the terminal.** Animated number tickers, the drawdown
    bars styled as health bars that pulse near the limit, subtle sound on fills
    and stop-outs, a big clear pass/fail screen. The terminal is the look; the
