@@ -3,6 +3,8 @@ import type { ChartBar, ChartView } from '../../../engine/chart/view';
 import { MINUS } from '../../format';
 import { useElementSize } from '../../hooks/useElementSize';
 import { linear, ticks } from './scale';
+import { StageBands } from './StageBands';
+import { useStageBands } from './stageBandsContext';
 
 /**
  * Renders a chart view (engine/chart/view.ts). Draws only what `view.layers`
@@ -11,6 +13,8 @@ import { linear, ticks } from './scale';
  */
 interface Props {
   view: ChartView;
+  /** Draw the hidden-stage bands (dev only). Defaults to `StageBandsContext`. */
+  bands?: boolean;
 }
 
 const PAD_R = 66;
@@ -40,9 +44,10 @@ const PANE_LABEL = {
 const fmtRs = (v: number) => `${v < 0 ? MINUS : ''}${Math.abs(v).toFixed(1)}`;
 const dollars = (cents: number) => cents / 100;
 
-export function StageChart({ view }: Props) {
+export function StageChart({ view, bands }: Props) {
   const [ref, { width, height }] = useElementSize<HTMLDivElement>();
   const clipId = useId();
+  const bandsFromContext = useStageBands();
 
   return (
     <div ref={ref} style={{ position: 'absolute', inset: 0 }}>
@@ -54,7 +59,7 @@ export function StageChart({ view }: Props) {
           role="img"
           aria-label={`${view.instrument.ticker} ${view.timeframe} price chart`}
         >
-          {renderChart({ view, width, height, clipId })}
+          {renderChart({ view, bands: bands ?? bandsFromContext, width, height, clipId })}
         </svg>
       )}
     </div>
@@ -63,6 +68,7 @@ export function StageChart({ view }: Props) {
 
 function renderChart({
   view,
+  bands,
   width: W,
   height: H,
   clipId,
@@ -90,6 +96,10 @@ function renderChart({
   const slots = bars.length + RIGHT_SLOTS;
   const bw = (plotR - PAD_L - 10) / slots;
   const xOf = (i: number) => PAD_L + (i + 0.5) * bw;
+
+  if (bands) {
+    k.push(<StageBands key="bands" window={bars} x0={PAD_L} slotWidth={bw} top={0} bottom={H} />);
+  }
 
   // Price scale
   const candles = layers.price === 'candles';
@@ -151,19 +161,49 @@ function renderChart({
       );
     });
   } else {
+    // Price line (Lv1–3), as on the Rookie board: area fill, soft glow, last-point dot.
+    const line = path(
+      bars.map((b) => b.c),
+      y,
+    );
+    const areaId = `${clipId}-area`;
+    k.push(
+      <defs key="price-defs">
+        <linearGradient id={areaId} x1={0} y1={0} x2={0} y2={1}>
+          <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.18} />
+          <stop offset="100%" stopColor="var(--accent)" stopOpacity={0} />
+        </linearGradient>
+      </defs>,
+    );
     k.push(
       <path
-        key="price"
-        d={path(
-          bars.map((b) => b.c),
-          y,
-        )}
+        key="price-area"
+        d={`${line} L${xOf(bars.length - 1)} ${pB} L${xOf(0)} ${pB} Z`}
+        fill={`url(#${areaId})`}
+      />,
+    );
+    k.push(
+      <path
+        key="price-glow"
+        d={line}
         fill="none"
         stroke="var(--accent-light)"
-        strokeWidth={1.75}
+        strokeWidth={6}
+        opacity={0.12}
         strokeLinejoin="round"
       />,
     );
+    k.push(
+      <path
+        key="price"
+        d={line}
+        fill="none"
+        stroke="var(--text)"
+        strokeWidth={2}
+        strokeLinejoin="round"
+      />,
+    );
+    k.push(<circle key="now" cx={xOf(bars.length - 1)} cy={y(last.c)} r={4} fill="var(--text)" />);
   }
 
   if (layers.ma10) {
@@ -195,7 +235,9 @@ function renderChart({
         opacity={0.12}
       />,
     );
-    k.push(<path key="ma30" d={ma30} fill="none" stroke="var(--ma30)" strokeWidth={2.25} />);
+    // Over a white price line (Lv2–3) the MA takes the accent so the two stay apart.
+    const ma30Color = candles ? 'var(--ma30)' : 'var(--accent-light)';
+    k.push(<path key="ma30" d={ma30} fill="none" stroke={ma30Color} strokeWidth={2.25} />);
   }
 
   // Volume pane
