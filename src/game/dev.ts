@@ -1,4 +1,6 @@
 import type { Level } from '../engine/chart/tools';
+import { chartView, type ChartView } from '../engine/chart/view';
+import { endCursor } from '../engine/cursor';
 import type { MarketTimeline, Stage, Ticker } from '../engine/market/types';
 
 /**
@@ -49,4 +51,16 @@ export function dealReadout(timeline: MarketTimeline): DealReadout {
     }),
     defaultInstrument: deal.defaultInstrument,
   };
+}
+
+/**
+ * The stage gallery (`?dev=gallery`): the weekly chart of every stock, in
+ * content order, at the end of the run, so the whole market can be judged at
+ * a glance. Each bar carries its hidden stage for the bands.
+ */
+export function galleryViews(timeline: MarketTimeline, level: Level): ChartView[] {
+  const cursor = endCursor(timeline);
+  return timeline.stocks.map((stock) =>
+    chartView({ timeline, cursor, instrument: stock.info.ticker, timeframe: 'W', level }),
+  );
 }
