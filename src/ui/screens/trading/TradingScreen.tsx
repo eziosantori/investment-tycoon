@@ -19,11 +19,11 @@ export function TradingScreen() {
   usePlaybackKeys(timeline);
 
   return (
-    <main className={`${s.screen} ${s.screenNoStatus}`} data-screen-label="01 Trading · Game">
+    <main className={s.screen} data-screen-label="01 Trading · Game">
       <HudTop />
       <EndOfMarket />
       <div className={s.main}>
-        <div className={`${s.leftCol} ${s.leftColNoBottom}`}>
+        <div className={s.leftCol}>
           <ChartCard />
         </div>
         <div className={s.rightCol}>

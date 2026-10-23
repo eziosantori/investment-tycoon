@@ -1,3 +1,4 @@
+import type { Level } from '../../../engine/chart/tools';
 import type { LockedChip } from '../../../engine/chart/view';
 import s from './trading.module.css';
 
@@ -21,12 +22,20 @@ function Padlock() {
 }
 
 /** A dashed "LABEL · Lv N" chip for a tool the player hasn't unlocked yet. */
-export function LockChip({ label, level, next }: { label: string; level: number; next: boolean }) {
+export function LockChip({
+  label,
+  level,
+  isNextUnlock,
+}: {
+  label: string;
+  level: Level;
+  isNextUnlock: boolean;
+}) {
   return (
     <button
       type="button"
       disabled
-      className={`${s.lockedChip} ${next ? s.lockedChipNext : ''}`}
+      className={`${s.lockedChip} ${isNextUnlock ? s.lockedChipNext : ''}`}
       title={`Unlocks at level ${level}`}
     >
       <Padlock />
@@ -41,7 +50,7 @@ export function LockedChips({ chips }: { chips: LockedChip[] }) {
   return (
     <div className={s.studyChips} role="group" aria-label="Locked tools">
       {chips.map((c) => (
-        <LockChip key={c.tool} label={c.label} level={c.level} next={c.next} />
+        <LockChip key={c.tool} label={c.label} level={c.level} isNextUnlock={c.isNextUnlock} />
       ))}
     </div>
   );

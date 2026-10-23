@@ -5,21 +5,20 @@ import s from './trading.module.css';
 
 interface Props {
   chips: TimeframeChip[];
-  level: number;
   onSelect(timeframe: Timeframe): void;
 }
 
 /** W / D / 65m chips; locked timeframes show as dashed "Lv N" chips. */
-export function TimeframeChips({ chips, level, onSelect }: Props) {
+export function TimeframeChips({ chips, onSelect }: Props) {
   return (
     <div className={s.chips} role="group" aria-label="Timeframe">
       {chips.map((tf) =>
         tf.locked ? (
           <LockChip
             key={tf.timeframe}
-            label={tf.timeframe}
+            label={tf.label}
             level={tf.level}
-            next={tf.level === level + 1}
+            isNextUnlock={tf.isNextUnlock}
           />
         ) : (
           <button
@@ -29,7 +28,7 @@ export function TimeframeChips({ chips, level, onSelect }: Props) {
             aria-pressed={tf.active}
             onClick={() => onSelect(tf.timeframe)}
           >
-            {tf.timeframe}
+            {tf.label}
           </button>
         ),
       )}

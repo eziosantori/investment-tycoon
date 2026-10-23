@@ -110,9 +110,16 @@ describe('chartView level gating', () => {
       ['rs', 6],
     ]);
     expect(v.timeframes).toEqual([
-      { timeframe: 'W', level: 1, locked: false, active: true },
-      { timeframe: 'D', level: 7, locked: true, active: false },
-      { timeframe: '65m', level: 8, locked: true, active: false },
+      { timeframe: 'W', label: 'W', level: 1, locked: false, active: true, isNextUnlock: false },
+      { timeframe: 'D', label: 'D', level: 7, locked: true, active: false, isNextUnlock: false },
+      {
+        timeframe: '65m',
+        label: '65m',
+        level: 8,
+        locked: true,
+        active: false,
+        isNextUnlock: false,
+      },
     ]);
   });
 
@@ -202,7 +209,41 @@ describe('chartView for every level (weekly stock chart)', () => {
     const v = view({ level: level as ChartViewInput['level'] });
     expect(v.layers).toEqual({ price, ma30, volume, ma10, rs });
     expect(v.locked.map((c) => `${c.label} · Lv${c.level}`)).toEqual(locked);
-    expect(v.locked.filter((c) => c.next).map((c) => c.label)).toEqual(next);
+    expect(v.locked.filter((c) => c.isNextUnlock).map((c) => c.label)).toEqual(next);
+  });
+});
+
+describe('chartView timeframe chips for every level', () => {
+  // [level, allowed timeframes, locked chips "LABEL · LvN", next-unlock timeframe chips]
+  const table: [number, string[], string[], string[]][] = [
+    [1, ['W'], ['D · Lv7', '65m · Lv8'], []],
+    [2, ['W'], ['D · Lv7', '65m · Lv8'], []],
+    [3, ['W'], ['D · Lv7', '65m · Lv8'], []],
+    [4, ['W'], ['D · Lv7', '65m · Lv8'], []],
+    [5, ['W'], ['D · Lv7', '65m · Lv8'], []],
+    [6, ['W'], ['D · Lv7', '65m · Lv8'], ['D']],
+    [7, ['W', 'D'], ['65m · Lv8'], ['65m']],
+    [8, ['W', 'D', '65m'], [], []],
+  ];
+
+  it.each(table)('Lv%i', (level, allowed, locked, next) => {
+    const tfs = view({ level: level as ChartViewInput['level'] }).timeframes;
+    expect(tfs.map((t) => t.timeframe)).toEqual(['W', 'D', '65m']);
+    expect(tfs.filter((t) => !t.locked).map((t) => t.label)).toEqual(allowed);
+    expect(tfs.filter((t) => t.locked).map((t) => `${t.label} · Lv${t.level}`)).toEqual(locked);
+    expect(tfs.filter((t) => t.isNextUnlock).map((t) => t.label)).toEqual(next);
+  });
+
+  it('marks one next unlock level across tools and timeframes', () => {
+    // Lv5: 10W MA and RS unlock at Lv6, before D at Lv7.
+    const v = view({ level: 5 });
+    expect(v.locked.filter((c) => c.isNextUnlock).map((c) => c.tool)).toEqual(['ma10', 'rs']);
+    expect(v.timeframes.some((t) => t.isNextUnlock)).toBe(false);
+  });
+
+  it('ignores the RS chip the index never shows when choosing the next unlock', () => {
+    const v = view({ instrument: 'TYX', level: 5 });
+    expect(v.locked.filter((c) => c.isNextUnlock).map((c) => c.tool)).toEqual(['ma10']);
   });
 });
 
