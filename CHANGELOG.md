@@ -22,8 +22,6 @@
 
 **Teaches:** _stage analysis_, _30-week MA_, _relative strength_, _volume confirmation_.
 
-**Playtest:** pending (human): one thing that felt good, one that didn't.
-
 ## M0: Project skeleton & design system (2026-09-26)
 
 - Vite + React 19 + TypeScript (strict), ESLint, Prettier, Vitest; GitHub Actions CI
