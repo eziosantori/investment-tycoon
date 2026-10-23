@@ -8,9 +8,9 @@ import type { Stage } from './types';
  *
  * Shape: one `InstrumentParams` per kind (index, stock) plus the deal. Each
  * holds the stage cycle and the price model (per-stage drift, volatility, mean
- * reversion and volume, plus the shocks, clustering and intraday shape). The
- * stage signatures (#12: breakout volume and gaps, breakdowns, tops) add their
- * own `signatures` section next to `price`.
+ * reversion and volume, plus the shocks, clustering and intraday shape) and
+ * the stage signatures (breakout and breakdown volume, gaps and levels, failed
+ * breakouts).
  *
  * A single stock can override its stage cycle from the content file
  * (`InstrumentSpec.stageCycle`); thanks to per-instrument RNG streams that
@@ -78,10 +78,54 @@ export interface PriceParams {
   volumeNoise: number;
 }
 
-/** Everything tunable about one kind of instrument. #12 adds `signatures`. */
+type Range = readonly [number, number];
+
+/**
+ * The stage signatures (M1 spec, "Stage signatures"): how the transitions look
+ * on the chart. Levels are weekly closes (a base's resistance is its highest
+ * close, its support the lowest; a top's support its lowest close); volume
+ * ratios are against the average of the previous 10 weeks. Ranges are drawn
+ * uniformly per event. The base and the top live in `PriceParams.stages`
+ * (volatility, volume, mean reversion).
+ */
+export interface SignatureParams {
+  /** Stage 1 → 2. */
+  breakout: {
+    /** Breakout-week volume ÷ the 10-week average. */
+    volume: Range;
+    /** Volume of the weeks after a breakout that holds, ÷ the same average. */
+    followVolume: Range;
+    followWeeks: number;
+    /** Probability of an opening gap up, and its size (fraction of the price). */
+    gapChance: number;
+    gap: Range;
+    /** The week closes at least this far above resistance (fraction). */
+    clearance: Range;
+  };
+  /** Stage 2 → 1, after the breakout week. */
+  failedBreakout: {
+    /** Volume of the weeks back toward the base ÷ the 10-week average ("normal"). */
+    volume: Range;
+    /** Pull per 65m bar back toward the base, as for `meanReversion`. */
+    pull: number;
+    /** The last Stage 2 week closes at least this far below resistance. */
+    clearance: Range;
+  };
+  /** Stage 1 → 4 or 3 → 4. */
+  breakdown: {
+    volume: Range;
+    gapChance: number;
+    gap: Range;
+    /** The week closes at least this far below support. */
+    clearance: Range;
+  };
+}
+
+/** Everything tunable about one kind of instrument. */
 export interface InstrumentParams {
   stageCycle: StageCycleParams;
   price: PriceParams;
+  signatures: SignatureParams;
 }
 
 /** The deal: the spread of stages at the first run bar. */
@@ -105,6 +149,20 @@ export interface MarketParams {
 /** U-shaped intraday profile: busy open and close (≈1.5×), quiet middle (≈0.7×). */
 const INTRADAY_VOL = [1.5, 1, 0.7, 0.7, 1, 1.5] as const;
 const INTRADAY_VOLUME = [1.5, 1, 0.7, 0.7, 1, 1.5] as const;
+
+/** Weinstein's numbers, shared by the index and the stocks. */
+const SIGNATURES: SignatureParams = {
+  breakout: {
+    volume: [2, 3],
+    followVolume: [1.3, 1.8],
+    followWeeks: 2,
+    gapChance: 0.5,
+    gap: [0.02, 0.04],
+    clearance: [0.01, 0.03],
+  },
+  failedBreakout: { volume: [0.8, 1.2], pull: 0.003, clearance: [0.01, 0.03] },
+  breakdown: { volume: [1.5, 2.5], gapChance: 0.4, gap: [0.02, 0.04], clearance: [0.01, 0.03] },
+};
 
 export const MARKET_PARAMS: MarketParams = {
   index: {
@@ -132,6 +190,7 @@ export const MARKET_PARAMS: MarketParams = {
       volumeShock: 0.25,
       volumeNoise: 0.2,
     },
+    signatures: SIGNATURES,
   },
   stock: {
     stageCycle: {
@@ -158,6 +217,7 @@ export const MARKET_PARAMS: MarketParams = {
       volumeShock: 0.3,
       volumeNoise: 0.25,
     },
+    signatures: SIGNATURES,
   },
   deal: {
     settingUp: [3, 5],

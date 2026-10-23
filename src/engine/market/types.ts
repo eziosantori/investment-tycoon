@@ -9,7 +9,9 @@
  *   `findInstrument`); the price model: `./priceSeries`
  * - assembling an instrument's timeline from its 65m bars + weekly stages
  *   (aggregation and weekly studies): `./assemble`, `./aggregate`
- * - tunable parameter set (stage cycle, price model, deal): `./params`
+ * - tunable parameter set (stage cycle, price model, stage signatures, deal): `./params`
+ * - reading the stage signatures back out of the weeks (breakouts, breakdowns):
+ *   `./stageEvents`; the statistical suite: `./marketCharacter.test.ts`
  * - hidden stages of the universe, dealt at the first run week: `./hiddenStages`
  *   (cycle: `./stageCycle`; deal targets and reading the deal: `./deal`)
  * - universe spec type: `./universe`; the data: `src/content/universe.ts`

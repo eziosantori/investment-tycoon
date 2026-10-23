@@ -131,7 +131,7 @@ describe('generateMarketTimeline: the real price series', () => {
   // Pinned: any change to generation (params, model, RNG use) changes it. When the
   // change is intended, bump ENGINE_VERSION if it isn't bumped yet and re-pin.
   it('matches the pinned golden hash for its seed', () => {
-    expect(hashOf(market)).toBe('5eac7013');
+    expect(hashOf(market)).toBe('8a1fbbe8');
   });
 
   it('leaves the other instruments identical when one stock content changes', () => {
