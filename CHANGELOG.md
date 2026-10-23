@@ -1,6 +1,6 @@
 # Changelog
 
-## M1: Market engine & playback (unreleased)
+## M1: Market engine & playback (2026-10-23)
 
 - A living fictional market: TYX index + 12 stocks, ~3 years of warm-up history
   then a 10-week run. Stocks follow beta × index plus their own stage cycle
