@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import type { Bar } from './market/types';
+import type { LegacyBar } from './market/types';
 import { aggregate, mansfieldRs, slopePct, sma } from './studies';
 
-const bar = (t: number, o: number, h: number, l: number, c: number, v = 100): Bar => ({
+const bar = (t: number, o: number, h: number, l: number, c: number, v = 100): LegacyBar => ({
   t,
   o,
   h,

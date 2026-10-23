@@ -1,6 +1,6 @@
 import { createStream, type Rng } from '../rng';
 import { buildStageTimeline, INDEX_STAGES, STOCK_STAGES } from './stageCycle';
-import type { Bar, Stage } from './types';
+import type { LegacyBar, Stage } from './types';
 
 /**
  * M0 market generator: daily bars for the TYX index and one stock, driven by
@@ -46,8 +46,8 @@ export interface GenerateOptions {
 }
 
 export interface GeneratedMarket {
-  index: Bar[];
-  stock: Bar[];
+  index: LegacyBar[];
+  stock: LegacyBar[];
 }
 
 export function roundToTick(price: number, tick: number): number {
@@ -64,8 +64,8 @@ interface SeriesSpec {
   market?: { returns: number[]; beta: number };
 }
 
-function generateDaily(spec: SeriesSpec, rng: Rng): { bars: Bar[]; returns: number[] } {
-  const bars: Bar[] = [];
+function generateDaily(spec: SeriesSpec, rng: Rng): { bars: LegacyBar[]; returns: number[] } {
+  const bars: LegacyBar[] = [];
   const returns: number[] = [];
   let close = spec.startPrice;
   let anchor = close;

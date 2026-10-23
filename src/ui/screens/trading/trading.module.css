@@ -1077,3 +1077,14 @@
   color: var(--text-disabled);
   white-space: nowrap;
 }
+
+/* M1: panels that aren't built yet are hidden; the chart takes their space. */
+.screenNoStatus {
+  grid-template-rows: 60px 1fr;
+}
+.mainNoSide {
+  grid-template-columns: 1fr;
+}
+.leftColNoBottom {
+  grid-template-rows: 1fr;
+}

@@ -1,4 +1,4 @@
-import type { WeeklyStudyBar } from '../engine/market/types';
+import type { LegacyWeeklyStudyBar } from '../engine/market/types';
 import { slopePct } from '../engine/studies';
 
 /**
@@ -54,7 +54,7 @@ interface Plan {
 const round2 = (x: number) => Math.round(x * 100) / 100;
 
 /** Long entry at a bar's close, stop under the prior 6-week low (8% if that's too tight/wide), target +2R. */
-function planAt(bars: readonly WeeklyStudyBar[], entryIndex: number): Plan | null {
+function planAt(bars: readonly LegacyWeeklyStudyBar[], entryIndex: number): Plan | null {
   const bar = bars[entryIndex];
   if (!bar) return null;
   const entry = bar.c;
@@ -67,12 +67,12 @@ function planAt(bars: readonly WeeklyStudyBar[], entryIndex: number): Plan | nul
 }
 
 /** Still open today: never touched the stop or the target after entry. */
-function stillOpen(bars: readonly WeeklyStudyBar[], plan: Plan): boolean {
+function stillOpen(bars: readonly LegacyWeeklyStudyBar[], plan: Plan): boolean {
   return bars.slice(plan.entryIndex + 1).every((b) => b.l > plan.stop && b.h < plan.target);
 }
 
 /** How textbook the entry bar is: above a rising 30w MA, on volume, with positive RS. */
-function setupScore(bars: readonly WeeklyStudyBar[], i: number): number {
+function setupScore(bars: readonly LegacyWeeklyStudyBar[], i: number): number {
   const b = bars[i];
   if (!b) return 0;
   const slope = slopePct(
@@ -92,7 +92,7 @@ function setupScore(bars: readonly WeeklyStudyBar[], i: number): number {
  * Picks the most textbook recent entry that would still be open, so the demo
  * never shows a position that should already have been stopped out.
  */
-function pickPlan(bars: readonly WeeklyStudyBar[]): Plan {
+function pickPlan(bars: readonly LegacyWeeklyStudyBar[]): Plan {
   const lastIndex = bars.length - 1;
   let best: { plan: Plan; score: number } | null = null;
   for (let ago = ENTRY_WINDOW[0]; ago <= ENTRY_WINDOW[1]; ago++) {
@@ -108,7 +108,7 @@ function pickPlan(bars: readonly WeeklyStudyBar[]): Plan {
   return { entryIndex: lastIndex, entry, stop, target: round2(entry + 2 * (entry - stop)) };
 }
 
-export function buildDemoScenario(bars: readonly WeeklyStudyBar[]): DemoScenario {
+export function buildDemoScenario(bars: readonly LegacyWeeklyStudyBar[]): DemoScenario {
   const lastIndex = bars.length - 1;
   const last = bars[lastIndex];
   const prev = bars[lastIndex - 1];

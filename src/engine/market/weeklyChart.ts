@@ -1,6 +1,6 @@
 import { aggregate, withWeeklyStudies } from '../studies';
 import { DAYS_PER_WEEK, generateMarket } from './generate';
-import type { WeeklyStudyBar } from './types';
+import type { LegacyWeeklyStudyBar } from './types';
 
 /** Weeks of history shown on the chart. */
 export const VISIBLE_WEEKS = 108;
@@ -8,8 +8,8 @@ export const VISIBLE_WEEKS = 108;
 export const WARMUP_WEEKS = 60;
 
 export interface WeeklyChartData {
-  stock: WeeklyStudyBar[];
-  index: WeeklyStudyBar[];
+  stock: LegacyWeeklyStudyBar[];
+  index: LegacyWeeklyStudyBar[];
 }
 
 /** Seeded weekly chart for one stock vs the TYX index, with studies computed on full history. */
