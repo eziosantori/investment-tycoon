@@ -9,7 +9,9 @@
  *   `findInstrument`); today backed by the placeholder `./fakeTimeline`
  * - assembling an instrument's timeline from its 65m bars + weekly stages
  *   (aggregation and weekly studies): `./assemble`, `./aggregate`
- * - reading the deal off the stages: `./deal`
+ * - tunable parameter set (stage cycle, deal; price params from #10): `./params`
+ * - hidden stages of the universe, dealt at the first run week: `./hiddenStages`
+ *   (cycle: `./stageCycle`; deal targets and reading the deal: `./deal`)
  * - universe spec type: `./universe`; the data: `src/content/universe.ts`
  * - cursor helpers (start/end, advance, next session/week close): `../cursor`
  * - tools-for-level table and `Level`: `../chart/tools`
