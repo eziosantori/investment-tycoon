@@ -10,6 +10,12 @@ import { generatePriceSeries } from './priceSeries';
 import type { InstrumentTimeline, MarketTimeline, Ticker } from './types';
 import { infoOf } from './universe';
 
+/** An instrument's own price streams: the series and its stage signatures. */
+const streamsOf = (seed: number, ticker: Ticker) => ({
+  series: createStream(seed, `series:${ticker}`),
+  signatures: createStream(seed, `signatures:${ticker}`),
+});
+
 /** The universe of the content file: TYX and the 12 stocks. */
 export const DEFAULT_UNIVERSE: Universe = { index: INDEX, stocks: STOCKS };
 
@@ -20,8 +26,8 @@ export const DEFAULT_UNIVERSE: Universe = { index: INDEX, stocks: STOCKS };
  *
  * Hidden stages are dealt first (`./hiddenStages`), then the index's 65m bars,
  * then each stock's on top of the index's moves (`./priceSeries`). Every
- * instrument draws from its own `stages:<ticker>` and `series:<ticker>`
- * streams, so editing one stock leaves every other instrument identical.
+ * instrument draws from its own `stages:<ticker>`, `series:<ticker>` and
+ * `signatures:<ticker>` streams, so editing one stock leaves every other instrument identical.
  *
  * @param universe defaults to the content file; tests pass edited copies
  * @param params defaults to `MARKET_PARAMS`
@@ -36,8 +42,8 @@ export function generateMarketTimeline(
   const indexSeries = generatePriceSeries(
     universe.index,
     stages.index,
-    params.index.price,
-    createStream(seed, `series:${universe.index.ticker}`),
+    params.index,
+    streamsOf(seed, universe.index.ticker),
     null,
   );
   const index = assembleInstrument(
@@ -52,8 +58,8 @@ export function generateMarketTimeline(
     const { bars } = generatePriceSeries(
       spec,
       stockStages,
-      params.stock.price,
-      createStream(seed, `series:${spec.ticker}`),
+      params.stock,
+      streamsOf(seed, spec.ticker),
       { index: indexSeries.moves, beta: spec.beta },
     );
     return assembleInstrument(infoOf(spec, 'stock'), bars, stockStages, index.weeks);
