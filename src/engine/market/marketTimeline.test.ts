@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { generateMarketTimeline } from './marketTimeline';
+import { INDEX, STOCKS } from '../../content/universe';
+import { generateHiddenStages } from './hiddenStages';
 import type { Bar } from './types';
 
 const SEED = 48213;
@@ -89,6 +91,15 @@ describe('generateMarketTimeline', () => {
     expect(deal.indexStage).toBe(market.index.stages[firstRun]);
     expect(market.stocks.map((s) => s.info.ticker)).toContain(deal.defaultInstrument);
     if (deal.settingUp.length > 0) expect(deal.defaultInstrument).toBe(deal.settingUp[0]);
+  });
+
+  it('records the dealt hidden stages and a balanced deal', () => {
+    const dealt = generateHiddenStages(SEED, { index: INDEX, stocks: STOCKS });
+    expect(market.index.stages).toEqual(dealt.index);
+    expect(market.stocks.map((s) => s.stages)).toEqual(dealt.stocks);
+    expect(market.deal.settingUp.length).toBeGreaterThanOrEqual(3);
+    expect(market.deal.traps.length).toBeGreaterThanOrEqual(1);
+    expect(market.deal.indexStage).not.toBe(4);
   });
 
   it('is deterministic per seed and differs across seeds', () => {

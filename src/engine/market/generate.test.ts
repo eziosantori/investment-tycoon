@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { createRng } from '../rng';
 import { DAYS_PER_WEEK, generateMarket } from './generate';
-import { buildStageTimeline, STOCK_STAGES } from './stageCycle';
+import { MARKET_PARAMS } from './params';
+import { buildStageTimeline } from './stageCycle';
 import { buildWeeklyChart, VISIBLE_WEEKS } from './weeklyChart';
 
 describe('generateMarket', () => {
@@ -51,8 +52,8 @@ describe('generateMarket', () => {
 
 describe('buildStageTimeline', () => {
   it('only makes allowed stage transitions', () => {
-    const allowed = new Set(['1>2', '1>4', '2>3', '3>2', '3>4', '4>1']);
-    const stages = buildStageTimeline(2000, STOCK_STAGES, createRng(5));
+    const allowed = new Set(['1>2', '1>4', '2>1', '2>3', '3>2', '3>4', '4>1']);
+    const stages = buildStageTimeline(2000, MARKET_PARAMS.stock.stageCycle, createRng(5));
     for (let i = 1; i < stages.length; i++) {
       if (stages[i] !== stages[i - 1]) {
         expect(allowed.has(`${stages[i - 1]}>${stages[i]}`)).toBe(true);

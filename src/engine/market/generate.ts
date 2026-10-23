@@ -1,5 +1,6 @@
 import { createStream, type Rng } from '../rng';
-import { buildStageTimeline, INDEX_STAGES, STOCK_STAGES } from './stageCycle';
+import { MARKET_PARAMS } from './params';
+import { buildStageTimeline } from './stageCycle';
 import type { LegacyBar, Stage } from './types';
 
 /**
@@ -132,8 +133,8 @@ function generateDaily(spec: SeriesSpec, rng: Rng): { bars: LegacyBar[]; returns
 export function generateMarket(opts: GenerateOptions): GeneratedMarket {
   const tickSize = opts.tickSize ?? 0.01;
   const stageRng = createStream(opts.seed, 'stages');
-  const indexStages = buildStageTimeline(opts.weeks, INDEX_STAGES, stageRng);
-  const stockStages = buildStageTimeline(opts.weeks, STOCK_STAGES, stageRng);
+  const indexStages = buildStageTimeline(opts.weeks, MARKET_PARAMS.index.stageCycle, stageRng);
+  const stockStages = buildStageTimeline(opts.weeks, MARKET_PARAMS.stock.stageCycle, stageRng);
 
   const index = generateDaily(
     {
