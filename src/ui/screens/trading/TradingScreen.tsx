@@ -1,42 +1,34 @@
-import { useMemo } from 'react';
-import { buildWeeklyChart } from '../../../engine/market/weeklyChart';
 import { ENGINE_VERSION } from '../../../engine/version';
-import { buildDemoScenario } from '../../../game/demoScenario';
-import { BottomRow } from './BottomRow';
+import { usePlaybackKeys } from '../../playback/usePlaybackKeys';
+import { usePlaybackLoop } from '../../playback/usePlaybackLoop';
+import { useTimeline } from '../../state/timeline';
 import { ChartCard } from './ChartCard';
+import { EndOfMarket } from './EndOfMarket';
 import { HudTop } from './HudTop';
-import { Loadout } from './Loadout';
-import { StatusRow } from './StatusRow';
+import { InstrumentPanel } from './InstrumentPanel';
 import s from './trading.module.css';
 
-interface Props {
-  seed: number;
-  /** Design variant: position without a protective stop. */
-  noStop: boolean;
-}
-
-/** Screen 01: the trading HUD. M0 is a layout shell over a real seeded weekly chart. */
-export function TradingScreen({ seed, noStop }: Props) {
-  const chart = useMemo(() => buildWeeklyChart(seed), [seed]);
-  const scenario = useMemo(() => buildDemoScenario(chart.stock), [chart]);
-  const p = scenario.position;
-  const chartPosition = {
-    entryIndex: p.entryIndex,
-    entry: p.entry,
-    stop: noStop ? null : p.stop,
-    target: p.target,
-  };
+/**
+ * Screen 01: the trading HUD. M1 shows only what works: the HUD with playback,
+ * the chart card and the instrument side panel. The status row (HP, mission), loadout and bottom row
+ * (mentor, battle log, quests) return in their milestones.
+ */
+export function TradingScreen() {
+  const timeline = useTimeline();
+  usePlaybackLoop(timeline);
+  usePlaybackKeys(timeline);
 
   return (
     <main className={s.screen} data-screen-label="01 Trading · Game">
-      <HudTop seed={seed} />
-      <StatusRow equity={scenario.equity} openPnl={scenario.position.openPnl} />
+      <HudTop />
+      <EndOfMarket />
       <div className={s.main}>
         <div className={s.leftCol}>
-          <ChartCard bars={chart.stock} scenario={scenario} position={chartPosition} />
-          <BottomRow scenario={scenario} />
+          <ChartCard />
         </div>
-        <Loadout scenario={scenario} noStop={noStop} />
+        <div className={s.rightCol}>
+          <InstrumentPanel />
+        </div>
       </div>
       <div className={s.buildInfo}>
         v{__APP_VERSION__} · {__APP_COMMIT__} · engine {ENGINE_VERSION} · Educational game.

@@ -79,10 +79,14 @@
 
   /* Radii */
   --r-seg: 2px;
+  --r-chip: 3px;
   --r-btn: 4px;
   --r-card: 6px;
   --r-bubble: 8px;
   --r-pill: 12px;
+
+  /* Elevation: popovers and floating panels over the screen */
+  --shadow-pop: 0 12px 32px rgb(0 0 0 / 0.5);
 
   /* Layout */
   --gutter: 16px;

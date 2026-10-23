@@ -14,6 +14,18 @@ export function parseSeed(raw: string | null): number | null {
   return seed >= 1 && seed <= MAX_SEED ? seed : null;
 }
 
+/** The same URL with `?seed=` set to `seed`; other params (level, dev) are kept. */
+export function urlWithSeed(href: string, seed: number): string {
+  const url = new URL(href);
+  url.searchParams.set('seed', String(seed));
+  return url.toString();
+}
+
+/** "New seed": reloads the page on a fresh random market, keeping the other URL params. */
+export function startNewSeed(): void {
+  window.location.assign(urlWithSeed(window.location.href, randomSeed()));
+}
+
 /**
  * Seed from `?seed=`, or a fresh random one written back into the URL, so a
  * reload shows the same market.
@@ -23,7 +35,6 @@ export function seedFromUrl(): number {
   const parsed = parseSeed(url.searchParams.get('seed'));
   if (parsed != null) return parsed;
   const seed = randomSeed();
-  url.searchParams.set('seed', String(seed));
-  window.history.replaceState(null, '', url);
+  window.history.replaceState(null, '', urlWithSeed(url.href, seed));
   return seed;
 }

@@ -1,107 +1,54 @@
-import { useState } from 'react';
-import type { WeeklyStudyBar } from '../../../engine/market/types';
-import type { DemoScenario } from '../../../game/demoScenario';
-import {
-  StageChart,
-  type ChartPosition,
-  type StudyToggles,
-} from '../../components/chart/StageChart';
+import { useMemo } from 'react';
+import { chartView } from '../../../engine/chart/view';
+import { StageChart } from '../../components/chart/StageChart';
 import { arrow, price, signedPct } from '../../format';
+import { useUiStore } from '../../state/store';
+import { useTimeline } from '../../state/timeline';
+import { LockedChips } from './LockChip';
+import { TickerSwitcher } from './TickerSwitcher';
+import { TimeframeChips } from './TimeframeChips';
 import s from './trading.module.css';
 
-const TIMEFRAMES = [
-  { id: 'W', enabled: true },
-  { id: 'D', enabled: false },
-  { id: '65m', enabled: false },
-] as const;
+/** The chart card: toolbar (ticker, last price, timeframes) over the chart view. */
+export function ChartCard() {
+  const timeline = useTimeline();
+  const cursor = useUiStore((st) => st.cursor);
+  const instrument = useUiStore((st) => st.instrument);
+  const timeframe = useUiStore((st) => st.timeframe);
+  const level = useUiStore((st) => st.level);
+  const setTimeframe = useUiStore((st) => st.setTimeframe);
 
-const STUDIES: { id: keyof StudyToggles; label: string }[] = [
-  { id: 'ma', label: 'MA' },
-  { id: 'vol', label: 'VOL' },
-  { id: 'rs', label: 'RS' },
-];
-
-interface Props {
-  bars: WeeklyStudyBar[];
-  scenario: DemoScenario;
-  position: ChartPosition;
-}
-
-export function ChartCard({ bars, scenario, position }: Props) {
-  const [show, setShow] = useState<StudyToggles>({ ma: true, vol: true, rs: true });
-  const last = scenario.position.last;
-  const chg = scenario.lastChangePct;
-  const slope = scenario.ma30SlopePct;
+  const view = useMemo(
+    () => chartView({ timeline, cursor, instrument, timeframe, level }),
+    [timeline, cursor, instrument, timeframe, level],
+  );
+  const chg = view.quote.changePct;
 
   return (
-    <section className={s.chartCard} aria-label={`${scenario.ticker} weekly chart`}>
+    <section
+      className={s.chartCard}
+      aria-label={`${view.instrument.ticker} ${view.timeframe} chart`}
+    >
       <div className={`${s.corner} ${s.cornerTL}`} />
       <div className={`${s.corner} ${s.cornerTR}`} />
       <div className={`${s.corner} ${s.cornerBL}`} />
       <div className={`${s.corner} ${s.cornerBR}`} />
 
       <div className={s.toolbar}>
-        <span className={s.ticker}>{scenario.ticker}</span>
+        <TickerSwitcher />
         <span className={s.lastPrice}>
-          {price(last)}{' '}
+          {price(view.quote.last / 100)}{' '}
           <span className={chg >= 0 ? s.up : s.down}>
             {signedPct(chg, 2)} {arrow(chg)}
           </span>
         </span>
-        <div className={s.chips} role="group" aria-label="Timeframe">
-          {TIMEFRAMES.map((tf) => (
-            <button
-              key={tf.id}
-              className={`${s.chip} ${tf.id === 'W' ? s.chipActive : ''}`}
-              disabled={!tf.enabled}
-              aria-pressed={tf.id === 'W'}
-              title={tf.enabled ? undefined : 'Daily and 65m timeframes arrive in M1'}
-            >
-              {tf.id}
-            </button>
-          ))}
-        </div>
-        {show.ma && (
-          <>
-            <span className={s.legend}>
-              <span className={s.legendSwatch} style={{ height: 2.5, background: 'var(--ma30)' }} />
-              30w{' '}
-              <span style={{ color: 'var(--text)' }}>
-                {scenario.ma30?.toFixed(2)} {slope == null ? '' : slope >= 0 ? '↗' : '↘'}
-              </span>
-            </span>
-            <span className={s.legend}>
-              <span
-                className={s.legendSwatch}
-                style={{ height: 1.5, background: 'var(--avg-vol)' }}
-              />
-              10w <span style={{ color: 'var(--text-2)' }}>{scenario.ma10?.toFixed(2)}</span>
-            </span>
-          </>
-        )}
+        <TimeframeChips chips={view.timeframes} onSelect={setTimeframe} />
         <div className={s.spacer} />
-        <div className={s.studyChips} role="group" aria-label="Studies">
-          {STUDIES.map((st) => (
-            <button
-              key={st.id}
-              className={`${s.studyChip} ${show[st.id] ? '' : s.studyChipOff}`}
-              aria-pressed={show[st.id]}
-              onClick={() => setShow((prev) => ({ ...prev, [st.id]: !prev[st.id] }))}
-            >
-              {st.label}
-            </button>
-          ))}
-          <span className={s.lockedChip} title="Unlocks in Phase 2">
-            🔒︎ SECTOR
-          </span>
-          <span className={s.lockedChip} title="Unlocks in Phase 2">
-            🔒︎ BREADTH
-          </span>
-        </div>
+        <LockedChips chips={view.locked} />
       </div>
 
       <div className={s.chartBody}>
-        <StageChart bars={bars} position={position} show={show} />
+        <StageChart view={view} />
       </div>
     </section>
   );
