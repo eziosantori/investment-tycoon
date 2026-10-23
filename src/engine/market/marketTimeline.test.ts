@@ -111,3 +111,96 @@ describe('generateMarketTimeline', () => {
     expect(JSON.parse(JSON.stringify(market))).toEqual(market);
   });
 });
+
+/** FNV-1a over the timeline's JSON: any change to generation changes it. */
+function hashOf(value: unknown): string {
+  const s = JSON.stringify(value);
+  let h = 0x811c9dc5;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(16).padStart(8, '0');
+}
+
+describe('generateMarketTimeline: the real price series', () => {
+  it('is stamped with ENGINE_VERSION 2', () => {
+    expect(market.engineVersion).toBe(2);
+  });
+
+  // Pinned: any change to generation (params, model, RNG use) changes it. When the
+  // change is intended, bump ENGINE_VERSION if it isn't bumped yet and re-pin.
+  it('matches the pinned golden hash for its seed', () => {
+    expect(hashOf(market)).toBe('5eac7013');
+  });
+
+  it('leaves the other instruments identical when one stock content changes', () => {
+    const edited = STOCKS.map((s, i) =>
+      i === 3 ? { ...s, beta: 1.5, startPrice: s.startPrice * 2, volScale: 1.4 } : s,
+    );
+    const other = generateMarketTimeline(SEED, { index: INDEX, stocks: edited });
+    expect(other.stocks[3]!.bars).not.toEqual(market.stocks[3]!.bars);
+    expect(other.index).toEqual(market.index);
+    for (let i = 0; i < STOCKS.length; i++) {
+      if (i !== 3) expect(other.stocks[i]).toEqual(market.stocks[i]);
+    }
+  });
+
+  it('stays positive on every seed, even the volatile ones', () => {
+    for (let seed = 1; seed <= 30; seed++) {
+      const m = generateMarketTimeline(seed);
+      for (const inst of [m.index, ...m.stocks]) {
+        for (const b of inst.bars) {
+          if (!(b.l > 0 && Number.isInteger(b.l) && Number.isInteger(b.v))) {
+            throw new Error(`seed ${seed} ${inst.info.ticker}: bad bar ${JSON.stringify(b)}`);
+          }
+        }
+      }
+    }
+  });
+
+  it('drifts up in Stage 2 and down in Stage 4, net of the index', () => {
+    const byStage: Record<number, number[]> = { 1: [], 2: [], 3: [], 4: [] };
+    for (let seed = 1; seed <= 20; seed++) {
+      const m = generateMarketTimeline(seed);
+      for (const s of m.stocks) {
+        for (let w = 1; w < s.weeks.length; w++) {
+          const r = Math.log(s.weeks[w]!.c / s.weeks[w - 1]!.c);
+          const ri = Math.log(m.index.weeks[w]!.c / m.index.weeks[w - 1]!.c);
+          byStage[s.stages[w]!]!.push(r - s.info.beta * ri);
+        }
+      }
+    }
+    const mean = (xs: number[]) => xs.reduce((a, x) => a + x, 0) / xs.length;
+    expect(mean(byStage[2]!)).toBeGreaterThan(0.004);
+    expect(mean(byStage[4]!)).toBeLessThan(-0.004);
+    expect(Math.abs(mean(byStage[1]!))).toBeLessThan(0.003);
+  });
+
+  it('gives the index about half the volatility of the stocks, with fat tails', () => {
+    const sd = (xs: number[]) => {
+      const m = xs.reduce((a, x) => a + x, 0) / xs.length;
+      return Math.sqrt(xs.reduce((a, x) => a + (x - m) ** 2, 0) / xs.length);
+    };
+    const kurtosis = (xs: number[]) => {
+      const m = xs.reduce((a, x) => a + x, 0) / xs.length;
+      const v = xs.reduce((a, x) => a + (x - m) ** 2, 0) / xs.length;
+      return xs.reduce((a, x) => a + (x - m) ** 4, 0) / xs.length / v ** 2;
+    };
+    const sessionReturns = (bars: readonly Bar[]) =>
+      bars.slice(1).map((b, i) => Math.log(b.c / bars[i]!.c));
+    const indexVol = sd(sessionReturns(market.index.sessions));
+    const stockVol =
+      market.stocks.reduce((a, s) => a + sd(sessionReturns(s.sessions)), 0) / market.stocks.length;
+    expect(indexVol / stockVol).toBeGreaterThan(0.3);
+    expect(indexVol / stockVol).toBeLessThan(0.7);
+    expect(kurtosis(sessionReturns(market.stocks[0]!.bars))).toBeGreaterThan(3);
+  });
+
+  it('generates the whole market in well under 150 ms', () => {
+    generateMarketTimeline(SEED + 7); // warm the JIT
+    const t0 = performance.now();
+    generateMarketTimeline(SEED + 8);
+    expect(performance.now() - t0).toBeLessThan(150);
+  });
+});

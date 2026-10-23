@@ -1,6 +1,5 @@
-import type { DemoScenario } from '../../../game/demoScenario';
 import { rMultiple, signedMoney } from '../../format';
-import { MENTOR, PAST_TRADES, QUESTS, STREAK, type LogRow } from './placeholder';
+import { MENTOR, PAST_TRADES, QUESTS, STREAK, type DemoScenario, type LogRow } from './placeholder';
 import s from './trading.module.css';
 
 function Mentor() {

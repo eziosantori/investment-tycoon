@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Stage } from '../../../engine/market/types';
-import type { DemoScenario } from '../../../game/demoScenario';
+import type { DemoScenario } from './placeholder';
 import { MINUS, arrow, money, price, rMultiple } from '../../format';
 import s from './trading.module.css';
 
