@@ -3,6 +3,8 @@ import type { ChartBar, ChartView } from '../../../engine/chart/view';
 import { MINUS } from '../../format';
 import { useElementSize } from '../../hooks/useElementSize';
 import { linear, ticks } from './scale';
+import { StageBands } from './StageBands';
+import { useStageBands } from './stageBandsContext';
 
 /**
  * Renders a chart view (engine/chart/view.ts). Draws only what `view.layers`
@@ -11,6 +13,8 @@ import { linear, ticks } from './scale';
  */
 interface Props {
   view: ChartView;
+  /** Draw the hidden-stage bands (dev only). Defaults to `StageBandsContext`. */
+  bands?: boolean;
 }
 
 const PAD_R = 66;
@@ -40,9 +44,10 @@ const PANE_LABEL = {
 const fmtRs = (v: number) => `${v < 0 ? MINUS : ''}${Math.abs(v).toFixed(1)}`;
 const dollars = (cents: number) => cents / 100;
 
-export function StageChart({ view }: Props) {
+export function StageChart({ view, bands }: Props) {
   const [ref, { width, height }] = useElementSize<HTMLDivElement>();
   const clipId = useId();
+  const bandsFromContext = useStageBands();
 
   return (
     <div ref={ref} style={{ position: 'absolute', inset: 0 }}>
@@ -54,7 +59,7 @@ export function StageChart({ view }: Props) {
           role="img"
           aria-label={`${view.instrument.ticker} ${view.timeframe} price chart`}
         >
-          {renderChart({ view, width, height, clipId })}
+          {renderChart({ view, bands: bands ?? bandsFromContext, width, height, clipId })}
         </svg>
       )}
     </div>
@@ -63,6 +68,7 @@ export function StageChart({ view }: Props) {
 
 function renderChart({
   view,
+  bands,
   width: W,
   height: H,
   clipId,
@@ -90,6 +96,10 @@ function renderChart({
   const slots = bars.length + RIGHT_SLOTS;
   const bw = (plotR - PAD_L - 10) / slots;
   const xOf = (i: number) => PAD_L + (i + 0.5) * bw;
+
+  if (bands) {
+    k.push(<StageBands key="bands" window={bars} x0={PAD_L} slotWidth={bw} top={0} bottom={H} />);
+  }
 
   // Price scale
   const candles = layers.price === 'candles';
