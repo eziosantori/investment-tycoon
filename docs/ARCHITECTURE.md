@@ -102,8 +102,9 @@ so they run week by week as turns, with daily drill-down.
 | 30w slope      | Change of the 30w MA over 4 weeks (the "rising/falling" arrow)         |
 | Setup checks   | price > 30w MA · 30w slope > 0 · breakout volume ≥ 2× · RS > 0         |
 
-The 52-week RS needs history, so every run starts with **~2 years of warm-up
-data** already on the chart.
+The 52-week RS needs history, so every run starts with **160 weeks of warm-up**
+already generated: the 108 weeks visible on the W chart, plus 52 so that all of
+them have a valid RS.
 
 **No-look-ahead stage classifier:** a rule-based function of the data up to week
 _t_ (30w MA slope, price vs MA, recent range, RS). It scores the player's stage
@@ -408,7 +409,8 @@ idiosyncratic cycle.
 
 ```
 stage    ~ semi-Markov cycle 1 → 2 → 3 → 4 → 1, durations drawn per stage (in weeks)
-           (with failure branches: 1 → 4 breakdown, 2 → 1 failed breakout)
+           (with failure branches: 1 → 4 breakdown, 2 → 1 failed breakout,
+            3 → 2 re-accumulation)
 vol_t    = GARCH-like: ω + α·r²_{t-1} + β·vol_{t-1}                  (volatility clustering)
 r_t      = β · r_index
          + drift(stage)                                              (≈0 in 1, + in 2, ≈0 in 3, − in 4)

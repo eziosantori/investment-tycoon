@@ -18,6 +18,7 @@ See [Levels](#levels-the-chart-grows) below and DESIGN §3.
 ## Definition of Done (every milestone)
 
 - [ ] Deployed to the static host; the milestone's **demo script** works on the live build
+      (M1–M3: locally on `npm run build && npm run preview` is enough; wiring the Cloudflare deploy is a ticket due before M4)
 - [ ] `npm run build`, `npm run lint`, `npm test` pass in CI
 - [ ] Engine changes have unit tests; determinism test (`replay(seed, log) == live`) still passes
 - [ ] No dead-end UI: every visible control either works or isn't shown

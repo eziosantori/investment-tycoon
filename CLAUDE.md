@@ -18,7 +18,8 @@ market, later historical case files. Plan and rationale live in `docs/`
 - `src/engine/` is pure, deterministic TypeScript: no React, no DOM, no
   `Math.random()` (use `engine/rng.ts` streams). ESLint enforces this.
 - Same seed → same market, regardless of player actions (separate RNG streams).
-- Money in the engine will be integer cents from M2 on.
+- Prices and money in the engine are integer cents, volumes integer shares
+  (from M1); studies (MAs, RS) are derived floats, never stored.
 - UI values come from the design tokens in `src/ui/theme/tokens.css`; match the
   handoff's numbers when a screen exists. Always pair P&L color with a sign/arrow.
 - Every milestone ends deployable; see the Definition of Done in `docs/ROADMAP.md`.
