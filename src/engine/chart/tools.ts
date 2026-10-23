@@ -26,15 +26,15 @@ export const TOOL_UNLOCKS: Readonly<Record<ChartTool, Level>> = {
   '65m': 8,
 };
 
-/** Short labels for the locked "Lv N" chips. */
+/** Short labels for the locked "Lv N" chips, as on the Design canvas. */
 export const TOOL_LABELS: Readonly<Record<ChartTool, string>> = {
   W: 'W',
   D: 'D',
   '65m': '65m',
-  ma30: '30w MA',
+  ma30: '30W MA',
   candles: 'CANDLES',
-  volume: 'VOL',
-  ma10: '10w MA',
+  volume: 'VOLUME',
+  ma10: '10W MA',
   rs: 'RS',
 };
 

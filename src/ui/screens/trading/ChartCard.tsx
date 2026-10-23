@@ -4,6 +4,7 @@ import { StageChart } from '../../components/chart/StageChart';
 import { arrow, price, signedPct } from '../../format';
 import { useUiStore } from '../../state/store';
 import { useTimeline } from '../../state/timeline';
+import { LockedChips } from './LockChip';
 import { TimeframeChips } from './TimeframeChips';
 import s from './trading.module.css';
 
@@ -42,6 +43,7 @@ export function ChartCard() {
         </span>
         <TimeframeChips chips={view.timeframes} level={level} onSelect={setTimeframe} />
         <div className={s.spacer} />
+        <LockedChips chips={view.locked} />
       </div>
 
       <div className={s.chartBody}>

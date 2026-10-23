@@ -151,19 +151,49 @@ function renderChart({
       );
     });
   } else {
+    // Price line (Lv1–3), as on the Rookie board: area fill, soft glow, last-point dot.
+    const line = path(
+      bars.map((b) => b.c),
+      y,
+    );
+    const areaId = `${clipId}-area`;
+    k.push(
+      <defs key="price-defs">
+        <linearGradient id={areaId} x1={0} y1={0} x2={0} y2={1}>
+          <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.18} />
+          <stop offset="100%" stopColor="var(--accent)" stopOpacity={0} />
+        </linearGradient>
+      </defs>,
+    );
     k.push(
       <path
-        key="price"
-        d={path(
-          bars.map((b) => b.c),
-          y,
-        )}
+        key="price-area"
+        d={`${line} L${xOf(bars.length - 1)} ${pB} L${xOf(0)} ${pB} Z`}
+        fill={`url(#${areaId})`}
+      />,
+    );
+    k.push(
+      <path
+        key="price-glow"
+        d={line}
         fill="none"
         stroke="var(--accent-light)"
-        strokeWidth={1.75}
+        strokeWidth={6}
+        opacity={0.12}
         strokeLinejoin="round"
       />,
     );
+    k.push(
+      <path
+        key="price"
+        d={line}
+        fill="none"
+        stroke="var(--text)"
+        strokeWidth={2}
+        strokeLinejoin="round"
+      />,
+    );
+    k.push(<circle key="now" cx={xOf(bars.length - 1)} cy={y(last.c)} r={4} fill="var(--text)" />);
   }
 
   if (layers.ma10) {
@@ -195,7 +225,9 @@ function renderChart({
         opacity={0.12}
       />,
     );
-    k.push(<path key="ma30" d={ma30} fill="none" stroke="var(--ma30)" strokeWidth={2.25} />);
+    // Over a white price line (Lv2–3) the MA takes the accent so the two stay apart.
+    const ma30Color = candles ? 'var(--ma30)' : 'var(--accent-light)';
+    k.push(<path key="ma30" d={ma30} fill="none" stroke={ma30Color} strokeWidth={2.25} />);
   }
 
   // Volume pane
