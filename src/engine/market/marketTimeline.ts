@@ -25,3 +25,15 @@ export function findInstrument(
 ): InstrumentTimeline | undefined {
   return instrumentsOf(timeline).find((i) => i.info.ticker === ticker);
 }
+
+/**
+ * The instrument a selection shows: the ticker's instrument, or the deal's
+ * default when the ticker isn't in the universe (e.g. before a run starts).
+ */
+export function resolveInstrument(timeline: MarketTimeline, ticker: Ticker): InstrumentTimeline {
+  return (
+    findInstrument(timeline, ticker) ??
+    findInstrument(timeline, timeline.deal.defaultInstrument) ??
+    timeline.index
+  );
+}

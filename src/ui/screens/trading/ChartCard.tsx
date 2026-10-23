@@ -4,6 +4,7 @@ import { StageChart } from '../../components/chart/StageChart';
 import { arrow, price, signedPct } from '../../format';
 import { useUiStore } from '../../state/store';
 import { useTimeline } from '../../state/timeline';
+import { TickerSwitcher } from './TickerSwitcher';
 import s from './trading.module.css';
 
 /** The chart card: toolbar (ticker, last price, timeframes) over the chart view. */
@@ -32,7 +33,7 @@ export function ChartCard() {
       <div className={`${s.corner} ${s.cornerBR}`} />
 
       <div className={s.toolbar}>
-        <span className={s.ticker}>{view.instrument.ticker}</span>
+        <TickerSwitcher />
         <span className={s.lastPrice}>
           {price(view.quote.last / 100)}{' '}
           <span className={chg >= 0 ? s.up : s.down}>
