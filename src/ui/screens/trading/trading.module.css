@@ -55,7 +55,7 @@
 
 .hud {
   display: grid;
-  grid-template-columns: 360px 1fr 420px;
+  grid-template-columns: 360px 1fr 500px;
   align-items: center;
   padding: 0 var(--gutter);
   gap: 16px;
@@ -199,6 +199,7 @@
 }
 .speedBtn:disabled {
   cursor: not-allowed;
+  opacity: 0.5;
 }
 .speedActive {
   background: var(--accent);
@@ -229,6 +230,43 @@
   font-family: var(--font-mono);
   font-size: 10px;
   color: var(--text-dim);
+}
+
+/* End of the 10 run weeks: banner over the chart with a new-seed action */
+.endOfMarket {
+  position: absolute;
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  background: var(--raised);
+  border: 1px solid var(--accent-deep);
+  border-radius: var(--r-card);
+  box-shadow: 0 0 16px rgba(143, 126, 243, 0.3);
+}
+.endOfMarketText {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  color: var(--text-2);
+}
+.endOfMarketBtn {
+  height: 28px;
+  padding: 0 12px;
+  background: var(--accent);
+  border: 0;
+  border-radius: var(--r-btn);
+  color: var(--text-on-accent);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
 }
 
 /* ---------- Mission / HP row ---------- */
@@ -481,11 +519,23 @@
   border-color: var(--border-locked);
   color: var(--text-dim);
 }
+/* Locked tool or timeframe: dashed "LABEL · Lv N" chip with a padlock (canvas lock style). */
 .lockedChip {
-  padding: 3px 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
   border-radius: 3px;
   border: 1px dashed var(--border-locked);
-  color: var(--text-disabled);
+  background: transparent;
+  color: var(--text-dim);
+  font: inherit;
+  cursor: default;
+}
+/* The tool(s) of the very next level. */
+.lockedChipNext {
+  border-color: var(--accent-deep);
+  color: var(--accent-light);
 }
 .legend {
   display: flex;

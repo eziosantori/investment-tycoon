@@ -1,7 +1,9 @@
 import { ENGINE_VERSION } from '../../../engine/version';
+import { usePlaybackKeys } from '../../playback/usePlaybackKeys';
 import { usePlaybackLoop } from '../../playback/usePlaybackLoop';
 import { useTimeline } from '../../state/timeline';
 import { ChartCard } from './ChartCard';
+import { EndOfMarket } from './EndOfMarket';
 import { HudTop } from './HudTop';
 import s from './trading.module.css';
 
@@ -13,10 +15,12 @@ import s from './trading.module.css';
 export function TradingScreen() {
   const timeline = useTimeline();
   usePlaybackLoop(timeline);
+  usePlaybackKeys(timeline);
 
   return (
     <main className={`${s.screen} ${s.screenNoStatus}`} data-screen-label="01 Trading · Game">
       <HudTop />
+      <EndOfMarket />
       <div className={`${s.main} ${s.mainNoSide}`}>
         <div className={`${s.leftCol} ${s.leftColNoBottom}`}>
           <ChartCard />
