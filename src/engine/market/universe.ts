@@ -1,3 +1,4 @@
+import type { StageCycleParams } from './params';
 import type { Cents, InstrumentInfo, Shares, Ticker } from './types';
 
 /** One instrument of the universe as defined in the content file (`src/content/universe.ts`). */
@@ -11,6 +12,8 @@ export interface InstrumentSpec {
   baseVolume: Shares;
   /** Multiplier on the instrument's volatility. */
   volScale: number;
+  /** Overrides the kind's stage cycle (`MARKET_PARAMS`) for this instrument only. */
+  stageCycle?: StageCycleParams;
 }
 
 export function infoOf(spec: InstrumentSpec, kind: InstrumentInfo['kind']): InstrumentInfo {

@@ -4,15 +4,16 @@ import { ENGINE_VERSION } from '../version';
 import { assembleInstrument } from './assemble';
 import { BARS_PER_SESSION, BARS_PER_WEEK, RUN_WEEKS, WARMUP_WEEKS } from './calendar';
 import { readDeal } from './deal';
-import { buildStageTimeline, INDEX_STAGES, STOCK_STAGES } from './stageCycle';
+import { generateHiddenStages } from './hiddenStages';
+import { MARKET_PARAMS } from './params';
 import type { Bar, MarketTimeline, Stage } from './types';
 import { infoOf, type InstrumentSpec } from './universe';
 
 /**
  * Placeholder market (#2): a simple seeded random walk per instrument, steered
  * by hidden stages, with the exact shape of the real market timeline. It lets
- * playback, the chart and the dev tools be built before the real generator
- * (#5 stages and deal, #10 price series) replaces it.
+ * playback, the chart and the dev tools be built before the real price
+ * series (#10) replaces it. The hidden stages and the deal are already real (#5).
  */
 
 /** Per-bar log drift and volume multiplier by stage. */
@@ -58,13 +59,8 @@ function fakeBars(
 }
 
 export function generateFakeTimeline(seed: number): MarketTimeline {
-  const weeks = WARMUP_WEEKS + RUN_WEEKS;
-
-  const indexStages = buildStageTimeline(
-    weeks,
-    INDEX_STAGES,
-    createStream(seed, `stages:${INDEX.ticker}`),
-  );
+  const stages = generateHiddenStages(seed, { index: INDEX, stocks: STOCKS });
+  const indexStages = stages.index;
   const indexSeries = fakeBars(
     INDEX,
     indexStages,
@@ -74,15 +70,11 @@ export function generateFakeTimeline(seed: number): MarketTimeline {
   );
   const index = assembleInstrument(infoOf(INDEX, 'index'), indexSeries.bars, indexStages, null);
 
-  const stocks = STOCKS.map((spec) => {
-    const stages = buildStageTimeline(
-      weeks,
-      STOCK_STAGES,
-      createStream(seed, `stages:${spec.ticker}`),
-    );
+  const stocks = STOCKS.map((spec, i) => {
+    const stockStages = stages.stocks[i]!;
     const { bars } = fakeBars(
       spec,
-      stages,
+      stockStages,
       STOCK_VOL,
       createStream(seed, `series:${spec.ticker}`),
       {
@@ -90,7 +82,7 @@ export function generateFakeTimeline(seed: number): MarketTimeline {
         beta: spec.beta,
       },
     );
-    return assembleInstrument(infoOf(spec, 'stock'), bars, stages, index.weeks);
+    return assembleInstrument(infoOf(spec, 'stock'), bars, stockStages, index.weeks);
   });
 
   return {
@@ -100,6 +92,6 @@ export function generateFakeTimeline(seed: number): MarketTimeline {
     runWeeks: RUN_WEEKS,
     index,
     stocks,
-    deal: readDeal(index, stocks, WARMUP_WEEKS),
+    deal: readDeal(index, stocks, WARMUP_WEEKS, MARKET_PARAMS.deal),
   };
 }
