@@ -1132,9 +1132,6 @@
 .screenNoStatus {
   grid-template-rows: 60px 1fr;
 }
-.mainNoSide {
-  grid-template-columns: 1fr;
-}
 .leftColNoBottom {
   grid-template-rows: 1fr;
 }

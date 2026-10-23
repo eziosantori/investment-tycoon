@@ -5,6 +5,7 @@ import { arrow, price, signedPct } from '../../format';
 import { useUiStore } from '../../state/store';
 import { useTimeline } from '../../state/timeline';
 import { LockedChips } from './LockChip';
+import { TickerSwitcher } from './TickerSwitcher';
 import { TimeframeChips } from './TimeframeChips';
 import s from './trading.module.css';
 
@@ -34,7 +35,7 @@ export function ChartCard() {
       <div className={`${s.corner} ${s.cornerBR}`} />
 
       <div className={s.toolbar}>
-        <span className={s.ticker}>{view.instrument.ticker}</span>
+        <TickerSwitcher />
         <span className={s.lastPrice}>
           {price(view.quote.last / 100)}{' '}
           <span className={chg >= 0 ? s.up : s.down}>

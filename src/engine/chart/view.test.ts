@@ -221,4 +221,16 @@ describe('chartView instrument', () => {
     expect(view({}).instrument).toEqual(stock.info);
     expect(view({ instrument: 'TYX' }).instrument.kind).toBe('index');
   });
+
+  it('opens on the deal default instrument when none is selected', () => {
+    expect(view({ instrument: '' }).instrument.ticker).toBe(timeline.deal.defaultInstrument);
+  });
+
+  it('gives the index view no RS pane and no RS values at any level', () => {
+    for (const level of [1, 2, 3, 4, 5, 6, 7, 8] as const) {
+      const v = view({ instrument: 'TYX', level });
+      expect(v.layers.rs).toBe(false);
+      expect(v.bars.every((b) => b.rs === null)).toBe(true);
+    }
+  });
 });

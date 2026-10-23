@@ -1,7 +1,7 @@
 import { clampCursor } from '../cursor';
 import { mergeBars } from '../market/aggregate';
 import { BARS_PER_UNIT, BARS_PER_WEEK } from '../market/calendar';
-import { findInstrument } from '../market/marketTimeline';
+import { resolveInstrument } from '../market/marketTimeline';
 import type {
   Bar,
   Cursor,
@@ -104,10 +104,7 @@ const GATED_TOOLS = ['ma30', 'candles', 'volume', 'ma10', 'rs'] as const;
 
 export function chartView(input: ChartViewInput): ChartView {
   const { timeline, level } = input;
-  const inst =
-    findInstrument(timeline, input.instrument) ??
-    findInstrument(timeline, timeline.deal.defaultInstrument) ??
-    timeline.index;
+  const inst = resolveInstrument(timeline, input.instrument);
   const cursor = clampCursor(timeline, input.cursor);
   const tools = toolsForLevel(level);
   const timeframe = tools.timeframes.includes(input.timeframe) ? input.timeframe : 'W';
