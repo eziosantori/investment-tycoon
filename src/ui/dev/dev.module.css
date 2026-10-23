@@ -111,3 +111,63 @@
 .neutral {
   color: var(--text-dim);
 }
+
+/* Stage gallery (?dev=gallery) */
+
+.gallery {
+  min-height: 100vh;
+  padding: var(--gutter);
+  color: var(--text-2);
+  font-size: 11px;
+}
+
+.galleryHead {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: var(--gap);
+}
+
+.galleryHead .title {
+  margin: 0;
+}
+
+.galleryNote {
+  color: var(--text-muted);
+}
+
+.galleryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--gap);
+}
+
+.galleryCard {
+  display: grid;
+  grid-template-rows: 28px 240px;
+  background: var(--chart-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  overflow: hidden;
+}
+
+.galleryCardHead {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--divider);
+  white-space: nowrap;
+}
+
+.galleryName {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-muted);
+}
+
+.galleryChart {
+  position: relative;
+  min-height: 0;
+}
