@@ -100,3 +100,33 @@ export const MENTOR = {
   term: 'relative strength',
   after: '.',
 };
+
+// M2–M3: orders and accounting. The shape the hidden loadout and battle log
+// render; the M0 demo scenario that filled it was removed with the M0 generator.
+
+export interface DemoPosition {
+  side: 'long';
+  entryIndex: number;
+  entry: number;
+  stop: number;
+  target: number;
+  riskPct: number;
+  riskBudget: number;
+  size: number;
+  riskIfStopped: number;
+  last: number;
+  openPnl: number;
+  openR: number;
+}
+
+export interface SetupCheck {
+  label: string;
+  ok: boolean;
+}
+
+export interface DemoScenario {
+  ticker: string;
+  equity: number;
+  position: DemoPosition;
+  checks: SetupCheck[];
+}

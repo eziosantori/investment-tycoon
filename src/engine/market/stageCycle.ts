@@ -1,5 +1,5 @@
 import type { Rng } from '../rng';
-import { MARKET_PARAMS, type DealParams, type StageCycleParams } from './params';
+import type { DealParams, StageCycleParams } from './params';
 import type { Stage } from './types';
 
 /**
@@ -199,12 +199,4 @@ export function buildStages(
     e += d;
   }
   return out;
-}
-
-/**
- * @deprecated M0 generator only (removed in #10): a stage per week starting at
- * a random point of the cycle.
- */
-export function buildStageTimeline(weeks: number, p: StageCycleParams, rng: Rng): Stage[] {
-  return buildStages(weeks, 0, chooseAnchor('free', p, MARKET_PARAMS.deal, rng), p, rng);
 }

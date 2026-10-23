@@ -6,10 +6,10 @@
  * Related signatures, one module per concern:
  * - calendar constants and bar ↔ session ↔ week math: `./calendar`
  * - market generation (seed → timeline): `./marketTimeline` (`generateMarketTimeline`,
- *   `findInstrument`); today backed by the placeholder `./fakeTimeline`
+ *   `findInstrument`); the price model: `./priceSeries`
  * - assembling an instrument's timeline from its 65m bars + weekly stages
  *   (aggregation and weekly studies): `./assemble`, `./aggregate`
- * - tunable parameter set (stage cycle, deal; price params from #10): `./params`
+ * - tunable parameter set (stage cycle, price model, deal): `./params`
  * - hidden stages of the universe, dealt at the first run week: `./hiddenStages`
  *   (cycle: `./stageCycle`; deal targets and reading the deal: `./deal`)
  * - universe spec type: `./universe`; the data: `src/content/universe.ts`
@@ -124,30 +124,3 @@ export interface MarketTimeline {
  * starts at the last warm-up bar (see `../cursor`).
  */
 export type Cursor = number;
-
-// ---------------------------------------------------------------------------
-// M0 legacy types: used only by the M0 daily generator, the static weekly
-// chart and the demo scenario. Removed with them in #10.
-// ---------------------------------------------------------------------------
-
-/** @deprecated M0 daily/weekly bar with float prices. */
-export interface LegacyBar {
-  /** Index in its own timeframe (day index for D, week index for W). */
-  t: number;
-  o: number;
-  h: number;
-  l: number;
-  c: number;
-  v: number;
-  /** Hidden ground-truth stage at the bar's close. Never shown during play. */
-  stage: Stage;
-}
-
-/** @deprecated M0 weekly bar with studies. */
-export interface LegacyWeeklyStudyBar extends LegacyBar {
-  ma10: number | null;
-  ma30: number | null;
-  avgVol10: number | null;
-  /** Mansfield relative strength vs the index. */
-  rs: number | null;
-}
