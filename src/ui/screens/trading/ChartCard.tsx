@@ -4,6 +4,7 @@ import { StageChart } from '../../components/chart/StageChart';
 import { arrow, price, signedPct } from '../../format';
 import { useUiStore } from '../../state/store';
 import { useTimeline } from '../../state/timeline';
+import { TimeframeChips } from './TimeframeChips';
 import s from './trading.module.css';
 
 /** The chart card: toolbar (ticker, last price, timeframes) over the chart view. */
@@ -39,20 +40,7 @@ export function ChartCard() {
             {signedPct(chg, 2)} {arrow(chg)}
           </span>
         </span>
-        <div className={s.chips} role="group" aria-label="Timeframe">
-          {view.timeframes
-            .filter((tf) => !tf.locked)
-            .map((tf) => (
-              <button
-                key={tf.timeframe}
-                className={`${s.chip} ${tf.active ? s.chipActive : ''}`}
-                aria-pressed={tf.active}
-                onClick={() => setTimeframe(tf.timeframe)}
-              >
-                {tf.timeframe}
-              </button>
-            ))}
-        </div>
+        <TimeframeChips chips={view.timeframes} level={level} onSelect={setTimeframe} />
         <div className={s.spacer} />
       </div>
 
