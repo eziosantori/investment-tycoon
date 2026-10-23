@@ -497,6 +497,23 @@
   background: var(--accent);
   color: var(--text-on-accent);
 }
+/* Locked timeframe: dashed "D · Lv7" chip with a padlock (canvas lock style). */
+.tfLocked {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  border: 1px dashed var(--border-locked);
+  background: none;
+  color: var(--text-dim);
+  font: inherit;
+  cursor: not-allowed;
+}
+.tfLockedNext {
+  border-color: var(--accent-deep);
+  color: var(--accent-light);
+}
 .studyChips {
   display: flex;
   align-items: center;
