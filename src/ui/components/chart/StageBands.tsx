@@ -1,5 +1,6 @@
 import { STAGE_LABELS, stageBands } from '../../../engine/chart/stageBands';
 import type { Stage } from '../../../engine/market/types';
+import s from './stageBands.module.css';
 
 /**
  * Hidden-stage bands drawn behind a chart (dev overlay, gallery): one
@@ -39,15 +40,7 @@ export function StageBands({ window, x0, slotWidth, top, bottom, labels = true }
               fill={`var(--stage-${band.stage})`}
             />
             {labels && width >= LABEL_MIN_WIDTH && (
-              <text
-                x={x + 6}
-                y={top + 14}
-                fill="var(--text-2)"
-                fontFamily="var(--font-display)"
-                fontWeight={700}
-                fontSize={10}
-                letterSpacing=".06em"
-              >
+              <text x={x + 6} y={top + 14} className={s.label}>
                 {STAGE_LABELS[band.stage]}
               </text>
             )}

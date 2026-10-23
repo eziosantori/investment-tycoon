@@ -1,0 +1,8 @@
+/* Hidden-stage bands (dev tools only): the "STAGE N" label at the top of a band. */
+.label {
+  fill: var(--text-2);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}

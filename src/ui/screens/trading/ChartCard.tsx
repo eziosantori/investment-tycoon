@@ -42,7 +42,7 @@ export function ChartCard() {
             {signedPct(chg, 2)} {arrow(chg)}
           </span>
         </span>
-        <TimeframeChips chips={view.timeframes} level={level} onSelect={setTimeframe} />
+        <TimeframeChips chips={view.timeframes} onSelect={setTimeframe} />
         <div className={s.spacer} />
         <LockedChips chips={view.locked} />
       </div>
