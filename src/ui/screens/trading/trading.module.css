@@ -481,6 +481,7 @@
   border-color: var(--border-locked);
   color: var(--text-dim);
 }
+/* Locked tool or timeframe: dashed "LABEL · Lv N" chip with a padlock (canvas lock style). */
 .lockedChip {
   display: flex;
   align-items: center;
