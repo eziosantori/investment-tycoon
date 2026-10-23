@@ -59,6 +59,39 @@ describe('chartView window', () => {
     expect(closed).toMatchObject({ index: 160, forming: false, ma30: stock.studies.ma30[160] });
   });
 
+  it('keeps the cursor when switching W, D and 65m', () => {
+    const last = stock.bars[4806]!.c;
+    for (const timeframe of ['W', 'D', '65m'] as const) {
+      const v = view({ cursor: 4806, timeframe, level: 8 });
+      expect(v.timeframe).toBe(timeframe);
+      expect(v.cursor).toBe(4806);
+      expect(v.bars.at(-1)!.c).toBe(last);
+    }
+  });
+
+  it('shows weekly studies on closed D and 65m bars, moving only when the week closes', () => {
+    // Week 160 = sessions 800..804 = 65m bars 4800..4829.
+    const s = stock.studies;
+    const d = view({ cursor: 4829, timeframe: 'D', level: 8 }).bars;
+    expect(d.at(-1)).toMatchObject({ index: 804, forming: false, ma30: s.ma30[160] });
+    expect(d.at(-1)!.ma10).toBe(s.ma10[160]);
+    for (const b of d.slice(-5, -1)) {
+      expect(b).toMatchObject({ ma30: s.ma30[159], ma10: s.ma10[159], rs: null });
+      expect(b.avgVol10).toBeCloseTo(s.avgVol10[159]! / 5, 9);
+    }
+    const m = view({ cursor: 4829, timeframe: '65m', level: 8 }).bars;
+    expect(m.at(-1)).toMatchObject({ index: 4829, ma30: s.ma30[160] });
+    expect(m.at(-2)).toMatchObject({ index: 4828, ma30: s.ma30[159] });
+    expect(m.at(-2)!.avgVol10).toBeCloseTo(s.avgVol10[159]! / 30, 9);
+  });
+
+  it('leaves the forming D bar without studies and keeps closed D bars still', () => {
+    const early = view({ cursor: 4802, timeframe: 'D', level: 8 }).bars;
+    const late = view({ cursor: 4810, timeframe: 'D', level: 8 }).bars;
+    expect(early.at(-1)).toMatchObject({ forming: true, ma30: null, ma10: null, avgVol10: null });
+    expect(late.find((b) => b.index === 799)).toEqual(early.find((b) => b.index === 799));
+  });
+
   it('carries the hidden stage of each bar', () => {
     const v = view({ cursor: 4806 });
     expect(v.bars.map((b) => b.stage)).toEqual(stock.stages.slice(53, 161));
