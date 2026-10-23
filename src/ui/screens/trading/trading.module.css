@@ -3,7 +3,8 @@
 .screen {
   position: relative;
   min-width: 1280px;
-  min-height: 800px;
+  /* Fits the viewport (HUD + chart); the floor only keeps the chart readable on very short windows. */
+  min-height: 560px;
   height: 100%;
   background: radial-gradient(ellipse 80% 60% at 50% 0%, var(--bg-glow) 0%, var(--bg) 60%);
   display: grid;
