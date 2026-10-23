@@ -73,6 +73,8 @@ export interface LockedChip {
   tool: Exclude<ChartTool, Timeframe>;
   label: string;
   level: Level;
+  /** True for the tools of the next level to unlock (highlighted "next unlock" chip). */
+  next: boolean;
 }
 
 export interface TimeframeChip {
@@ -122,9 +124,7 @@ export function chartView(input: ChartViewInput): ChartView {
       volume: tools.volume,
       rs: tools.rs && rsAvailable,
     },
-    locked: GATED_TOOLS.filter(
-      (tool) => !isUnlocked(tool, level) && (tool !== 'rs' || rsAvailable),
-    ).map((tool) => ({ tool, label: TOOL_LABELS[tool], level: unlockLevel(tool) })),
+    locked: lockedChips(level, rsAvailable),
     timeframes: TIMEFRAMES.map((tf) => ({
       timeframe: tf,
       level: unlockLevel(tf),
@@ -133,6 +133,19 @@ export function chartView(input: ChartViewInput): ChartView {
     })),
     quote: quoteAt(inst, cursor),
   };
+}
+
+function lockedChips(level: Level, rsAvailable: boolean): LockedChip[] {
+  const tools = GATED_TOOLS.filter(
+    (tool) => !isUnlocked(tool, level) && (tool !== 'rs' || rsAvailable),
+  );
+  const nextLevel = Math.min(...tools.map(unlockLevel));
+  return tools.map((tool) => ({
+    tool,
+    label: TOOL_LABELS[tool],
+    level: unlockLevel(tool),
+    next: unlockLevel(tool) === nextLevel,
+  }));
 }
 
 function windowBars(inst: InstrumentTimeline, cursor: Cursor, timeframe: Timeframe): ChartBar[] {

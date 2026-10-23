@@ -107,6 +107,72 @@ describe('chartView level gating', () => {
   });
 });
 
+describe('chartView for every level (weekly stock chart)', () => {
+  // [level, price, ma30, volume, ma10, rs, locked chips "LABEL · LvN", next-unlock chips]
+  const table: [
+    number,
+    'line' | 'candles',
+    boolean,
+    boolean,
+    boolean,
+    boolean,
+    string[],
+    string[],
+  ][] = [
+    [
+      1,
+      'line',
+      false,
+      false,
+      false,
+      false,
+      ['30W MA · Lv2', 'CANDLES · Lv4', 'VOLUME · Lv5', '10W MA · Lv6', 'RS · Lv6'],
+      ['30W MA'],
+    ],
+    [
+      2,
+      'line',
+      true,
+      false,
+      false,
+      false,
+      ['CANDLES · Lv4', 'VOLUME · Lv5', '10W MA · Lv6', 'RS · Lv6'],
+      ['CANDLES'],
+    ],
+    [
+      3,
+      'line',
+      true,
+      false,
+      false,
+      false,
+      ['CANDLES · Lv4', 'VOLUME · Lv5', '10W MA · Lv6', 'RS · Lv6'],
+      ['CANDLES'],
+    ],
+    [
+      4,
+      'candles',
+      true,
+      false,
+      false,
+      false,
+      ['VOLUME · Lv5', '10W MA · Lv6', 'RS · Lv6'],
+      ['VOLUME'],
+    ],
+    [5, 'candles', true, true, false, false, ['10W MA · Lv6', 'RS · Lv6'], ['10W MA', 'RS']],
+    [6, 'candles', true, true, true, true, [], []],
+    [7, 'candles', true, true, true, true, [], []],
+    [8, 'candles', true, true, true, true, [], []],
+  ];
+
+  it.each(table)('Lv%i', (level, price, ma30, volume, ma10, rs, locked, next) => {
+    const v = view({ level: level as ChartViewInput['level'] });
+    expect(v.layers).toEqual({ price, ma30, volume, ma10, rs });
+    expect(v.locked.map((c) => `${c.label} · Lv${c.level}`)).toEqual(locked);
+    expect(v.locked.filter((c) => c.next).map((c) => c.label)).toEqual(next);
+  });
+});
+
 describe('chartView quote', () => {
   it('gives the last price at the cursor and the change on the previous week close', () => {
     const v = view({ cursor: 4806 });

@@ -482,10 +482,21 @@
   color: var(--text-dim);
 }
 .lockedChip {
-  padding: 3px 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
   border-radius: 3px;
   border: 1px dashed var(--border-locked);
-  color: var(--text-disabled);
+  background: transparent;
+  color: var(--text-dim);
+  font: inherit;
+  cursor: default;
+}
+/* The tool(s) of the very next level. */
+.lockedChipNext {
+  border-color: var(--accent-deep);
+  color: var(--accent-light);
 }
 .legend {
   display: flex;
