@@ -1,4 +1,4 @@
-import type { Bar, WeeklyStudyBar } from './market/types';
+import type { LegacyBar, LegacyWeeklyStudyBar } from './market/types';
 
 /** Simple moving average; `null` until there are `n` values. */
 export function sma(values: readonly number[], n: number): (number | null)[] {
@@ -42,8 +42,8 @@ export function slopePct(
 }
 
 /** Aggregates consecutive groups of `size` bars (e.g. 5 daily bars → 1 weekly bar). */
-export function aggregate(bars: readonly Bar[], size: number): Bar[] {
-  const out: Bar[] = [];
+export function aggregate(bars: readonly LegacyBar[], size: number): LegacyBar[] {
+  const out: LegacyBar[] = [];
   for (let i = 0; i + size <= bars.length; i += size) {
     const group = bars.slice(i, i + size);
     const first = group[0];
@@ -64,9 +64,9 @@ export function aggregate(bars: readonly Bar[], size: number): Bar[] {
 
 /** Weekly bars with the Stage Analysis studies: MA 10w/30w, avg volume 10w, Mansfield RS. */
 export function withWeeklyStudies(
-  weekly: readonly Bar[],
-  indexWeekly: readonly Bar[],
-): WeeklyStudyBar[] {
+  weekly: readonly LegacyBar[],
+  indexWeekly: readonly LegacyBar[],
+): LegacyWeeklyStudyBar[] {
   const closes = weekly.map((b) => b.c);
   const ma10 = sma(closes, 10);
   const ma30 = sma(closes, 30);
