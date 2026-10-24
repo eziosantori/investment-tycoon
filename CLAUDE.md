@@ -9,9 +9,12 @@ market, later historical case files. Plan and rationale live in `docs/`
 
 ## Commands
 
-- `npm run dev`: dev server (http://localhost:5173/?seed=48213)
-- `npm test`, `npm run lint`, `npm run typecheck`, `npm run format`
-- `npm run build`: typecheck + production build to `dist/`
+pnpm, pinned through `packageManager` in `package.json` (run `corepack enable`
+once so `pnpm` resolves to that version).
+
+- `pnpm dev`: dev server (http://localhost:5173/?seed=48213)
+- `pnpm test`, `pnpm lint`, `pnpm typecheck`, `pnpm format`
+- `pnpm build`: typecheck + production build to `dist/`
 
 ## Rules
 

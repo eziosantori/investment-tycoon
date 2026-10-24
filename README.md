@@ -18,9 +18,10 @@ Mansfield RS). Most HUD values are still placeholders. Next up is **M1: market
 engine & playback**.
 
 ```bash
-npm install
-npm run dev        # http://localhost:5173/?seed=48213
-npm test
+corepack enable    # once: pnpm at the version pinned in package.json
+pnpm install
+pnpm dev           # http://localhost:5173/?seed=48213
+pnpm test
 ```
 
 URL params: `?seed=123` fixes the market, `?cb=1` colorblind palette,
