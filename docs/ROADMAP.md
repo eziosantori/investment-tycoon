@@ -18,8 +18,8 @@ See [Levels](#levels-the-chart-grows) below and DESIGN §3.
 ## Definition of Done (every milestone)
 
 - [ ] Deployed to the static host; the milestone's **demo script** works on the live build
-      (M1–M3: locally on `npm run build && npm run preview` is enough; wiring the Cloudflare deploy is a ticket due before M4)
-- [ ] `npm run build`, `npm run lint`, `npm test` pass in CI
+      (M1–M3: locally on `pnpm build && pnpm preview` is enough; wiring the Cloudflare deploy is a ticket due before M4)
+- [ ] `pnpm build`, `pnpm lint`, `pnpm test` pass in CI
 - [ ] Engine changes have unit tests; determinism test (`replay(seed, log) == live`) still passes
 - [ ] No dead-end UI: every visible control either works or isn't shown
 - [ ] UI matches the Design canvas (`design/README.md`) where a screen exists
@@ -28,14 +28,14 @@ See [Levels](#levels-the-chart-grows) below and DESIGN §3.
 
 ## Overview
 
-| Phase                                              | Milestones       | Ships as                                                               |
-| -------------------------------------------------- | ---------------- | ---------------------------------------------------------------------- |
-| **0: Foundation**                                  | Pre-M0 ✅, M0 ✅ | Skeleton + design tokens + seeded weekly chart                         |
-| **1: Stage Analysis Challenge** (generated market) | M1–M7            | **M4 = first playable → v1.0 (M7)**                                    |
-| **2: Model Book** (real historical stocks)         | M8–M11           | **v2.0**: case files (CSCO, AAPL, TSLA…) + historical market replays   |
-| **3: Fundamentals & Firm**                         | M12–M15          | v3.0: earnings/fundamentals, clients/AUM                               |
-| **4: Automation**                                  | M16–M17          | v4.0: strategy builder + backtester (on generated and Model Book data) |
-| **C: Cloud** (optional, after v1.0)                | C1–C2            | accounts, cloud save, leaderboards                                     |
+| Phase                                              | Milestones        | Ships as                                                               |
+| -------------------------------------------------- | ----------------- | ---------------------------------------------------------------------- |
+| **0: Foundation**                                  | Pre-M0 ✅, M0 ✅  | Skeleton + design tokens + seeded weekly chart                         |
+| **1: Stage Analysis Challenge** (generated market) | M1, Pre-M2, M2–M7 | **M4 = first playable → v1.0 (M7)**                                    |
+| **2: Model Book** (real historical stocks)         | M8–M11            | **v2.0**: case files (CSCO, AAPL, TSLA…) + historical market replays   |
+| **3: Fundamentals & Firm**                         | M12–M15           | v3.0: earnings/fundamentals, clients/AUM                               |
+| **4: Automation**                                  | M16–M17           | v4.0: strategy builder + backtester (on generated and Model Book data) |
+| **C: Cloud** (optional, after v1.0)                | C1–C2             | accounts, cloud save, leaderboards                                     |
 
 Estimates assume one developer working part-time; with Claude writing the code
 they shrink a lot and playtesting becomes the bottleneck. **S** ≈ a few evenings ·
@@ -119,6 +119,15 @@ screen, the level ladder and the Challenge Passed screen.
 
 **Demo:** press play and watch weeks unfold; bases form, some break out on volume, leaders top and roll over. Switch W/D/65m and switch tickers. `?level=1` shows only the price line, `?level=6` the full chart.
 **Teaches:** _stage analysis_, _30-week MA_, _relative strength_, _volume confirmation_.
+
+### Pre-M2: tooling (pnpm + engine package) · S
+
+**Goal:** the repo layout M2+ builds on, with no behaviour change.
+
+- pnpm instead of npm, version pinned through `packageManager` (corepack); CI on pnpm with the same steps ([ADR-0004](adr/0004-pnpm-workspaces-without-turborepo.md))
+- The engine and the market universe as a workspace package with its own tsconfig ([ADR-0003](adr/0003-engine-as-workspace-package.md))
+
+**Demo:** `pnpm build && pnpm preview` shows the same screen as before at `?seed=48213`; the golden hash of the pinned seed is unchanged.
 
 ### M2: Trading & accounting · M
 
@@ -210,10 +219,10 @@ Real historical stocks, played as "case files". Details in [MODEL_BOOK.md](MODEL
 
 - `scripts/fetch-case` : daily OHLCV (split-adjusted) for a ticker + its benchmark index, from the chosen provider
 - Validation (gaps, splits, bad ticks), weekly aggregation, compact JSON output in `content/casefiles/data/`
-- Case-file schema + validator (`npm run casefile:check`)
+- Case-file schema + validator (`pnpm casefile:check`)
 - **Private build flag**: real-data content is excluded from the public build until licensing is resolved (MODEL_BOOK §5)
 
-**Demo:** `npm run fetch-case CSCO 1995-01-01 2003-12-31` → the data renders in the game's chart with 30w MA and RS vs the index.
+**Demo:** `pnpm fetch-case CSCO 1995-01-01 2003-12-31` → the data renders in the game's chart with 30w MA and RS vs the index.
 
 ### M9: Case File mode · M
 

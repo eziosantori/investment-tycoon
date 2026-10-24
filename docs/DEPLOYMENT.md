@@ -32,7 +32,7 @@ add a small backend on the same platform later if we want.
 | **Preview**    | every push to a branch / PR | `<branch>.<project>.pages.dev`              | Playtest a milestone before merging |
 | **Production** | merge to `main`             | `<project>.pages.dev` → custom domain later | Public build                        |
 
-Build is `npm run build` → `dist/`. CI (GitHub Actions) runs lint + test + build;
+Build is `pnpm build` → `dist/`. CI (GitHub Actions) runs lint + test + build;
 Cloudflare deploys only if CI is green.
 
 ### Build metadata
