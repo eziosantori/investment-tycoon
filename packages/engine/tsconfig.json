@@ -1,0 +1,9 @@
+{
+  // No DOM, React or Vite types: the engine is pure TypeScript (ADR-0003).
+  // Node types are for the tests (e.g. `performance`); they declare no `window`/`document`.
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["node"]
+  },
+  "include": ["src"]
+}

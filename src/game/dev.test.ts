@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { generateMarketTimeline } from '../engine/market/marketTimeline';
+import { generateMarketTimeline } from '@investment-tycoon/engine';
 import { dealReadout, devModeFromSearch, galleryViews, withRunParams } from './dev';
 
 describe('galleryViews', () => {

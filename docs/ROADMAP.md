@@ -28,14 +28,14 @@ See [Levels](#levels-the-chart-grows) below and DESIGN §3.
 
 ## Overview
 
-| Phase                                              | Milestones        | Ships as                                                               |
-| -------------------------------------------------- | ----------------- | ---------------------------------------------------------------------- |
-| **0: Foundation**                                  | Pre-M0 ✅, M0 ✅  | Skeleton + design tokens + seeded weekly chart                         |
-| **1: Stage Analysis Challenge** (generated market) | M1, Pre-M2, M2–M7 | **M4 = first playable → v1.0 (M7)**                                    |
-| **2: Model Book** (real historical stocks)         | M8–M11            | **v2.0**: case files (CSCO, AAPL, TSLA…) + historical market replays   |
-| **3: Fundamentals & Firm**                         | M12–M15           | v3.0: earnings/fundamentals, clients/AUM                               |
-| **4: Automation**                                  | M16–M17           | v4.0: strategy builder + backtester (on generated and Model Book data) |
-| **C: Cloud** (optional, after v1.0)                | C1–C2             | accounts, cloud save, leaderboards                                     |
+| Phase                                              | Milestones           | Ships as                                                               |
+| -------------------------------------------------- | -------------------- | ---------------------------------------------------------------------- |
+| **0: Foundation**                                  | Pre-M0 ✅, M0 ✅     | Skeleton + design tokens + seeded weekly chart                         |
+| **1: Stage Analysis Challenge** (generated market) | M1, Pre-M2 ✅, M2–M7 | **M4 = first playable → v1.0 (M7)**                                    |
+| **2: Model Book** (real historical stocks)         | M8–M11               | **v2.0**: case files (CSCO, AAPL, TSLA…) + historical market replays   |
+| **3: Fundamentals & Firm**                         | M12–M15              | v3.0: earnings/fundamentals, clients/AUM                               |
+| **4: Automation**                                  | M16–M17              | v4.0: strategy builder + backtester (on generated and Model Book data) |
+| **C: Cloud** (optional, after v1.0)                | C1–C2                | accounts, cloud save, leaderboards                                     |
 
 Estimates assume one developer working part-time; with Claude writing the code
 they shrink a lot and playtesting becomes the bottleneck. **S** ≈ a few evenings ·
@@ -120,7 +120,7 @@ screen, the level ladder and the Challenge Passed screen.
 **Demo:** press play and watch weeks unfold; bases form, some break out on volume, leaders top and roll over. Switch W/D/65m and switch tickers. `?level=1` shows only the price line, `?level=6` the full chart.
 **Teaches:** _stage analysis_, _30-week MA_, _relative strength_, _volume confirmation_.
 
-### Pre-M2: tooling (pnpm + engine package) · S
+### Pre-M2: tooling (pnpm + engine package) · S · ✅ done
 
 **Goal:** the repo layout M2+ builds on, with no behaviour change.
 

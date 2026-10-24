@@ -1,4 +1,4 @@
-import { INDEX, STOCKS } from '../../content/universe';
+import { INDEX, STOCKS } from '../universe';
 import { createStream } from '../rng';
 import { ENGINE_VERSION } from '../version';
 import { assembleInstrument } from './assemble';
@@ -16,7 +16,7 @@ const streamsOf = (seed: number, ticker: Ticker) => ({
   signatures: createStream(seed, `signatures:${ticker}`),
 });
 
-/** The universe of the content file: TYX and the 12 stocks. */
+/** The universe data (`../universe.ts`): TYX and the 12 stocks. */
 export const DEFAULT_UNIVERSE: Universe = { index: INDEX, stocks: STOCKS };
 
 /**
@@ -29,7 +29,7 @@ export const DEFAULT_UNIVERSE: Universe = { index: INDEX, stocks: STOCKS };
  * instrument draws from its own `stages:<ticker>`, `series:<ticker>` and
  * `signatures:<ticker>` streams, so editing one stock leaves every other instrument identical.
  *
- * @param universe defaults to the content file; tests pass edited copies
+ * @param universe defaults to the universe data; tests pass edited copies
  * @param params defaults to `MARKET_PARAMS`
  */
 export function generateMarketTimeline(

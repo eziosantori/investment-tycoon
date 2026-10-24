@@ -1,4 +1,4 @@
-import { ENGINE_VERSION } from '../../../engine/version';
+import { ENGINE_VERSION } from '@investment-tycoon/engine';
 import { usePlaybackKeys } from '../../playback/usePlaybackKeys';
 import { usePlaybackLoop } from '../../playback/usePlaybackLoop';
 import { useTimeline } from '../../state/timeline';

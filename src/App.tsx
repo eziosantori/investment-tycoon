@@ -1,6 +1,5 @@
 import { useLayoutEffect, useMemo, type ReactNode } from 'react';
-import type { Level } from './engine/chart/tools';
-import { generateMarketTimeline } from './engine/market/marketTimeline';
+import { generateMarketTimeline, type Level } from '@investment-tycoon/engine';
 import { TradingScreen } from './ui/screens/trading/TradingScreen';
 import { useUiStore } from './ui/state/store';
 import { TimelineContext } from './ui/state/timeline';

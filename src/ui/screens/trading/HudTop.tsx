@@ -1,5 +1,4 @@
-import { isAtEnd } from '../../../engine/cursor';
-import { runWeekOfBar } from '../../../engine/market/calendar';
+import { isAtEnd, runWeekOfBar } from '@investment-tycoon/engine';
 import { SPEEDS } from '../../playback/clock';
 import { clockLabel } from '../../playback/clockLabel';
 import { useUiStore } from '../../state/store';

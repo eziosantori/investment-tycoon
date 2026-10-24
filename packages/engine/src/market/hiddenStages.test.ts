@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { INDEX, STOCKS } from '../../content/universe';
+import { INDEX, STOCKS } from '../universe';
 import { RUN_WEEKS, WARMUP_WEEKS } from './calendar';
 import { generateHiddenStages } from './hiddenStages';
 import { MARKET_PARAMS } from './params';

@@ -1,4 +1,4 @@
-import { parseLevel, type Level } from '../engine/chart/tools';
+import { type Level, parseLevel } from '@investment-tycoon/engine';
 
 /** The stage gallery opens at Lv6 (full weekly chart) so the stages can be judged. */
 export const GALLERY_DEFAULT_LEVEL: Level = 6;

@@ -1,5 +1,4 @@
-import type { TimeframeChip } from '../../../engine/chart/view';
-import type { Timeframe } from '../../../engine/market/types';
+import type { Timeframe, TimeframeChip } from '@investment-tycoon/engine';
 import { LockChip } from './LockChip';
 import s from './trading.module.css';
 

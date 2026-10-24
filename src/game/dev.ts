@@ -1,7 +1,12 @@
-import type { Level } from '../engine/chart/tools';
-import { chartView, type ChartView } from '../engine/chart/view';
-import { endCursor } from '../engine/cursor';
-import type { MarketTimeline, Stage, Ticker } from '../engine/market/types';
+import {
+  chartView,
+  type ChartView,
+  endCursor,
+  type Level,
+  type MarketTimeline,
+  type Stage,
+  type Ticker,
+} from '@investment-tycoon/engine';
 
 /**
  * Developer tools, available in every build and linked from nowhere:

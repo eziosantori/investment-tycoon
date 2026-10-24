@@ -6,7 +6,7 @@ import { buildStages, chooseAnchor, type AnchorTarget } from './stageCycle';
 import type { Stage } from './types';
 import type { InstrumentSpec } from './universe';
 
-/** The instruments of a run: the index and the stocks, in content-file order. */
+/** The instruments of a run: the index and the stocks, in universe-data order. */
 export interface Universe {
   index: InstrumentSpec;
   stocks: readonly InstrumentSpec[];

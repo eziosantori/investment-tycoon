@@ -1,4 +1,4 @@
-import { isAtEnd } from '../../../engine/cursor';
+import { isAtEnd } from '@investment-tycoon/engine';
 import { startNewSeed } from '../../../game/seed';
 import { useUiStore } from '../../state/store';
 import { useTimeline } from '../../state/timeline';

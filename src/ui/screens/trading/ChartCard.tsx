@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { chartView } from '../../../engine/chart/view';
+import { chartView } from '@investment-tycoon/engine';
 import { StageChart } from '../../components/chart/StageChart';
 import { arrow, price, signedPct } from '../../format';
 import { useUiStore } from '../../state/store';

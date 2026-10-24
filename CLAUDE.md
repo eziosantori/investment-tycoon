@@ -14,13 +14,20 @@ Node 22 from `mise.toml` (mise) and pnpm pinned through `packageManager` in
 `corepack enable` with mise's Node active, so `pnpm` resolves to that version.
 
 - `pnpm dev`: dev server (http://localhost:5173/?seed=48213)
-- `pnpm test`, `pnpm lint`, `pnpm typecheck`, `pnpm format`
+- `pnpm test`, `pnpm lint`, `pnpm typecheck`, `pnpm format` (test and
+  typecheck run the app, then every package with `pnpm -r`)
+- `pnpm --filter @investment-tycoon/engine test`: the engine's tests only
 - `pnpm build`: typecheck + production build to `dist/`
 
 ## Rules
 
-- `src/engine/` is pure, deterministic TypeScript: no React, no DOM, no
-  `Math.random()` (use `engine/rng.ts` streams). ESLint enforces this.
+- The engine is the workspace package `packages/engine`
+  (`@investment-tycoon/engine`, ADR-0003): pure, deterministic TypeScript, no
+  React, no DOM, no `Math.random()` (use `packages/engine/src/rng.ts` streams).
+  Its own tsconfig has no DOM types; ESLint enforces the rest. The app imports
+  it only through the entry point `packages/engine/src/index.ts`; export new
+  names there. The market universe lives in the package; UI content (concepts)
+  stays in `src/content/`.
 - Same seed → same market, regardless of player actions (separate RNG streams).
 - Prices and money in the engine are integer cents, volumes integer shares
   (from M1); studies (MAs, RS) are derived floats, never stored.

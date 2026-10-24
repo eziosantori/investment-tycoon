@@ -1,5 +1,4 @@
-import type { Level } from '../../../engine/chart/tools';
-import type { LockedChip } from '../../../engine/chart/view';
+import type { Level, LockedChip } from '@investment-tycoon/engine';
 import s from './trading.module.css';
 
 /** Padlock icon of the locked chips (canvas SVG, replaces the 🔒 emoji). */

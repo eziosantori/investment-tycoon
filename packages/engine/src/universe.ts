@@ -1,4 +1,4 @@
-import type { InstrumentSpec } from '../engine/market/universe';
+import type { InstrumentSpec } from './market/universe';
 
 /**
  * The universe: the TYX index and the 12 fictional stocks a run trades.

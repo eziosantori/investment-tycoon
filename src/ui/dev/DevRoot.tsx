@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { App } from '../../App';
-import type { Level } from '../../engine/chart/tools';
+import type { Level } from '@investment-tycoon/engine';
 import { withRunParams } from '../../game/dev';
 import { StageBandsContext } from '../components/chart/stageBandsContext';
 import { DevOverlay } from './DevOverlay';

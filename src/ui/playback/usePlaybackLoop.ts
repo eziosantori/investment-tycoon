@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
-import { advanceBars, isAtEnd } from '../../engine/cursor';
-import type { MarketTimeline } from '../../engine/market/types';
+import { advanceBars, isAtEnd, type MarketTimeline } from '@investment-tycoon/engine';
 import { useUiStore } from '../state/store';
 import { tickPlayback } from './clock';
 
