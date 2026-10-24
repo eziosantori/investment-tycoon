@@ -1,5 +1,5 @@
 // M1 demo script at the engine level (the visual part is checked by hand on
-// `npm run build && npm run preview`): play the run week by week, switch
+// `pnpm build && pnpm preview`): play the run week by week, switch
 // W/D/65m and tickers, and compare ?level=1 with ?level=6.
 import { describe, expect, it } from 'vitest';
 import { chartView } from './chart/view';

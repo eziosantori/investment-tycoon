@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
-import { LEVELS, parseLevel, type Level } from '../../engine/chart/tools';
-import { STAGE_LABELS } from '../../engine/chart/stageBands';
+import { type Level, LEVELS, parseLevel, STAGE_LABELS } from '@investment-tycoon/engine';
 import { dealReadout } from '../../game/dev';
 import { parseSeed, randomSeed } from '../../game/seed';
 import { useTimeline } from '../state/timeline';

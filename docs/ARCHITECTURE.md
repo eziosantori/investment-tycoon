@@ -33,15 +33,24 @@ only the visible window), so SVG performance isn't a concern.
 Revisit if pan/zoom and crosshair on long 65m histories (M1+) get heavy: the
 fallback is a `<canvas>` layer for candles with the SVG overlays on top.
 
-**Core rule: the simulation engine is framework-free TypeScript** (`src/engine/`)
-with no React imports and no DOM access. The UI only reads snapshots and sends
-commands. This keeps the engine testable, deterministic, and movable into a Web
-Worker later if performance needs it.
+**Core rule: the simulation engine is framework-free TypeScript**, in the
+workspace package `packages/engine` (`@investment-tycoon/engine`,
+[ADR-0003](adr/0003-engine-as-workspace-package.md)), with no React imports and
+no DOM access. The UI only reads snapshots and sends commands. This keeps the
+engine testable, deterministic, and movable into a Web Worker (or a replay
+server) later. The app consumes it as TypeScript source through one entry point
+(`src/index.ts`); ESLint forbids deep imports, and the package's tsconfig has no
+DOM types. pnpm workspaces, no Turborepo
+([ADR-0004](adr/0004-pnpm-workspaces-without-turborepo.md)): root `test` and
+`typecheck` run the app, then each package via `pnpm -r`.
 
 ```
-src/
-  engine/        pure simulation: rng, clock, market gen, orders, accounting, rules, events
-  content/       data: rulesets, concepts (advisor text), company archetypes, scenarios
+packages/engine/src/
+  index.ts       the public surface the app imports
+  universe.ts    the market universe (TYX + 12 stocks): it decides a seed's market
+  rng, cursor, studies, version, market/ (generation, calendar), chart/ (views)
+src/             the web app
+  content/       UI content: rulesets, concepts (advisor text), scenarios
   game/          game loop, save/load, command dispatch, engine ↔ store bridge
   ui/            React components, panels, theme
   test/          shared fixtures
@@ -61,7 +70,7 @@ Every run comes from a **seed**. This gives us:
 
 Rules:
 
-- Seeded PRNG (e.g. `sfc32` / `mulberry32`). `Math.random()` is banned in `engine/`.
+- Seeded PRNG (e.g. `sfc32` / `mulberry32`). `Math.random()` is banned in `packages/engine`.
 - **Separate RNG streams** per subsystem (`market`, `events`, `companies`, ...),
   so a player action can never change what the market does. Same seed means the
   same market, whatever the player does.

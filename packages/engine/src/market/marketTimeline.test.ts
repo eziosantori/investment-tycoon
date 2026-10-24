@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { generateMarketTimeline } from './marketTimeline';
-import { INDEX, STOCKS } from '../../content/universe';
+import { INDEX, STOCKS } from '../universe';
 import { generateHiddenStages } from './hiddenStages';
 import type { Bar } from './types';
 

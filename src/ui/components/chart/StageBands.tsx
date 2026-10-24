@@ -1,5 +1,4 @@
-import { STAGE_LABELS, stageBands } from '../../../engine/chart/stageBands';
-import type { Stage } from '../../../engine/market/types';
+import { type Stage, STAGE_LABELS, stageBands } from '@investment-tycoon/engine';
 import s from './stageBands.module.css';
 
 /**

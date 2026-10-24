@@ -1,7 +1,11 @@
 import { useMemo, useState } from 'react';
-import { STAGE_LABELS } from '../../engine/chart/stageBands';
-import { LEVELS, parseLevel, type Level } from '../../engine/chart/tools';
-import { generateMarketTimeline } from '../../engine/market/marketTimeline';
+import {
+  generateMarketTimeline,
+  type Level,
+  LEVELS,
+  parseLevel,
+  STAGE_LABELS,
+} from '@investment-tycoon/engine';
 import { galleryViews, withRunParams } from '../../game/dev';
 import { parseSeed, randomSeed } from '../../game/seed';
 import { StageChart } from '../components/chart/StageChart';

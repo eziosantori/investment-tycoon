@@ -8,17 +8,18 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "pnpm typecheck && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && pnpm -r typecheck",
     "lint": "eslint .",
-    "test": "vitest run",
+    "test": "vitest run && pnpm -r test",
     "test:watch": "vitest",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "deploy": "pnpm build && wrangler deploy"
   },
   "dependencies": {
+    "@investment-tycoon/engine": "workspace:*",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "zustand": "^5.0.16"

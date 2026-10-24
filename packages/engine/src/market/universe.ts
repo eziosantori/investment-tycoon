@@ -1,7 +1,7 @@
 import type { StageCycleParams } from './params';
 import type { Cents, InstrumentInfo, Shares, Ticker } from './types';
 
-/** One instrument of the universe as defined in the content file (`src/content/universe.ts`). */
+/** One instrument of the universe as defined in the universe data (`../universe.ts`). */
 export interface InstrumentSpec {
   ticker: Ticker;
   name: string;

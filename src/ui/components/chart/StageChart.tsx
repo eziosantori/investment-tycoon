@@ -1,5 +1,5 @@
 import { useId, type ReactNode } from 'react';
-import type { ChartBar, ChartView } from '../../../engine/chart/view';
+import type { ChartBar, ChartView } from '@investment-tycoon/engine';
 import { MINUS } from '../../format';
 import { useElementSize } from '../../hooks/useElementSize';
 import { linear, ticks } from './scale';

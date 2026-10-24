@@ -50,6 +50,13 @@ Then the next milestone, from step 1.
 
 - A linear ticket chain cancels the swarm's benefit; a wide graph is the point.
 - CI, lint and the determinism test (`replay(seed, log) == live`) are the gate
-  that stops regressions when many agents merge.
+  that stops regressions when many agents merge. Run the gate from the repo
+  root: `pnpm lint`, `pnpm typecheck` and `pnpm test` cover the app and
+  `packages/engine` (lint from the root config; typecheck and test fan out
+  with `pnpm -r`); an engine-only ticket can iterate with
+  `pnpm --filter @investment-tycoon/engine test`.
+- Tickets that touch the engine and the UI meet at the package's entry point
+  (`packages/engine/src/index.ts`): export new names there, never import
+  engine internals from the app.
 - Every parallel agent spends its own tokens: use the swarm on M/L milestones,
   not small changes.

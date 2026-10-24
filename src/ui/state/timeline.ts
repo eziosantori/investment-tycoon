@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import type { MarketTimeline } from '../../engine/market/types';
+import type { MarketTimeline } from '@investment-tycoon/engine';
 
 /**
  * The run's market timeline, provided once at the top of the app. It lives

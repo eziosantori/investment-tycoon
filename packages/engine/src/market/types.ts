@@ -14,7 +14,7 @@
  *   `./stageEvents`; the statistical suite: `./marketCharacter.test.ts`
  * - hidden stages of the universe, dealt at the first run week: `./hiddenStages`
  *   (cycle: `./stageCycle`; deal targets and reading the deal: `./deal`)
- * - universe spec type: `./universe`; the data: `src/content/universe.ts`
+ * - universe spec type: `./universe`; the data: `../universe.ts`
  * - cursor helpers (start/end, advance, next session/week close): `../cursor`
  * - tools-for-level table and `Level`: `../chart/tools`
  * - chart view (what the chart draws) and quote: `../chart/view`, `../chart/quote`
@@ -115,7 +115,7 @@ export interface MarketTimeline {
   /** Weeks of the run, numbered 1..runWeeks for the player. */
   runWeeks: number;
   index: InstrumentTimeline;
-  /** The universe's stocks, in content-file order. */
+  /** The universe's stocks, in universe-data order. */
   stocks: InstrumentTimeline[];
   deal: Deal;
 }

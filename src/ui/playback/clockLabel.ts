@@ -1,11 +1,11 @@
 import {
   BAR_MINUTES,
   BARS_PER_SESSION,
+  type Cursor,
   SESSION_OPEN_MINUTES,
-  SESSIONS_PER_WEEK,
   sessionOfBar,
-} from '../../engine/market/calendar';
-import type { Cursor } from '../../engine/market/types';
+  SESSIONS_PER_WEEK,
+} from '@investment-tycoon/engine';
 
 const DAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI'] as const;
 

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { watchlist } from '../../../engine/chart/watchlist';
+import { watchlist } from '@investment-tycoon/engine';
 import { arrow, price, signedPct } from '../../format';
 import { useUiStore } from '../../state/store';
 import { useTimeline } from '../../state/timeline';

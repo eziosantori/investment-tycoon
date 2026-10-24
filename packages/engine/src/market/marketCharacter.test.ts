@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { STOCKS } from '../../content/universe';
+import { STOCKS } from '../universe';
 import { generateMarketTimeline } from './marketTimeline';
 import { measureStageEvents, type Breakdown, type Breakout } from './stageEvents';
 import type { Stage } from './types';

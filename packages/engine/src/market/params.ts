@@ -12,7 +12,7 @@ import type { Stage } from './types';
  * the stage signatures (breakout and breakdown volume, gaps and levels, failed
  * breakouts).
  *
- * A single stock can override its stage cycle from the content file
+ * A single stock can override its stage cycle from the universe data
  * (`InstrumentSpec.stageCycle`); thanks to per-instrument RNG streams that
  * leaves every other stock unchanged.
  */

@@ -17,16 +17,33 @@ export default tseslint.config(
     },
   },
   {
-    // The engine must stay framework-free and deterministic (docs/ARCHITECTURE.md §1–2).
-    files: ['src/engine/**/*.ts'],
+    // The app reaches the engine only through its entry point (ADR-0003).
+    files: ['src/**/*.{ts,tsx}'],
     rules: {
       'no-restricted-imports': [
         'error',
-        { patterns: ['react', 'react-dom', 'react/*', '../ui/*', '../../ui/*', '../game/*'] },
+        {
+          patterns: [
+            {
+              group: ['@investment-tycoon/engine/*', '**/packages/engine/**'],
+              message: "Import from '@investment-tycoon/engine' only.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // The engine must stay framework-free and deterministic (docs/ARCHITECTURE.md §1–2).
+    files: ['packages/engine/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        { patterns: ['react', 'react-dom', 'react/*', 'zustand', '../../*'] },
       ],
       'no-restricted-properties': [
         'error',
-        { object: 'Math', property: 'random', message: 'Use the seeded RNG (engine/rng.ts).' },
+        { object: 'Math', property: 'random', message: 'Use the seeded RNG (src/rng.ts).' },
       ],
       'no-restricted-globals': ['error', 'window', 'document', 'localStorage'],
     },
