@@ -18,9 +18,10 @@ Mansfield RS). Most HUD values are still placeholders. Next up is **M1: market
 engine & playback**.
 
 ```bash
-corepack enable    # once: pnpm at the version pinned in package.json
+mise trust && mise install   # once: Node 22 from mise.toml
+corepack enable              # once: pnpm at the version pinned in package.json
 pnpm install
-pnpm dev           # http://localhost:5173/?seed=48213
+pnpm dev                     # http://localhost:5173/?seed=48213
 pnpm test
 ```
 

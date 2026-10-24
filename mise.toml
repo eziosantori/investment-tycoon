@@ -1,0 +1,4 @@
+# Node for local dev, same major as CI (.github/workflows/ci.yml). pnpm 11
+# needs >= 22.13 (node:sqlite); its version is pinned in package.json.
+[tools]
+node = "22"

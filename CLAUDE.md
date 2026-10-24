@@ -9,8 +9,9 @@ market, later historical case files. Plan and rationale live in `docs/`
 
 ## Commands
 
-pnpm, pinned through `packageManager` in `package.json` (run `corepack enable`
-once so `pnpm` resolves to that version).
+Node 22 from `mise.toml` (mise) and pnpm pinned through `packageManager` in
+`package.json`. Once per machine: `mise trust && mise install`, then
+`corepack enable` with mise's Node active, so `pnpm` resolves to that version.
 
 - `pnpm dev`: dev server (http://localhost:5173/?seed=48213)
 - `pnpm test`, `pnpm lint`, `pnpm typecheck`, `pnpm format`
