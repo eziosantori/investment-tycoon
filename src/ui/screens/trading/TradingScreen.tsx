@@ -8,6 +8,7 @@ import { HudTop } from './HudTop';
 import { Bankroll } from './Bankroll';
 import { InstrumentPanel } from './InstrumentPanel';
 import o from './order.module.css';
+import { HoldingCard } from './HoldingCard';
 import { OrderPanel } from './OrderPanel';
 import s from './trading.module.css';
 
@@ -36,6 +37,7 @@ export function TradingScreen() {
         <div className={s.rightCol}>
           <InstrumentPanel />
           <OrderPanel />
+          <HoldingCard />
         </div>
       </div>
       <div className={s.buildInfo}>

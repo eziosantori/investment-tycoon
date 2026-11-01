@@ -4,6 +4,7 @@ import { watchlist } from '@investment-tycoon/engine';
 import { arrow, price, signedPct } from '../../format';
 import { useUiStore } from '../../state/store';
 import { useTimeline } from '../../state/timeline';
+import { useTradingView } from '../../state/tradingView';
 import sw from './instrument.module.css';
 import s from './trading.module.css';
 
@@ -14,6 +15,7 @@ import s from './trading.module.css';
  */
 export function TickerSwitcher() {
   const timeline = useTimeline();
+  const markers = useTradingView().markers;
   const cursor = useUiStore((st) => st.run.cursor);
   const instrument = useUiStore((st) => st.instrument);
   const selectInstrument = useUiStore((st) => st.selectInstrument);
@@ -105,6 +107,17 @@ export function TickerSwitcher() {
                       <span className={sw.rowTicker}>
                         {r.ticker}
                         {r.kind === 'index' && <span className={sw.indexTag}>INDEX</span>}
+                        {markers[r.ticker] && (
+                          <span
+                            className={`${sw.marker} ${markers[r.ticker] === 'long' ? s.up : s.down}`}
+                            role="img"
+                            aria-label={
+                              markers[r.ticker] === 'long' ? 'long position' : 'short position'
+                            }
+                          >
+                            {markers[r.ticker] === 'long' ? '▲' : '▼'}
+                          </span>
+                        )}
                       </span>
                       <span className={sw.rowPrice}>{price(r.quote.last / 100)}</span>
                       <span className={`${sw.rowChg} ${chg >= 0 ? s.up : s.down}`}>
