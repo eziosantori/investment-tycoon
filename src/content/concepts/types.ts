@@ -1,6 +1,14 @@
 /** Stable ids for mentor concepts. Grows as later milestones add concepts. */
 export type ConceptId =
-  'stage' | '30-week-ma' | 'relative-strength' | 'volume-confirmation' | 'trend';
+  | 'stage'
+  | '30-week-ma'
+  | 'relative-strength'
+  | 'volume-confirmation'
+  | 'trend'
+  | 'long'
+  | 'short-selling'
+  | 'spread'
+  | 'realized-vs-open-pnl';
 
 /** A mentor explanation (docs/ARCHITECTURE.md §4.6). */
 export interface Concept {
