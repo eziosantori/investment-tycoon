@@ -89,3 +89,41 @@ describe('UI store run slice', () => {
     expect(store().orderShares).toBeNull();
   });
 });
+
+describe('UI store refusal feedback', () => {
+  beforeEach(() => {
+    store().startRun(timeline, 1);
+  });
+
+  it('holds the reason of the last refused command, and clears it by id', () => {
+    expect(store().refusal).toBeNull();
+    store().dispatch(timeline, { type: 'marketOrder', ticker: 'TYX', side: 'buy', shares: 10 });
+    const first = store().refusal!;
+    expect(first.reason).toBe('notTradable');
+
+    store().dispatch(timeline, {
+      type: 'marketOrder',
+      ticker: 'OMNX',
+      side: 'buy',
+      shares: 1_000_000,
+    });
+    const second = store().refusal!;
+    expect(second.reason).toBe('insufficientBuyingPower');
+    expect(second.id).not.toBe(first.id);
+
+    // A stale timer (the first refusal's) does not clear the newer message.
+    store().clearRefusal(first.id);
+    expect(store().refusal).toEqual(second);
+    store().clearRefusal(second.id);
+    expect(store().refusal).toBeNull();
+  });
+
+  it('sets no refusal for a filled order, and a new run clears it', () => {
+    store().dispatch(timeline, { type: 'marketOrder', ticker: 'OMNX', side: 'buy', shares: 10 });
+    expect(store().refusal).toBeNull();
+    store().dispatch(timeline, { type: 'marketOrder', ticker: 'OMNX', side: 'buy', shares: 0 });
+    expect(store().refusal?.reason).toBe('invalidShares');
+    store().startRun(timeline, 1);
+    expect(store().refusal).toBeNull();
+  });
+});

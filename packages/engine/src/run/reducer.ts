@@ -136,12 +136,25 @@ function applyFlatten(state: RunState, timeline: MarketTimeline, command: Flatte
 }
 
 /**
+ * Why a market order would be refused at the run's cursor, or `null`: the same
+ * check `apply` makes, so the trading view can disable a button with its reason.
+ */
+export function orderRefusal(
+  state: RunState,
+  timeline: MarketTimeline,
+  order: Omit<MarketOrderCommand, 'at'>,
+): RefusalReason | null {
+  return refusalOf(state, timeline, order, tradeQuote(timeline, order.ticker, state.cursor));
+}
+
+/**
  * Why a market order can't fill, or `null`. Checks run in this order; each new
- * rule (buying power, end of market: #24) slots in here.
+ * rule (end of market: #29) slots in here.
  */
 function refusalOf(
   state: RunState,
-  order: MarketOrderCommand,
+  timeline: MarketTimeline,
+  order: Omit<MarketOrderCommand, 'at'>,
   quote: TradeQuote | null,
 ): RefusalReason | null {
   if (!Number.isInteger(order.shares) || order.shares <= 0) return 'invalidShares';
@@ -151,6 +164,16 @@ function refusalOf(
   if (held !== 0 && Math.sign(delta) !== Math.sign(held) && Math.abs(delta) > Math.abs(held))
     return 'crossesZero';
   if (delta < 0 && held <= 0 && !state.settings.allowShort) return 'shortNotAllowed';
+  if (Math.abs(held + delta) > Math.abs(held)) {
+    // Growing a position: exposure after the fill may not exceed equity after
+    // it. The fill moves equity by the spread paid, Δ × (mid − price), so
+    // short proceeds add nothing; closing shares is never refused for this.
+    const price = delta > 0 ? quote.ask : quote.bid;
+    const { equity, exposure } = account(state, timeline);
+    const exposureAfter = exposure + Math.abs(delta) * quote.mid;
+    const equityAfter = equity + delta * (quote.mid - price);
+    if (exposureAfter > equityAfter) return 'insufficientBuyingPower';
+  }
   return null;
 }
 
@@ -162,7 +185,7 @@ function applyMarketOrder(
   refusedAs: Command,
 ): RunStep {
   const quote = tradeQuote(timeline, order.ticker, state.cursor);
-  const reason = refusalOf(state, order, quote);
+  const reason = refusalOf(state, timeline, order, quote);
   if (reason || !quote) return refuse(state, refusedAs, reason ?? 'notTradable');
 
   const price = order.side === 'buy' ? quote.ask : quote.bid;

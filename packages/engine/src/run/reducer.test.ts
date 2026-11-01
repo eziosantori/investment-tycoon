@@ -173,6 +173,46 @@ describe('apply: refusals', () => {
     });
   });
 
+  it('refuses an order that would push exposure above equity, filling the largest one that fits', () => {
+    const run = fresh();
+    const { ask } = quote(run, 'OMNX');
+    // Exposure after a buy of n is n × mid, equity 10M − n × (ask − mid): fits while n × ask ≤ 10M.
+    const most = Math.floor(10_000_000 / ask);
+    expect(act(run, buy('OMNX', most)).state.positions.OMNX).toMatchObject({ shares: most });
+    expect(refused(run, { ...buy('OMNX', most + 1), at: start })).toMatchObject({
+      type: 'refused',
+      reason: 'insufficientBuyingPower',
+    });
+  });
+
+  it('counts exposure across stocks', () => {
+    const half = act(fresh(), buy('OMNX', Math.floor(5_000_000 / quote(fresh(), 'OMNX').ask)));
+    const { ask } = quote(half.state, 'KRVX');
+    expect(
+      refused(half.state, { ...buy('KRVX', Math.ceil(5_000_000 / ask) + 10), at: start }),
+    ).toMatchObject({ reason: 'insufficientBuyingPower' });
+  });
+
+  it('does not add short proceeds to buying power', () => {
+    const lv7 = newRun(timeline, runSettingsFor(7));
+    const short = act(lv7, sell('OMNX', 500)).state;
+    expect(short.cash).toBeGreaterThan(10_000_000);
+    const before = account(lv7, timeline).buyingPower;
+    expect(account(short, timeline).buyingPower).toBeLessThan(before);
+    const { ask } = quote(short, 'KRVX');
+    expect(refused(short, { ...buy('KRVX', Math.floor(before / ask)), at: start })).toMatchObject({
+      reason: 'insufficientBuyingPower',
+    });
+  });
+
+  it('never refuses closing shares for buying power', () => {
+    const run = fresh();
+    const most = Math.floor(10_000_000 / quote(run, 'OMNX').ask);
+    const full = act(run, buy('OMNX', most)).state;
+    expect(account(full, timeline).buyingPower).toBeLessThan(quote(full, 'OMNX').ask);
+    expect(act(full, sell('OMNX', 10)).state.positions.OMNX!.shares).toBe(most - 10);
+  });
+
   it('refuses selling past zero, and selling short when the run forbids it', () => {
     const long = act(fresh(), buy('OMNX', 100)).state;
     expect(refused(long, { ...sell('OMNX', 101), at: start })).toMatchObject({

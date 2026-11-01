@@ -51,6 +51,7 @@ export {
   advanceTo,
   apply,
   newRun,
+  orderRefusal,
   replay,
   runSettingsFor,
   SHORT_UNLOCK_LEVEL,
