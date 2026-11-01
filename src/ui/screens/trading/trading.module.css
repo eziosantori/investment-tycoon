@@ -265,12 +265,17 @@
   padding: 0 var(--gutter) 14px;
   min-height: 0;
 }
+/* Chart over the battle log: 148px on the Rookie artboard (Lv1–5), the Lv6
+   artboard's 188px bottom row from Lv6 (the mentor and quests return in M6). */
 .leftCol {
   display: grid;
-  grid-template-rows: 1fr;
+  grid-template-rows: 1fr 148px;
   gap: var(--gap);
   min-width: 0;
   min-height: 0;
+}
+.leftCol.leftColFull {
+  grid-template-rows: 1fr 188px;
 }
 
 /* Chart card */

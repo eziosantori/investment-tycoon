@@ -1,0 +1,97 @@
+/* BATTLE LOG. Values from design/README.md ("Battle log on the Rookie artboard")
+   and the handoff's BATTLE LOG row (28px rows, nowrap). */
+
+.log {
+  display: grid;
+  grid-template-rows: 30px 1fr 28px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--divider);
+}
+
+/* Internal scroll once there are more rows than fit (about four). */
+.rows {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* #, ticker, side, shares, entry → exit, P&L $ %, duration */
+.row,
+.total {
+  display: grid;
+  grid-template-columns: 34px 52px 70px 56px 1fr 170px 44px;
+  align-items: center;
+  height: 28px;
+  padding: 0 14px;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.row {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--divider);
+  background: transparent;
+  color: var(--text-2);
+  text-align: left;
+  cursor: pointer;
+}
+.row:hover {
+  background: var(--raised);
+}
+.rowSelected {
+  background: var(--selected);
+}
+
+.id {
+  color: var(--text-dim);
+}
+.ticker {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--text);
+}
+.num {
+  text-align: right;
+}
+.prices {
+  padding-left: 14px;
+}
+.live {
+  color: var(--accent-light);
+}
+.pnl {
+  text-align: right;
+  font-weight: 700;
+}
+
+.total {
+  grid-template-columns: 1fr auto;
+  border-top: 1px solid var(--divider);
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+.total > :last-child {
+  font-family: var(--font-mono);
+  letter-spacing: 0;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}

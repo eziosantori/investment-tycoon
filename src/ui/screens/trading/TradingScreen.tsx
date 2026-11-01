@@ -1,7 +1,9 @@
 import { ENGINE_VERSION } from '@investment-tycoon/engine';
 import { usePlaybackKeys } from '../../playback/usePlaybackKeys';
 import { usePlaybackLoop } from '../../playback/usePlaybackLoop';
+import { useUiStore } from '../../state/store';
 import { useTimeline } from '../../state/timeline';
+import { BattleLog } from './BattleLog';
 import { ChartCard } from './ChartCard';
 import { EndOfMarket } from './EndOfMarket';
 import { HudTop } from './HudTop';
@@ -14,13 +16,14 @@ import s from './trading.module.css';
 /**
  * Screen 01: the trading HUD. Only what works is shown: the HUD with playback,
  * the status row with the BANKROLL alone in its slot (mission and HP return in
- * M4), the chart card, and the right column with the instrument panel and
- * ORDER. Loadout and the bottom row (mentor, quests) return in their milestones.
+ * M4), the chart card over the battle log, and the right column with the
+ * instrument panel and ORDER. Loadout, mentor and quests return in their milestones.
  */
 export function TradingScreen() {
   const timeline = useTimeline();
   usePlaybackLoop(timeline);
   usePlaybackKeys(timeline);
+  const level = useUiStore((st) => st.level);
 
   return (
     <main className={s.screen} data-screen-label="01 Trading · Game">
@@ -30,8 +33,9 @@ export function TradingScreen() {
         <Bankroll />
       </div>
       <div className={s.main}>
-        <div className={s.leftCol}>
+        <div className={`${s.leftCol} ${level >= 6 ? s.leftColFull : ''}`}>
           <ChartCard />
+          <BattleLog />
         </div>
         <div className={s.rightCol}>
           <InstrumentPanel />

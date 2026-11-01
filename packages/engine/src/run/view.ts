@@ -1,5 +1,6 @@
 import type { Level } from '../chart/tools';
 import type { MarketTimeline, Shares, Ticker } from '../market/types';
+import { battleLog } from './battleLog';
 import { tradeQuote } from './quote';
 import { account } from './reducer';
 import type { Account, OrderButton, OrderPanel, RunState, TradeQuote, TradingView } from './types';
@@ -34,8 +35,7 @@ export function tradingView(input: TradingViewInput): TradingView {
     order: quote ? orderPanel(input, acc, quote) : null,
     // #25: HOLDING card for the selected stock.
     holding: null,
-    // #28: battle log rows (open trades first, then closed).
-    battleLog: { rows: [], totalRealized: acc.realizedPnl },
+    battleLog: battleLog(run, timeline, acc.realizedPnl),
     // #27: ▲ / ▼ markers for the ticker switcher.
     markers: {},
     // #29: end-of-market summary.
