@@ -1,5 +1,6 @@
 import type { Level } from '../chart/tools';
 import type { MarketTimeline, Shares, Ticker } from '../market/types';
+import { holdingCard } from './holding';
 import { tradeQuote } from './quote';
 import { account } from './reducer';
 import type {
@@ -38,10 +39,11 @@ export function tradingView(input: TradingViewInput): TradingView {
   const { timeline, run, ticker } = input;
   const acc = account(run, timeline);
   const quote = tradeQuote(timeline, ticker, run.cursor);
+  const held = run.positions[ticker];
   return {
     order: quote ? orderPanel(input, acc, quote) : null,
     // #25: HOLDING card for the selected stock.
-    holding: null,
+    holding: held && quote ? holdingCard(held, quote, run.cursor, input.level) : null,
     // #28: battle log rows (open trades first, then closed).
     battleLog: { rows: [], totalRealized: acc.realizedPnl },
     // #27: ▲ / ▼ markers for the ticker switcher.
