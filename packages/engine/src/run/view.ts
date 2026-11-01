@@ -2,7 +2,15 @@ import type { Level } from '../chart/tools';
 import type { MarketTimeline, Shares, Ticker } from '../market/types';
 import { tradeQuote } from './quote';
 import { account } from './reducer';
-import type { Account, OrderButton, OrderPanel, RunState, TradeQuote, TradingView } from './types';
+import type {
+  Account,
+  OrderButton,
+  OrderPanel,
+  PositionMarker,
+  RunState,
+  TradeQuote,
+  TradingView,
+} from './types';
 
 export interface TradingViewInput {
   timeline: MarketTimeline;
@@ -37,11 +45,18 @@ export function tradingView(input: TradingViewInput): TradingView {
     // #28: battle log rows (open trades first, then closed).
     battleLog: { rows: [], totalRealized: acc.realizedPnl },
     // #27: ▲ / ▼ markers for the ticker switcher.
-    markers: {},
+    markers: markersOf(run),
     // #29: end-of-market summary.
     endSummary: null,
     bankroll: { equity: acc.equity, openPnl: acc.openPnl },
   };
+}
+
+/** A ▲ / ▼ per ticker with a position; flat tickers have none. */
+function markersOf(run: RunState): Partial<Record<Ticker, PositionMarker>> {
+  const markers: Partial<Record<Ticker, PositionMarker>> = {};
+  for (const p of Object.values(run.positions)) markers[p.ticker] = p.shares > 0 ? 'long' : 'short';
+  return markers;
 }
 
 function orderPanel(input: TradingViewInput, acc: Account, quote: TradeQuote): OrderPanel {

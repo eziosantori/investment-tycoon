@@ -75,6 +75,35 @@ describe('tradingView: ORDER panel at Lv1–6', () => {
   });
 });
 
+describe('tradingView: ticker switcher markers', () => {
+  it('has no marker when flat', () => {
+    expect(view(runAt(7), 7).markers).toEqual({});
+  });
+
+  it('marks a long position, whichever ticker is selected', () => {
+    expect(view(bought(1, 300), 1).markers).toEqual({ OMNX: 'long' });
+    expect(view(bought(1, 300), 1, null, 'KRVX').markers).toEqual({ OMNX: 'long' });
+  });
+
+  it('marks a short next to a long (hand-built run)', () => {
+    const run = bought(7, 300);
+    const withShort: RunState = {
+      ...run,
+      positions: {
+        ...run.positions,
+        KRVX: {
+          ticker: 'KRVX',
+          shares: -100,
+          costBasis: -500_000,
+          tradeId: 2,
+          openedAt: run.cursor,
+        },
+      },
+    };
+    expect(view(withShort, 7).markers).toEqual({ OMNX: 'long', KRVX: 'short' });
+  });
+});
+
 describe('tradingView: BANKROLL', () => {
   it('shows the starting balance when flat', () => {
     expect(view(runAt(1), 1).bankroll).toEqual({ equity: 10_000_000, openPnl: 0 });
