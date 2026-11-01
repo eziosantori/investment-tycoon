@@ -9,7 +9,8 @@ import { REFUSAL_MS, refusalText } from './refusal';
 import t from './trading.module.css';
 
 /**
- * ORDER panel (Lv1–6: BUY n [B], SELL ALL [S] when long). Layout only: sizes,
+ * ORDER panel (Lv1–6: BUY n [B], SELL ALL [S] when long; Lv7+: BUY / COVER n
+ * [B], SELL / SHORT n [S], FLATTEN [F]). Layout only: sizes,
  * labels and which buttons show come from the engine's trading view.
  */
 export function OrderPanel() {
@@ -67,7 +68,7 @@ export function OrderPanel() {
           <button
             key={b.id}
             type="button"
-            className={b.id === 'buy' ? s.buy : s.secondary}
+            className={b.key === 'B' ? s.buy : s.secondary}
             onClick={() => press(b)}
             disabled={b.disabledReason !== null}
             title={b.disabledReason ? refusalText(b.disabledReason) : undefined}

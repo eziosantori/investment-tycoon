@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import type { OrderButton } from '@investment-tycoon/engine';
+import {
+  apply,
+  generateMarketTimeline,
+  newRun,
+  runSettingsFor,
+  tradingView,
+  type Level,
+  type OrderButton,
+} from '@investment-tycoon/engine';
 import { orderButtonFor, shortcutFor } from './shortcuts';
 
 const key = (k: string, extra: Partial<Parameters<typeof shortcutFor>[0]> = {}) =>
@@ -66,5 +74,34 @@ describe('order keys', () => {
 
   it('does nothing when the button is disabled', () => {
     expect(orderButtonFor([button('buy', 'B', true)], 'B')).toBeNull();
+  });
+
+  describe('against the trading view', () => {
+    const timeline = generateMarketTimeline(48213);
+    const longAt = (level: Level) => {
+      const run = newRun(timeline, runSettingsFor(level));
+      const at = run.cursor;
+      return apply(run, timeline, {
+        type: 'marketOrder',
+        at,
+        ticker: 'OMNX',
+        side: 'buy',
+        shares: 100,
+      }).state;
+    };
+    const buttonsAt = (level: Level) =>
+      tradingView({ timeline, run: longAt(level), level, ticker: 'OMNX', orderShares: null }).order!
+        .buttons;
+
+    it('F flattens the selected ticker at Lv7+', () => {
+      expect(orderButtonFor(buttonsAt(7), 'F')?.intent).toEqual({
+        type: 'flatten',
+        ticker: 'OMNX',
+      });
+    });
+
+    it('F does nothing at Lv1–6', () => {
+      for (const level of [1, 6] as const) expect(orderButtonFor(buttonsAt(level), 'F')).toBeNull();
+    });
   });
 });

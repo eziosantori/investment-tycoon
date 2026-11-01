@@ -97,6 +97,65 @@ describe('tradingView: ORDER panel at Lv1–6', () => {
   });
 });
 
+describe('tradingView: ORDER panel at Lv7+', () => {
+  const sold = (shares: number): RunState => {
+    const run = runAt(7);
+    const at = run.cursor;
+    return apply(run, timeline, { type: 'marketOrder', at, ticker: 'OMNX', side: 'sell', shares })
+      .state;
+  };
+  const summary = (run: RunState, level: Level, orderShares: number | null) =>
+    view(run, level, orderShares).order!.buttons.map((b) => [b.id, b.key, b.label, b.intent]);
+  const order = (side: 'buy' | 'sell', shares: number) =>
+    ({ type: 'marketOrder', ticker: 'OMNX', side, shares }) as const;
+  const flatten = { type: 'flatten', ticker: 'OMNX' } as const;
+
+  it('shows BUY n [B] + SHORT n [S] when flat', () => {
+    for (const level of [7, 8] as const) {
+      expect(summary(runAt(level), level, 300)).toEqual([
+        ['buy', 'B', 'BUY 300 OMNX', order('buy', 300)],
+        ['short', 'S', 'SHORT 300 OMNX', order('sell', 300)],
+      ]);
+    }
+  });
+
+  it('shows BUY n [B] + SELL n [S] + FLATTEN [F] when long', () => {
+    expect(summary(bought(7, 230), 7, 100)).toEqual([
+      ['buy', 'B', 'BUY 100 OMNX', order('buy', 100)],
+      ['sell', 'S', 'SELL 100 OMNX', order('sell', 100)],
+      ['flatten', 'F', 'FLATTEN', flatten],
+    ]);
+  });
+
+  it('caps SELL n at the position size', () => {
+    expect(summary(bought(7, 230), 7, 500)[1]).toEqual([
+      'sell',
+      'S',
+      'SELL 230 OMNX',
+      order('sell', 230),
+    ]);
+  });
+
+  it('shows COVER n [B] + SHORT n [S] + FLATTEN [F] when short, COVER capped at the position', () => {
+    expect(summary(sold(230), 7, 100)).toEqual([
+      ['cover', 'B', 'COVER 100 OMNX', order('buy', 100)],
+      ['short', 'S', 'SHORT 100 OMNX', order('sell', 100)],
+      ['flatten', 'F', 'FLATTEN', flatten],
+    ]);
+    expect(summary(sold(230), 7, 500)[0]).toEqual([
+      'cover',
+      'B',
+      'COVER 230 OMNX',
+      order('buy', 230),
+    ]);
+  });
+
+  it('keeps the Lv1–6 panel without SHORT, SELL n or FLATTEN', () => {
+    expect(summary(bought(6, 230), 6, 100).map(([id]) => id)).toEqual(['buy', 'sellAll']);
+    expect(summary(runAt(6), 6, 100).map(([id]) => id)).toEqual(['buy']);
+  });
+});
+
 describe('tradingView: ticker switcher markers', () => {
   it('has no marker when flat', () => {
     expect(view(runAt(7), 7).markers).toEqual({});
