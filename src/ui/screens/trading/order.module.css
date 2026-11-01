@@ -134,3 +134,27 @@
   font-size: 12px;
   color: var(--text-muted);
 }
+
+/* ---------- HOLDING card ---------- */
+
+.holding {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 14px;
+}
+.holdingLine {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 14px;
+}
+.holdingPnl {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 13px;
+}
+.holdingHeld {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}

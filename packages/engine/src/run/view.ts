@@ -1,5 +1,6 @@
 import type { Level } from '../chart/tools';
 import type { MarketTimeline, Shares, Ticker } from '../market/types';
+import { holdingCard } from './holding';
 import { tradeQuote } from './quote';
 import { account, orderRefusal } from './reducer';
 import type {
@@ -7,6 +8,7 @@ import type {
   MarketOrderCommand,
   OrderButton,
   OrderPanel,
+  PositionMarker,
   RunState,
   TradeQuote,
   TradingView,
@@ -38,18 +40,26 @@ export function tradingView(input: TradingViewInput): TradingView {
   const { timeline, run, ticker } = input;
   const acc = account(run, timeline);
   const quote = tradeQuote(timeline, ticker, run.cursor);
+  const held = run.positions[ticker];
   return {
     order: quote ? orderPanel(input, acc, quote) : null,
     // #25: HOLDING card for the selected stock.
-    holding: null,
+    holding: held && quote ? holdingCard(held, quote, run.cursor, input.level) : null,
     // #28: battle log rows (open trades first, then closed).
     battleLog: { rows: [], totalRealized: acc.realizedPnl },
     // #27: ▲ / ▼ markers for the ticker switcher.
-    markers: {},
+    markers: markersOf(run),
     // #29: end-of-market summary.
     endSummary: null,
     bankroll: { equity: acc.equity, openPnl: acc.openPnl },
   };
+}
+
+/** A ▲ / ▼ per ticker with a position; flat tickers have none. */
+function markersOf(run: RunState): Partial<Record<Ticker, PositionMarker>> {
+  const markers: Partial<Record<Ticker, PositionMarker>> = {};
+  for (const p of Object.values(run.positions)) markers[p.ticker] = p.shares > 0 ? 'long' : 'short';
+  return markers;
 }
 
 function orderPanel(input: TradingViewInput, acc: Account, quote: TradeQuote): OrderPanel {

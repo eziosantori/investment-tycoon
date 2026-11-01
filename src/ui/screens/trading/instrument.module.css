@@ -89,6 +89,10 @@
   font-size: 12px;
   letter-spacing: 0.04em;
 }
+.marker {
+  font-size: 9px;
+  line-height: 1;
+}
 .indexTag {
   padding: 1px 4px;
   border-radius: var(--r-seg);
