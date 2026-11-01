@@ -12,7 +12,7 @@ import s from './trading.module.css';
 /** The chart card: toolbar (ticker, last price, timeframes) over the chart view. */
 export function ChartCard() {
   const timeline = useTimeline();
-  const cursor = useUiStore((st) => st.cursor);
+  const cursor = useUiStore((st) => st.run.cursor);
   const instrument = useUiStore((st) => st.instrument);
   const timeframe = useUiStore((st) => st.timeframe);
   const level = useUiStore((st) => st.level);

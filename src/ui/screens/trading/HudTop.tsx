@@ -9,7 +9,7 @@ import s from './trading.module.css';
 export function HudTop() {
   const timeline = useTimeline();
   const level = useUiStore((st) => st.level);
-  const cursor = useUiStore((st) => st.cursor);
+  const cursor = useUiStore((st) => st.run.cursor);
   const paused = useUiStore((st) => st.paused);
   const speed = useUiStore((st) => st.speed);
   const play = useUiStore((st) => st.play);

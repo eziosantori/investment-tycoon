@@ -124,14 +124,16 @@ function hashOf(value: unknown): string {
 }
 
 describe('generateMarketTimeline: the real price series', () => {
-  it('is stamped with ENGINE_VERSION 2', () => {
-    expect(market.engineVersion).toBe(2);
+  it('is stamped with ENGINE_VERSION 3', () => {
+    expect(market.engineVersion).toBe(3);
   });
 
   // Pinned: any change to generation (params, model, RNG use) changes it. When the
   // change is intended, bump ENGINE_VERSION if it isn't bumped yet and re-pin.
+  // The version stamp is left out, so a bump for run behavior alone (M2: spreads)
+  // leaves the market's hash unchanged. Pinned at ENGINE_VERSION 2, kept at 3.
   it('matches the pinned golden hash for its seed', () => {
-    expect(hashOf(market)).toBe('8a1fbbe8');
+    expect(hashOf({ ...market, engineVersion: undefined })).toBe('cf64c8fa');
   });
 
   it('leaves the other instruments identical when one stock content changes', () => {

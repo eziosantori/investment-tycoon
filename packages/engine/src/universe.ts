@@ -3,7 +3,8 @@ import type { InstrumentSpec } from './market/universe';
 /**
  * The universe: the TYX index and the 12 fictional stocks a run trades.
  * Data, not code: tune here. Prices in integer cents, volumes in shares
- * (average per 65m bar).
+ * (average per 65m bar), spreads in basis points of the mid (wider for small,
+ * volatile names; the index has none and is not tradable).
  */
 
 export const INDEX: InstrumentSpec = {
@@ -23,6 +24,7 @@ export const STOCKS: readonly InstrumentSpec[] = [
     startPrice: 4_000,
     baseVolume: 250_000,
     volScale: 1.1,
+    spreadBps: 10,
   },
   {
     ticker: 'OMNX',
@@ -31,6 +33,7 @@ export const STOCKS: readonly InstrumentSpec[] = [
     startPrice: 6_500,
     baseVolume: 180_000,
     volScale: 0.9,
+    spreadBps: 6,
   },
   {
     ticker: 'TALR',
@@ -39,6 +42,7 @@ export const STOCKS: readonly InstrumentSpec[] = [
     startPrice: 8_800,
     baseVolume: 120_000,
     volScale: 1,
+    spreadBps: 8,
   },
   {
     ticker: 'BRQE',
@@ -47,6 +51,7 @@ export const STOCKS: readonly InstrumentSpec[] = [
     startPrice: 3_200,
     baseVolume: 300_000,
     volScale: 0.8,
+    spreadBps: 7,
   },
   {
     ticker: 'VANT',
@@ -55,6 +60,7 @@ export const STOCKS: readonly InstrumentSpec[] = [
     startPrice: 12_000,
     baseVolume: 220_000,
     volScale: 1.3,
+    spreadBps: 12,
   },
   {
     ticker: 'QZEN',
@@ -63,6 +69,7 @@ export const STOCKS: readonly InstrumentSpec[] = [
     startPrice: 2_500,
     baseVolume: 400_000,
     volScale: 1.2,
+    spreadBps: 12,
   },
   {
     ticker: 'MERI',
@@ -71,6 +78,7 @@ export const STOCKS: readonly InstrumentSpec[] = [
     startPrice: 15_000,
     baseVolume: 90_000,
     volScale: 0.8,
+    spreadBps: 5,
   },
   {
     ticker: 'DUNE',
@@ -79,6 +87,7 @@ export const STOCKS: readonly InstrumentSpec[] = [
     startPrice: 5_400,
     baseVolume: 160_000,
     volScale: 1,
+    spreadBps: 8,
   },
   {
     ticker: 'PRYX',
@@ -87,6 +96,7 @@ export const STOCKS: readonly InstrumentSpec[] = [
     startPrice: 7_700,
     baseVolume: 200_000,
     volScale: 1.2,
+    spreadBps: 10,
   },
   {
     ticker: 'LUMA',
@@ -95,6 +105,7 @@ export const STOCKS: readonly InstrumentSpec[] = [
     startPrice: 2_900,
     baseVolume: 350_000,
     volScale: 1,
+    spreadBps: 9,
   },
   {
     ticker: 'CYGN',
@@ -103,6 +114,7 @@ export const STOCKS: readonly InstrumentSpec[] = [
     startPrice: 1_800,
     baseVolume: 500_000,
     volScale: 1.4,
+    spreadBps: 15,
   },
   {
     ticker: 'FERO',
@@ -111,5 +123,6 @@ export const STOCKS: readonly InstrumentSpec[] = [
     startPrice: 9_600,
     baseVolume: 110_000,
     volScale: 0.9,
+    spreadBps: 6,
   },
 ];
