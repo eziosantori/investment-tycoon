@@ -3,6 +3,7 @@ import { isAtEnd } from '../cursor';
 import type { MarketTimeline, Shares, Ticker } from '../market/types';
 import { battleLog } from './battleLog';
 import { holdingCard } from './holding';
+import { midOf, openPnlOf, sideOf } from './position';
 import { tradeQuote } from './quote';
 import { account, orderRefusal, SHORT_UNLOCK_LEVEL } from './reducer';
 import type {
@@ -65,13 +66,13 @@ function endSummaryOf(run: RunState, timeline: MarketTimeline, acc: Account): En
     realizedPnl: acc.realizedPnl,
     trades: run.trades.length,
     openPositions: Object.values(run.positions).map((p) => {
-      const mid = tradeQuote(timeline, p.ticker, run.cursor)?.mid ?? 0;
+      const mid = midOf(timeline, p.ticker, run.cursor);
       return {
         ticker: p.ticker,
-        side: p.shares > 0 ? 'long' : 'short',
+        side: sideOf(p),
         shares: Math.abs(p.shares),
         mid,
-        openPnl: p.shares * mid - p.costBasis,
+        openPnl: openPnlOf(p, mid),
       };
     }),
   };
@@ -80,7 +81,7 @@ function endSummaryOf(run: RunState, timeline: MarketTimeline, acc: Account): En
 /** A ▲ / ▼ per ticker with a position; flat tickers have none. */
 function markersOf(run: RunState): Partial<Record<Ticker, PositionMarker>> {
   const markers: Partial<Record<Ticker, PositionMarker>> = {};
-  for (const p of Object.values(run.positions)) markers[p.ticker] = p.shares > 0 ? 'long' : 'short';
+  for (const p of Object.values(run.positions)) markers[p.ticker] = sideOf(p);
   return markers;
 }
 
@@ -107,7 +108,8 @@ function orderPanel(input: TradingViewInput, acc: Account, quote: TradeQuote): O
     },
   ];
   if (input.level >= SHORT_UNLOCK_LEVEL) {
-    buttons = proButtons(ticker, shares, held, buttons[0]!, refusal);
+    const closing = Math.min(Math.abs(held), Math.max(ORDER_STEP, requested));
+    buttons = proButtons(ticker, shares, closing, held, buttons[0]!, refusal);
   } else if (held > 0) {
     const sellAll = { type: 'marketOrder', ticker, side: 'sell', shares: held } as const;
     buttons.push({
@@ -134,17 +136,18 @@ function orderPanel(input: TradingViewInput, acc: Account, quote: TradeQuote): O
 
 /**
  * The Lv7+ variants: flat → BUY n + SHORT n; long → BUY n + SELL n + FLATTEN;
- * short → COVER n + SHORT n + FLATTEN. SELL and COVER are capped at the
- * position, so one order never takes it past zero and the label is the real number.
+ * short → COVER n + SHORT n + FLATTEN. SELL and COVER (`closing`) take the
+ * stepper's size capped only at the position, never at buying power (closing
+ * frees it), so one order never takes it past zero and the label is the real number.
  */
 function proButtons(
   ticker: Ticker,
   shares: Shares,
+  closing: Shares,
   held: Shares,
   buy: OrderButton,
   refusal: (intent: Omit<MarketOrderCommand, 'at'>) => OrderButton['disabledReason'],
 ): OrderButton[] {
-  const closing = Math.min(Math.abs(held), Math.max(ORDER_STEP, shares));
   const close = (id: 'sell' | 'cover', key: 'B' | 'S', side: 'buy' | 'sell'): OrderButton => {
     const intent = { type: 'marketOrder', ticker, side, shares: closing } as const;
     return {

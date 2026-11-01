@@ -1,24 +1,27 @@
-import type { MarketTimeline } from '../market/types';
-import { durationBetween } from './holding';
-import { tradeQuote } from './quote';
+import type { Cents, MarketTimeline } from '../market/types';
+import { durationBetween, midOf, openPnlOf } from './position';
 import type { BattleLog, BattleLogRow, Fill, RunState, Trade } from './types';
 
 /**
  * The battle log (spec #19): one row per trade, open trades first as live
- * rows (current P&L, no exit), then closed ones, newest first.
+ * rows (current P&L, no exit), newest first; then closed ones, most recently
+ * closed first (on one bar, the later trade first).
  */
 export function battleLog(
   run: RunState,
   timeline: MarketTimeline,
-  totalRealized: number,
+  totalRealized: Cents,
 ): BattleLog {
   const fills = new Map(run.fills.map((f) => [f.id, f]));
+  const closedAt = new Map(run.trades.map((t) => [t.id, t.closedAt ?? 0]));
   const rows = run.trades.map((t) => rowOf(run, timeline, t, fills));
   const newestFirst = (a: BattleLogRow, b: BattleLogRow) => b.tradeId - a.tradeId;
+  const lastClosedFirst = (a: BattleLogRow, b: BattleLogRow) =>
+    closedAt.get(b.tradeId)! - closedAt.get(a.tradeId)! || newestFirst(a, b);
   return {
     rows: [
       ...rows.filter((r) => r.live).sort(newestFirst),
-      ...rows.filter((r) => !r.live).sort(newestFirst),
+      ...rows.filter((r) => !r.live).sort(lastClosedFirst),
     ],
     totalRealized,
   };
@@ -53,8 +56,8 @@ function rowOf(
 
   const live = trade.closedAt === null;
   const position = run.positions[trade.ticker];
-  const mid = tradeQuote(timeline, trade.ticker, run.cursor)?.mid ?? 0;
-  const openPnl = live && position ? position.shares * mid - position.costBasis : 0;
+  const openPnl =
+    live && position ? openPnlOf(position, midOf(timeline, trade.ticker, run.cursor)) : 0;
   const pnl = trade.realizedPnl + openPnl;
 
   return {

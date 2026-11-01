@@ -511,7 +511,7 @@ saved: it is regenerated from the seed.
 ```ts
 interface SaveFile {
   version: number; // with migrations
-  engineVersion: string; // a change in how commands resolve bumps it
+  engineVersion: number; // a change in how commands resolve bumps it
   profile: Profile;
   activeRun?: {
     seed: number;

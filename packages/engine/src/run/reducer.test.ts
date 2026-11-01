@@ -264,6 +264,22 @@ describe('replay', () => {
     expect(replayed).toEqual(live);
     expect(replayed.trades.map((t) => t.closedAt)).toEqual([start + 31, start + 64]);
   });
+
+  it('refuses a logged command stamped before the cursor as wrongBar, as live does', () => {
+    const log: Command[] = [
+      { type: 'marketOrder', at: start + 10, ticker: 'OMNX', side: 'buy', shares: 100 },
+      { type: 'marketOrder', at: start + 3, ticker: 'KRVX', side: 'buy', shares: 50 },
+    ];
+    let live = advanceTo(fresh(), timeline, start + 10).state;
+    live = apply(live, timeline, log[0]!).state;
+    const stale = apply(live, timeline, log[1]!);
+    expect(stale.events).toEqual([{ type: 'refused', command: log[1], reason: 'wrongBar' }]);
+    live = advanceTo(stale.state, timeline, start + 20).state;
+
+    const replayed = replay(generateMarketTimeline(48213), lv1, log, start + 20);
+    expect(replayed).toEqual(live);
+    expect(replayed.positions.KRVX).toBeUndefined();
+  });
 });
 
 describe('apply: shorts at Lv7', () => {

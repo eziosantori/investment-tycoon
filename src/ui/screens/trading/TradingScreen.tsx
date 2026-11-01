@@ -14,6 +14,9 @@ import { HoldingCard } from './HoldingCard';
 import { OrderPanel } from './OrderPanel';
 import s from './trading.module.css';
 
+/** From this level the screen takes the Lv6 artboard's layout (188px battle log row). */
+const STAGE_ANALYST_LEVEL = 6;
+
 /**
  * Screen 01: the trading HUD. Only what works is shown: the HUD with playback,
  * the status row with the BANKROLL alone in its slot (mission and HP return in
@@ -34,7 +37,7 @@ export function TradingScreen() {
         <Bankroll />
       </div>
       <div className={s.main}>
-        <div className={`${s.leftCol} ${level >= 6 ? s.leftColFull : ''}`}>
+        <div className={`${s.leftCol} ${level >= STAGE_ANALYST_LEVEL ? s.leftColFull : ''}`}>
           <ChartCard />
           <BattleLog />
         </div>

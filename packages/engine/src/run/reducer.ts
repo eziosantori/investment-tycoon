@@ -1,6 +1,7 @@
 import type { Level } from '../chart/tools';
 import { clampCursor, isAtEnd, startCursor } from '../cursor';
-import type { Cursor, MarketTimeline, Ticker } from '../market/types';
+import type { Cursor, MarketTimeline } from '../market/types';
+import { midOf, openPnlOf, sideOf } from './position';
 import { tradeQuote } from './quote';
 import type {
   Account,
@@ -75,9 +76,11 @@ export function apply(state: RunState, timeline: MarketTimeline, command: Comman
 /**
  * Rebuilds a run from its settings and command log: for each command,
  * advance to its bar and apply it; then advance to the final cursor.
- * Every logged command must carry the cursor it was applied at (the app's
- * dispatch stamps it so): a command stamped with an earlier bar is refused
- * live (`wrongBar`) but would fill at that bar on replay.
+ * The cursor never moves back, so a command stamped before an earlier logged
+ * one is refused as `wrongBar`, exactly as it was live. The log holds no time
+ * (ADR-0005), so a command must carry the cursor it was applied at (the app's
+ * dispatch stamps it so): one stamped later than the previous command but
+ * before the live cursor was refused live yet would fill on replay.
  */
 export function replay(
   timeline: MarketTimeline,
@@ -99,9 +102,10 @@ export function account(state: RunState, timeline: MarketTimeline): Account {
   let openPnl = 0;
   let exposure = 0;
   for (const p of Object.values(state.positions)) {
-    const value = p.shares * midOf(timeline, p.ticker, state.cursor);
+    const mid = midOf(timeline, p.ticker, state.cursor);
+    const value = p.shares * mid;
     marketValue += value;
-    openPnl += value - p.costBasis;
+    openPnl += openPnlOf(p, mid);
     exposure += Math.abs(value);
   }
   const equity = state.cash + marketValue;
@@ -118,10 +122,6 @@ export function account(state: RunState, timeline: MarketTimeline): Account {
 
 // ---------- internals ----------
 
-function midOf(timeline: MarketTimeline, ticker: Ticker, cursor: Cursor): number {
-  return tradeQuote(timeline, ticker, cursor)?.mid ?? 0;
-}
-
 function refuse(state: RunState, command: Command, reason: RefusalReason): RunStep {
   return { state, events: [{ type: 'refused', command, reason }] };
 }
@@ -133,7 +133,7 @@ function applyFlatten(state: RunState, timeline: MarketTimeline, command: Flatte
     type: 'marketOrder',
     at: command.at,
     ticker: command.ticker,
-    side: position.shares > 0 ? 'sell' : 'buy',
+    side: sideOf(position) === 'long' ? 'sell' : 'buy',
     shares: Math.abs(position.shares),
   };
   return applyMarketOrder(state, timeline, order, command);

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { hpFromLoss, hpState } from '../game/hp';
-import { money, rMultiple, signedMoney, signedPct, splitMoney } from './format';
+import { duration, money, rMultiple, signedMoney, signedPct, splitMoney } from './format';
 
 describe('format', () => {
   it('formats money with grouping and a real minus sign', () => {
@@ -36,5 +36,19 @@ describe('hp', () => {
     expect(hpState(30)).toBe('warning');
     expect(hpState(29)).toBe('critical');
     expect(hpState(0)).toBe('breached');
+  });
+});
+
+describe('duration', () => {
+  it('reads sessions, never days, in full on the holding card', () => {
+    expect(duration({ value: 1, unit: 'sessions' })).toBe('1 session');
+    expect(duration({ value: 3, unit: 'sessions' })).toBe('3 sessions');
+    expect(duration({ value: 2, unit: 'weeks' })).toBe('2 wk');
+  });
+
+  it('is compact in the battle log', () => {
+    expect(duration({ value: 1, unit: 'sessions' }, 'compact')).toBe('1 sess');
+    expect(duration({ value: 3, unit: 'sessions' }, 'compact')).toBe('3 sess');
+    expect(duration({ value: 2, unit: 'weeks' }, 'compact')).toBe('2 wk');
   });
 });

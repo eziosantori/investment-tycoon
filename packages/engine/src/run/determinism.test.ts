@@ -30,13 +30,14 @@ function randomShares(rng: Rng, run: RunState, ticker: string): number {
   return pick(rng, [0, -10, 2.5, Number.NaN]);
 }
 
-function randomCommand(rng: Rng, timeline: MarketTimeline, run: RunState): Command {
+function randomCommand(rng: Rng, timeline: MarketTimeline, run: RunState, lastAt: number): Command {
   const stocks = timeline.stocks.map((s) => s.info.ticker);
   const tickers = [...stocks, timeline.index.info.ticker, 'NOPE'];
   const held = Object.keys(run.positions);
   const ticker = held.length > 0 && rng.chance(0.5) ? pick(rng, held) : pick(rng, tickers);
-  // Now and then a command stamped with a stale bar (refused: wrongBar).
-  const at = rng.chance(0.03) ? run.cursor - 1 : run.cursor;
+  // Now and then a command stamped before the last logged one (refused:
+  // wrongBar, live and on replay alike).
+  const at = rng.chance(0.03) ? lastAt - 1 : run.cursor;
   if (rng.chance(0.2)) return { type: 'flatten', at, ticker };
   return {
     type: 'marketOrder',
@@ -67,12 +68,11 @@ function playLive(timeline: MarketTimeline, settings: RunSettings, rng: Rng): Pl
       live = advanceTo(live, timeline, live.cursor + rng.int(1, 8)).state;
     }
     if (rng.chance(0.02)) live = advanceTo(live, timeline, end + 10).state;
-    const command = randomCommand(rng, timeline, live);
+    const command = randomCommand(rng, timeline, live, log.at(-1)?.at ?? startCursor(timeline));
     const step = apply(live, timeline, command);
     for (const e of step.events) if (e.type === 'refused') refusals.add(e.reason);
-    // The app stamps every command with the cursor, so a stale one never
-    // reaches the log: replay would apply it at its own (earlier) bar.
-    if (command.at === live.cursor) log.push(command);
+    // Every command reaches the log, refused or not, stale ones included.
+    log.push(command);
     live = step.state;
 
     const a = account(live, timeline);

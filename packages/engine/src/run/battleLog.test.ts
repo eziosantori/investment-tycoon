@@ -144,16 +144,32 @@ describe('tradingView: battle log', () => {
     expect(log.totalRealized).toBe(10 * (6997 - 6502) + 20 * (6997 - 7003));
   });
 
-  it('counts durations in sessions below a week, in weeks from a week', () => {
+  it('orders closed trades by close bar, newest first; on one bar, the later trade first', () => {
+    const log = new Script()
+      .order('buy', 10) // #1, closes last
+      .order('buy', 10, 'KRVX') // #2, closes first
+      .at(S + 6)
+      .order('sell', 10, 'KRVX')
+      .order('buy', 10, 'KRVX') // #3, closes on #1's bar
+      .at(S + 12)
+      .order('sell', 10)
+      .order('sell', 10, 'KRVX')
+      .battleLog();
+    expect(log.rows.map((r) => r.tradeId)).toEqual([3, 1, 2]);
+  });
+
+  it('counts the sessions a trade spans, the opening one included; weeks from five', () => {
+    // S is the last bar of a session, so the next bar opens the next session.
     const durations = (bars: number) =>
       new Script()
         .order('buy', 10, 'KRVX')
         .at(S + bars)
         .battleLog().rows[0]!.duration;
-    expect(durations(0)).toEqual({ value: 0, unit: 'sessions' });
-    expect(durations(12)).toEqual({ value: 2, unit: 'sessions' });
-    expect(durations(29)).toEqual({ value: 4, unit: 'sessions' });
-    expect(durations(30)).toEqual({ value: 1, unit: 'weeks' });
+    expect(durations(0)).toEqual({ value: 1, unit: 'sessions' });
+    expect(durations(1)).toEqual({ value: 2, unit: 'sessions' });
+    expect(durations(12)).toEqual({ value: 3, unit: 'sessions' });
+    expect(durations(18)).toEqual({ value: 4, unit: 'sessions' });
+    expect(durations(19)).toEqual({ value: 1, unit: 'weeks' });
     expect(durations(65)).toEqual({ value: 2, unit: 'weeks' });
   });
 });
