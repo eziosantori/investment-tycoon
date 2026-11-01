@@ -75,6 +75,9 @@ export function apply(state: RunState, timeline: MarketTimeline, command: Comman
 /**
  * Rebuilds a run from its settings and command log: for each command,
  * advance to its bar and apply it; then advance to the final cursor.
+ * Every logged command must carry the cursor it was applied at (the app's
+ * dispatch stamps it so): a command stamped with an earlier bar is refused
+ * live (`wrongBar`) but would fill at that bar on replay.
  */
 export function replay(
   timeline: MarketTimeline,
