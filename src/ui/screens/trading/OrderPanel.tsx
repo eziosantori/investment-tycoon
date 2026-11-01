@@ -1,9 +1,11 @@
+import { useEffect } from 'react';
 import type { OrderButton } from '@investment-tycoon/engine';
 import { money } from '../../format';
 import { useUiStore } from '../../state/store';
 import { useTimeline } from '../../state/timeline';
 import { useTradingView } from '../../state/tradingView';
 import s from './order.module.css';
+import { REFUSAL_MS, refusalText } from './refusal';
 import t from './trading.module.css';
 
 /**
@@ -15,7 +17,18 @@ export function OrderPanel() {
   const order = useTradingView().order;
   const setOrderShares = useUiStore((st) => st.setOrderShares);
   const dispatch = useUiStore((st) => st.dispatch);
+  const refusal = useUiStore((st) => st.refusal);
+  const clearRefusal = useUiStore((st) => st.clearRefusal);
+  useEffect(() => {
+    if (!refusal) return;
+    const timer = setTimeout(() => clearRefusal(refusal.id), REFUSAL_MS);
+    return () => clearTimeout(timer);
+  }, [refusal, clearRefusal]);
   if (!order) return null;
+
+  // An engine refusal shows for a few seconds; otherwise a disabled button's reason.
+  const disabled = order.buttons.find((b) => b.disabledReason !== null)?.disabledReason;
+  const reason = refusal?.reason ?? disabled ?? null;
 
   const step = (by: number) => setOrderShares(Math.max(order.step, order.shares + by));
   const press = (b: OrderButton) => dispatch(timeline, b.intent);
@@ -57,12 +70,16 @@ export function OrderPanel() {
             className={b.id === 'buy' ? s.buy : s.secondary}
             onClick={() => press(b)}
             disabled={b.disabledReason !== null}
+            title={b.disabledReason ? refusalText(b.disabledReason) : undefined}
           >
             {b.label}
             <kbd className={s.keycap}>{b.key}</kbd>
           </button>
         ))}
       </div>
+      <p className={s.refusal} role="status" aria-live="polite">
+        {reason && refusalText(reason)}
+      </p>
     </section>
   );
 }

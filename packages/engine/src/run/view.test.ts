@@ -3,7 +3,7 @@ import type { Level } from '../chart/tools';
 import { generateMarketTimeline } from '../market/marketTimeline';
 import type { MarketTimeline } from '../market/types';
 import { apply, newRun, runSettingsFor } from './reducer';
-import type { RunState } from './types';
+import type { Command, RunState } from './types';
 import { tradingView } from './view';
 
 // A flat market: OMNX at $65.00 on every bar (6 bps → bid 64.98, ask 65.02).
@@ -68,6 +68,28 @@ describe('tradingView: ORDER panel at Lv1–6', () => {
     const capped = view(runAt(1), 1, 5000).order!;
     expect(capped.maxShares).toBe(1530);
     expect(capped.shares).toBe(1530);
+  });
+
+  it('caps the stepper at an order the engine fills', () => {
+    const order = view(runAt(1), 1, 5000).order!;
+    const run = runAt(1);
+    const { events } = apply(run, timeline, {
+      ...order.buttons[0]!.intent,
+      at: run.cursor,
+    } as Command);
+    expect(events[0]).toMatchObject({ type: 'fill', fill: { shares: 1530 } });
+    expect(order.buttons[0]!.disabledReason).toBeNull();
+  });
+
+  it('disables BUY with "insufficientBuyingPower" once buying power is spent, but not SELL ALL', () => {
+    // 1530 × $65.02 spent; $519.40 of buying power left, under one step at the ask.
+    const order = view(bought(1, 1530), 1).order!;
+    expect(order.maxShares).toBe(0);
+    expect(order.shares).toBe(0);
+    expect(order.buttons.map((b) => [b.id, b.disabledReason])).toEqual([
+      ['buy', 'insufficientBuyingPower'],
+      ['sellAll', null],
+    ]);
   });
 
   it('has no ORDER panel for the index', () => {

@@ -2,9 +2,10 @@ import type { Level } from '../chart/tools';
 import type { MarketTimeline, Shares, Ticker } from '../market/types';
 import { holdingCard } from './holding';
 import { tradeQuote } from './quote';
-import { account } from './reducer';
+import { account, orderRefusal } from './reducer';
 import type {
   Account,
+  MarketOrderCommand,
   OrderButton,
   OrderPanel,
   PositionMarker,
@@ -62,7 +63,10 @@ function markersOf(run: RunState): Partial<Record<Ticker, PositionMarker>> {
 }
 
 function orderPanel(input: TradingViewInput, acc: Account, quote: TradeQuote): OrderPanel {
-  const { run, ticker, orderShares } = input;
+  const { timeline, run, ticker, orderShares } = input;
+  /** A button is disabled with the reason the engine would refuse its order. */
+  const refusal = (intent: Omit<MarketOrderCommand, 'at'>) =>
+    intent.shares > 0 ? orderRefusal(run, timeline, intent) : 'insufficientBuyingPower';
   const defaultShares = roundDown((acc.equity * DEFAULT_SIZE_PCT) / 100 / quote.ask);
   const maxShares = roundDown(acc.buyingPower / quote.ask);
   const requested = roundDown(orderShares ?? defaultShares);
@@ -70,24 +74,25 @@ function orderPanel(input: TradingViewInput, acc: Account, quote: TradeQuote): O
   const cost = shares * quote.ask;
   const held = run.positions[ticker]?.shares ?? 0;
 
+  const buyIntent = { type: 'marketOrder', ticker, side: 'buy', shares } as const;
   const buttons: OrderButton[] = [
     {
       id: 'buy',
       key: 'B',
       label: `BUY ${shares} ${ticker}`,
-      intent: { type: 'marketOrder', ticker, side: 'buy', shares },
-      // #24: every refusal the engine would give, with its reason.
-      disabledReason: shares > 0 ? null : 'insufficientBuyingPower',
+      intent: buyIntent,
+      disabledReason: refusal(buyIntent),
     },
   ];
   // #26: the Lv7+ variants (SHORT, SELL n, COVER n, FLATTEN) branch here on the level.
   if (held > 0) {
+    const sellAll = { type: 'marketOrder', ticker, side: 'sell', shares: held } as const;
     buttons.push({
       id: 'sellAll',
       key: 'S',
       label: 'SELL ALL',
-      intent: { type: 'marketOrder', ticker, side: 'sell', shares: held },
-      disabledReason: null,
+      intent: sellAll,
+      disabledReason: refusal(sellAll),
     });
   }
 

@@ -9,6 +9,7 @@ import {
   type Level,
   type MarketTimeline,
   newRun,
+  type RefusalReason,
   nextSessionClose,
   nextWeekClose,
   type RunEvent,
@@ -42,6 +43,14 @@ export interface RunSlice {
   run: RunState;
   /** Every command dispatched this run, in order (refused ones included). */
   log: Command[];
+  /** The last refused command's reason, shown under the order buttons until cleared. */
+  refusal: Refusal | null;
+}
+
+/** A refusal to show; `id` tells a newer refusal from the one a timer is clearing. */
+export interface Refusal {
+  id: number;
+  reason: RefusalReason;
 }
 
 export interface UiActions {
@@ -51,6 +60,8 @@ export interface UiActions {
   advanceRun(timeline: MarketTimeline, bar: Cursor): void;
   /** Applies a command at the run's cursor and appends it to the log. */
   dispatch(timeline: MarketTimeline, intent: CommandIntent): RunEvent[];
+  /** Clears the refusal message, unless a newer refusal replaced refusal `id`. */
+  clearRefusal(id: number): void;
   /** NEXT DAY: jumps to the next session close; pauses if that is the end of the market. */
   nextDay(timeline: MarketTimeline): void;
   /** NEXT WEEK: jumps to the next week close; pauses if that is the end of the market. */
@@ -71,6 +82,8 @@ export type UiStore = UiState & RunSlice & UiActions;
 const NO_RUN = newRun({ warmupWeeks: 0, runWeeks: 0 }, runSettingsFor(1));
 
 export const useUiStore = create<UiStore>()((set, get) => {
+  let refusalId = 0;
+
   /** Advances the run, pausing playback when it lands on the end of the market. */
   const advance = (timeline: MarketTimeline, bar: Cursor) =>
     set((s) => {
@@ -87,11 +100,13 @@ export const useUiStore = create<UiStore>()((set, get) => {
     orderShares: null,
     run: NO_RUN,
     log: [],
+    refusal: null,
 
     startRun: (timeline, level) =>
       set({
         run: newRun(timeline, runSettingsFor(level)),
         log: [],
+        refusal: null,
         paused: true,
         instrument: timeline.deal.defaultInstrument,
         timeframe: 'W',
@@ -103,9 +118,15 @@ export const useUiStore = create<UiStore>()((set, get) => {
       const { run, log } = get();
       const command = { ...intent, at: run.cursor } as Command;
       const step = apply(run, timeline, command);
-      set({ run: step.state, log: [...log, command] });
+      const refused = step.events.find((e) => e.type === 'refused');
+      set({
+        run: step.state,
+        log: [...log, command],
+        ...(refused && { refusal: { id: ++refusalId, reason: refused.reason } }),
+      });
       return step.events;
     },
+    clearRefusal: (id) => set((s) => (s.refusal?.id === id ? { refusal: null } : {})),
     nextDay: (timeline) => advance(timeline, nextSessionClose(timeline, get().run.cursor)),
     nextWeek: (timeline) => advance(timeline, nextWeekClose(timeline, get().run.cursor)),
     play: (speed) => set((s) => ({ paused: false, speed: speed ?? s.speed })),
