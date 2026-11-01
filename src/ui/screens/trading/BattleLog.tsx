@@ -1,16 +1,14 @@
-import type { BattleLogRow, Duration } from '@investment-tycoon/engine';
-import { arrow, price, signedMoney, signedPct } from '../../format';
+import type { BattleLogRow } from '@investment-tycoon/engine';
+import { duration, price } from '../../format';
 import { useUiStore } from '../../state/store';
 import { useTradingView } from '../../state/tradingView';
 import b from './battleLog.module.css';
+import { Pnl, SideLabel } from './Pnl';
 import t from './trading.module.css';
-
-const tone = (pnl: number) => (pnl > 0 ? t.up : pnl < 0 ? t.down : '');
-const duration = ({ value, unit }: Duration) => `${value}${unit === 'weeks' ? 'w' : 'd'}`;
 
 /**
  * BATTLE LOG (design/README.md, "Battle log on the Rookie artboard"): open
- * trades first as live rows, then closed ones, newest first, and a total row
+ * trades first as live rows, then closed ones, most recently closed first, and a total row
  * with the run's realized P&L. Clicking a row selects its ticker.
  */
 export function BattleLog() {
@@ -36,9 +34,7 @@ export function BattleLog() {
       </div>
       <div className={b.total}>
         <span>TOTAL REALIZED</span>
-        <span className={tone(totalRealized)}>
-          {signedMoney(totalRealized / 100)} {arrow(totalRealized)}
-        </span>
+        <Pnl cents={totalRealized} />
       </div>
     </section>
   );
@@ -53,7 +49,6 @@ function Row({
   selected: boolean;
   onSelect: () => void;
 }) {
-  const long = row.side === 'long';
   return (
     <button
       type="button"
@@ -63,16 +58,14 @@ function Row({
     >
       <span className={b.id}>#{row.tradeId}</span>
       <span className={b.ticker}>{row.ticker}</span>
-      <span className={long ? t.up : t.down}>{long ? '▲ LONG' : '▼ SHORT'}</span>
+      <SideLabel side={row.side} />
       <span className={b.num}>{row.shares}</span>
       <span className={b.prices}>
         {price(row.avgEntry / 100)} →{' '}
         {row.avgExit === null ? <span className={b.live}>live</span> : price(row.avgExit / 100)}
       </span>
-      <span className={`${b.pnl} ${tone(row.pnl)}`}>
-        {signedMoney(row.pnl / 100, 0)} {signedPct(row.pnlPct)} {arrow(row.pnl)}
-      </span>
-      <span className={b.num}>{duration(row.duration)}</span>
+      <Pnl className={b.pnl} cents={row.pnl} decimals={0} pct={row.pnlPct} />
+      <span className={b.num}>{duration(row.duration, 'compact')}</span>
     </button>
   );
 }

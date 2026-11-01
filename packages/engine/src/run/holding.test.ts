@@ -46,7 +46,7 @@ describe('tradingView: HOLDING card', () => {
       ticker: 'OMNX',
       avgPrice: 6502,
       openPnl: -600,
-      held: { value: 0, unit: 'sessions' },
+      held: { value: 1, unit: 'sessions' },
     });
     expect(card.openPnlPct).toBeCloseTo(-0.030758, 5);
   });
@@ -68,11 +68,12 @@ describe('tradingView: HOLDING card', () => {
     expect(card.openPnlPct).toBeCloseTo(-0.030779, 5);
   });
 
-  it('counts sessions below a week and weeks from then on', () => {
+  it('counts the sessions held, the opening one included, and weeks from five', () => {
+    // Opened on the last bar of a session: the next bar is a second session.
     const run = order(1, 'buy', 100);
-    expect(holding(advance(run, 6), 1)!.held).toEqual({ value: 1, unit: 'sessions' });
-    expect(holding(advance(run, 29), 1)!.held).toEqual({ value: 4, unit: 'sessions' });
-    expect(holding(advance(run, 30), 1)!.held).toEqual({ value: 1, unit: 'weeks' });
+    expect(holding(advance(run, 1), 1)!.held).toEqual({ value: 2, unit: 'sessions' });
+    expect(holding(advance(run, 18), 1)!.held).toEqual({ value: 4, unit: 'sessions' });
+    expect(holding(advance(run, 19), 1)!.held).toEqual({ value: 1, unit: 'weeks' });
     expect(holding(advance(run, 65), 1)!.held).toEqual({ value: 2, unit: 'weeks' });
   });
 });

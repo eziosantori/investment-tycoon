@@ -137,6 +137,23 @@ describe('tradingView: ORDER panel at Lv7+', () => {
     ]);
   });
 
+  it('sizes SELL n and COVER n from the stepper, not capped by buying power', () => {
+    // 1530 long or short spends the buying power: BUY / SHORT drop to 0, but
+    // the stepper's 500 still closes 500.
+    expect(summary(bought(7, 1530), 7, 500)[1]).toEqual([
+      'sell',
+      'S',
+      'SELL 500 OMNX',
+      order('sell', 500),
+    ]);
+    expect(summary(sold(1530), 7, 500)[0]).toEqual([
+      'cover',
+      'B',
+      'COVER 500 OMNX',
+      order('buy', 500),
+    ]);
+  });
+
   it('shows COVER n [B] + SHORT n [S] + FLATTEN [F] when short, COVER capped at the position', () => {
     expect(summary(sold(230), 7, 100)).toEqual([
       ['cover', 'B', 'COVER 100 OMNX', order('buy', 100)],
