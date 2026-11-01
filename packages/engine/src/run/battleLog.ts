@@ -1,15 +1,7 @@
-import { BARS_PER_SESSION, SESSIONS_PER_WEEK } from '../market/calendar';
-import type { Cursor, MarketTimeline } from '../market/types';
+import type { MarketTimeline } from '../market/types';
+import { durationBetween } from './holding';
 import { tradeQuote } from './quote';
-import type { BattleLog, BattleLogRow, Duration, Fill, RunState, Trade } from './types';
-
-/** A span between two bars: whole weeks from a week, whole sessions below. */
-export function durationBetween(from: Cursor, to: Cursor): Duration {
-  const sessions = Math.floor(Math.max(0, to - from) / BARS_PER_SESSION);
-  return sessions >= SESSIONS_PER_WEEK
-    ? { value: Math.floor(sessions / SESSIONS_PER_WEEK), unit: 'weeks' }
-    : { value: sessions, unit: 'sessions' };
-}
+import type { BattleLog, BattleLogRow, Fill, RunState, Trade } from './types';
 
 /**
  * The battle log (spec #19): one row per trade, open trades first as live
