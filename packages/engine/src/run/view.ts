@@ -1,4 +1,5 @@
 import type { Level } from '../chart/tools';
+import { isAtEnd } from '../cursor';
 import type { MarketTimeline, Shares, Ticker } from '../market/types';
 import { battleLog } from './battleLog';
 import { holdingCard } from './holding';
@@ -6,6 +7,7 @@ import { tradeQuote } from './quote';
 import { account, orderRefusal, SHORT_UNLOCK_LEVEL } from './reducer';
 import type {
   Account,
+  EndSummary,
   MarketOrderCommand,
   OrderButton,
   OrderPanel,
@@ -42,16 +44,36 @@ export function tradingView(input: TradingViewInput): TradingView {
   const acc = account(run, timeline);
   const quote = tradeQuote(timeline, ticker, run.cursor);
   const held = run.positions[ticker];
+  const ended = isAtEnd(timeline, run.cursor);
   return {
-    order: quote ? orderPanel(input, acc, quote) : null,
+    // No order buttons once the market has ended: every order would be refused.
+    order: quote && !ended ? orderPanel(input, acc, quote) : null,
     // #25: HOLDING card for the selected stock.
     holding: held && quote ? holdingCard(held, quote, run.cursor, input.level) : null,
     battleLog: battleLog(run, timeline, acc.realizedPnl),
     // #27: ▲ / ▼ markers for the ticker switcher.
     markers: markersOf(run),
-    // #29: end-of-market summary.
-    endSummary: null,
+    endSummary: ended ? endSummaryOf(run, timeline, acc) : null,
     bankroll: { equity: acc.equity, openPnl: acc.openPnl },
+  };
+}
+
+/** The run's closing numbers; open positions stay valued at the final mid (no auto-flatten). */
+function endSummaryOf(run: RunState, timeline: MarketTimeline, acc: Account): EndSummary {
+  return {
+    finalEquity: acc.equity,
+    realizedPnl: acc.realizedPnl,
+    trades: run.trades.length,
+    openPositions: Object.values(run.positions).map((p) => {
+      const mid = tradeQuote(timeline, p.ticker, run.cursor)?.mid ?? 0;
+      return {
+        ticker: p.ticker,
+        side: p.shares > 0 ? 'long' : 'short',
+        shares: Math.abs(p.shares),
+        mid,
+        openPnl: p.shares * mid - p.costBasis,
+      };
+    }),
   };
 }
 

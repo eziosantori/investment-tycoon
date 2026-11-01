@@ -392,3 +392,33 @@ describe('apply: shorts at Lv7', () => {
     ]);
   });
 });
+
+describe('the end of the market', () => {
+  const end = endCursor(timeline);
+  const flatten = (ticker: string) => ({ type: 'flatten', ticker }) as const;
+
+  it('clamps at the last bar, then refuses every order with marketEnded, state unchanged', () => {
+    const held = act(fresh(), buy('OMNX', 100)).state;
+    const ended = advanceTo(held, timeline, 10 ** 9).state;
+    expect(ended.cursor).toBe(end);
+    for (const intent of [buy('OMNX', 10), sell('OMNX', 10), buy('KRVX', 10), flatten('OMNX')]) {
+      const { state, events } = act(ended, intent);
+      expect(state).toBe(ended);
+      expect(events).toEqual([
+        { type: 'refused', command: { ...intent, at: end }, reason: 'marketEnded' },
+      ]);
+    }
+  });
+
+  it('keeps open positions, valued at the final mid', () => {
+    const held = act(fresh(), buy('OMNX', 100)).state;
+    const ended = advanceTo(held, timeline, end).state;
+    const { mid } = quote(ended, 'OMNX');
+    const position = ended.positions.OMNX!;
+    expect(position.shares).toBe(100);
+    const acc = account(ended, timeline);
+    expect(acc.openPnl).toBe(100 * mid - position.costBasis);
+    expect(acc.equity).toBe(ended.cash + 100 * mid);
+    expect(account(advanceTo(ended, timeline, end + 50).state, timeline)).toEqual(acc);
+  });
+});

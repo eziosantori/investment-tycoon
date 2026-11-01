@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import type { Level } from '../chart/tools';
 import { generateMarketTimeline } from '../market/marketTimeline';
 import type { MarketTimeline } from '../market/types';
-import { apply, newRun, runSettingsFor } from './reducer';
+import { endCursor } from '../cursor';
+import { advanceTo, apply, newRun, runSettingsFor } from './reducer';
 import type { Command, RunState } from './types';
 import { tradingView } from './view';
 
@@ -193,5 +194,48 @@ describe('tradingView: BANKROLL', () => {
   it('shows equity and open P&L at the mid: minus the half spread right after a buy', () => {
     // 300 shares bought at 65.02, valued at 65.00: −$6.00.
     expect(view(bought(1, 300), 1).bankroll).toEqual({ equity: 9_999_400, openPnl: -600 });
+  });
+});
+
+describe('tradingView: end of the market', () => {
+  /** At Lv7: a closed OMNX round trip (buy 100, sell 100), then long 300 OMNX, sell 100. */
+  function endedRun(): RunState {
+    let run = runAt(7);
+    const order = (side: 'buy' | 'sell', shares: number) => {
+      const command: Command = {
+        type: 'marketOrder',
+        at: run.cursor,
+        ticker: 'OMNX',
+        side,
+        shares,
+      };
+      run = apply(run, timeline, command).state;
+    };
+    order('buy', 100);
+    order('sell', 100);
+    order('buy', 300);
+    order('sell', 100);
+    return advanceTo(run, timeline, endCursor(timeline)).state;
+  }
+
+  it('has no summary while the market runs', () => {
+    expect(view(bought(7, 300), 7).endSummary).toBeNull();
+  });
+
+  it('sums up the run: final equity, realized P&L, trades, positions still open at the mid', () => {
+    // Round trip: 100 × (64.98 − 65.02) = −$4.00. Partial close: 100 at 64.98
+    // against a third of 300 × 65.02 = −$4.00. 200 left at 65.00: −$4.00 open.
+    expect(view(endedRun(), 7).endSummary).toEqual({
+      finalEquity: 9_998_800,
+      realizedPnl: -800,
+      trades: 2,
+      openPositions: [{ ticker: 'OMNX', side: 'long', shares: 200, mid: 6500, openPnl: -400 }],
+    });
+  });
+
+  it('shows no order buttons once the market has ended', () => {
+    const ended = endedRun();
+    expect(view(ended, 7).order).toBeNull();
+    expect(view(ended, 1, null, 'KRVX').order).toBeNull();
   });
 });

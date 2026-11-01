@@ -1,5 +1,5 @@
 import type { Level } from '../chart/tools';
-import { clampCursor, startCursor } from '../cursor';
+import { clampCursor, isAtEnd, startCursor } from '../cursor';
 import type { Cursor, MarketTimeline, Ticker } from '../market/types';
 import { tradeQuote } from './quote';
 import type {
@@ -66,6 +66,7 @@ export function advanceTo(state: RunState, timeline: MarketTimeline, bar: Cursor
 /** Applies one command at the run's cursor. A refused command leaves the state unchanged. */
 export function apply(state: RunState, timeline: MarketTimeline, command: Command): RunStep {
   if (command.at !== state.cursor) return refuse(state, command, 'wrongBar');
+  if (isAtEnd(timeline, state.cursor)) return refuse(state, command, 'marketEnded');
   return command.type === 'flatten'
     ? applyFlatten(state, timeline, command)
     : applyMarketOrder(state, timeline, command, command);
@@ -148,8 +149,9 @@ export function orderRefusal(
 }
 
 /**
- * Why a market order can't fill, or `null`. Checks run in this order; each new
- * rule (end of market: #29) slots in here.
+ * Why a market order can't fill, or `null`. Checks run in this order. After the
+ * last bar every order is refused; positions stay open at the final mid (no
+ * auto-flatten: that's a Challenge rule, M4).
  */
 function refusalOf(
   state: RunState,
@@ -157,6 +159,7 @@ function refusalOf(
   order: Omit<MarketOrderCommand, 'at'>,
   quote: TradeQuote | null,
 ): RefusalReason | null {
+  if (isAtEnd(timeline, state.cursor)) return 'marketEnded';
   if (!Number.isInteger(order.shares) || order.shares <= 0) return 'invalidShares';
   if (!quote) return 'notTradable';
   const held = state.positions[order.ticker]?.shares ?? 0;
