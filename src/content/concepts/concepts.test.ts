@@ -10,6 +10,13 @@ describe('concepts', () => {
     expect(getConcept('trend').term).toBe('Trend');
   });
 
+  it('has the M2 trading concepts the mentor needs', () => {
+    expect(getConcept('long').term).toBe('Long');
+    expect(getConcept('short-selling').term).toBe('Short selling');
+    expect(getConcept('spread').term).toBe('Spread');
+    expect(getConcept('realized-vs-open-pnl').term).toBe('Realized vs open P&L');
+  });
+
   it('has one entry per id', () => {
     const ids = concepts.map((c) => c.id);
     expect(new Set(ids).size).toBe(ids.length);
