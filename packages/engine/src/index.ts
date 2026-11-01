@@ -15,7 +15,15 @@ export {
   SESSIONS_PER_WEEK,
   sessionOfBar,
 } from './market/calendar';
-export type { Cursor, MarketTimeline, Stage, Ticker, Timeframe } from './market/types';
+export type {
+  Cents,
+  Cursor,
+  MarketTimeline,
+  Shares,
+  Stage,
+  Ticker,
+  Timeframe,
+} from './market/types';
 
 export {
   advanceBars,
@@ -36,3 +44,48 @@ export {
 } from './chart/view';
 export { STAGE_LABELS, stageBands } from './chart/stageBands';
 export { watchlist } from './chart/watchlist';
+
+// M2 run: the reducer (ADR-0005), the quote and the trading view.
+export {
+  account,
+  advanceTo,
+  apply,
+  newRun,
+  replay,
+  runSettingsFor,
+  SHORT_UNLOCK_LEVEL,
+  STARTING_BALANCE,
+} from './run/reducer';
+export { tradeQuote } from './run/quote';
+export { ORDER_STEP, tradingView, type TradingViewInput } from './run/view';
+export type {
+  Account,
+  BattleLog,
+  BattleLogRow,
+  Bankroll,
+  Command,
+  CommandIntent,
+  Duration,
+  EndSummary,
+  FlattenCommand,
+  Fill,
+  HoldingCard,
+  MarketOrderCommand,
+  OpenPositionSummary,
+  OrderButton,
+  OrderButtonId,
+  OrderKey,
+  OrderPanel,
+  Position,
+  PositionMarker,
+  PositionSide,
+  RefusalReason,
+  RunEvent,
+  RunSettings,
+  RunState,
+  RunStep,
+  Side,
+  Trade,
+  TradeQuote,
+  TradingView,
+} from './run/types';

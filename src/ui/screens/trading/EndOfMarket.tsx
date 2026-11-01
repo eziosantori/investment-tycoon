@@ -7,7 +7,7 @@ import s from './trading.module.css';
 /** Shown once the cursor reaches the end of the run weeks: playback has stopped. */
 export function EndOfMarket() {
   const timeline = useTimeline();
-  const ended = useUiStore((st) => isAtEnd(timeline, st.cursor));
+  const ended = useUiStore((st) => isAtEnd(timeline, st.run.cursor));
   if (!ended) return null;
 
   return (

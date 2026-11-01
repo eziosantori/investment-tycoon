@@ -5,13 +5,17 @@ import { useTimeline } from '../../state/timeline';
 import { ChartCard } from './ChartCard';
 import { EndOfMarket } from './EndOfMarket';
 import { HudTop } from './HudTop';
+import { Bankroll } from './Bankroll';
 import { InstrumentPanel } from './InstrumentPanel';
+import o from './order.module.css';
+import { OrderPanel } from './OrderPanel';
 import s from './trading.module.css';
 
 /**
- * Screen 01: the trading HUD. M1 shows only what works: the HUD with playback,
- * the chart card and the instrument side panel. The status row (HP, mission), loadout and bottom row
- * (mentor, battle log, quests) return in their milestones.
+ * Screen 01: the trading HUD. Only what works is shown: the HUD with playback,
+ * the status row with the BANKROLL alone in its slot (mission and HP return in
+ * M4), the chart card, and the right column with the instrument panel and
+ * ORDER. Loadout and the bottom row (mentor, quests) return in their milestones.
  */
 export function TradingScreen() {
   const timeline = useTimeline();
@@ -22,12 +26,16 @@ export function TradingScreen() {
     <main className={s.screen} data-screen-label="01 Trading · Game">
       <HudTop />
       <EndOfMarket />
+      <div className={o.statusRow}>
+        <Bankroll />
+      </div>
       <div className={s.main}>
         <div className={s.leftCol}>
           <ChartCard />
         </div>
         <div className={s.rightCol}>
           <InstrumentPanel />
+          <OrderPanel />
         </div>
       </div>
       <div className={s.buildInfo}>

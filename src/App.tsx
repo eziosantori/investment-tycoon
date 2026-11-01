@@ -15,12 +15,10 @@ export function App({ seed, level, children }: AppOptions) {
   // The timeline is generated once per seed and kept outside the UI store.
   const timeline = useMemo(() => generateMarketTimeline(seed), [seed]);
 
+  // The level fixes the run's settings (shorting from Lv7), so a new level starts a new run.
   useLayoutEffect(() => {
-    useUiStore.getState().startRun(timeline);
-  }, [timeline]);
-  useLayoutEffect(() => {
-    useUiStore.getState().setLevel(level);
-  }, [level]);
+    useUiStore.getState().startRun(timeline, level);
+  }, [timeline, level]);
 
   return (
     <TimelineContext.Provider value={timeline}>

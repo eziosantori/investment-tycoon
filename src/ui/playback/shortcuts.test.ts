@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { shortcutFor } from './shortcuts';
+import type { OrderButton } from '@investment-tycoon/engine';
+import { orderButtonFor, shortcutFor } from './shortcuts';
 
 const key = (k: string, extra: Partial<Parameters<typeof shortcutFor>[0]> = {}) =>
   shortcutFor({ key: k, ...extra });
@@ -30,5 +31,40 @@ describe('shortcutFor', () => {
     expect(key('2', { metaKey: true })).toBeNull();
     expect(key('5', { altKey: true })).toBeNull();
     expect(key(' ', { repeat: true })).toBeNull();
+    expect(key('b', { ctrlKey: true })).toBeNull();
+  });
+});
+
+describe('order keys', () => {
+  const button = (id: OrderButton['id'], k: OrderButton['key'], disabled = false): OrderButton => ({
+    id,
+    key: k,
+    label: id,
+    intent: { type: 'flatten', ticker: 'OMNX' },
+    disabledReason: disabled ? 'insufficientBuyingPower' : null,
+  });
+
+  it('maps B, S and F (either case) to the order button with that keycap', () => {
+    expect(key('b')).toEqual({ type: 'order', key: 'B' });
+    expect(key('S')).toEqual({ type: 'order', key: 'S' });
+    expect(key('f')).toEqual({ type: 'order', key: 'F' });
+  });
+
+  it('is ignored while typing in a field', () => {
+    expect(key('b', { target: { tagName: 'INPUT' } })).toBeNull();
+    expect(key('s', { target: { tagName: 'DIV', isContentEditable: true } })).toBeNull();
+  });
+
+  it('triggers the visible button with the same keycap, and nothing when it is not shown', () => {
+    const flat = [button('buy', 'B')];
+    const long = [button('buy', 'B'), button('sellAll', 'S')];
+    expect(orderButtonFor(flat, 'B')?.id).toBe('buy');
+    expect(orderButtonFor(flat, 'S')).toBeNull();
+    expect(orderButtonFor(long, 'S')?.id).toBe('sellAll');
+    expect(orderButtonFor(null, 'B')).toBeNull();
+  });
+
+  it('does nothing when the button is disabled', () => {
+    expect(orderButtonFor([button('buy', 'B', true)], 'B')).toBeNull();
   });
 });

@@ -14,7 +14,7 @@ import s from './trading.module.css';
  */
 export function TickerSwitcher() {
   const timeline = useTimeline();
-  const cursor = useUiStore((st) => st.cursor);
+  const cursor = useUiStore((st) => st.run.cursor);
   const instrument = useUiStore((st) => st.instrument);
   const selectInstrument = useUiStore((st) => st.selectInstrument);
   const [anchor, setAnchor] = useState<DOMRect | null>(null);
