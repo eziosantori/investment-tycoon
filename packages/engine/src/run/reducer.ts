@@ -1,0 +1,282 @@
+import type { Level } from '../chart/tools';
+import { clampCursor, isAtEnd, startCursor } from '../cursor';
+import type { Cursor, MarketTimeline } from '../market/types';
+import { midOf, openPnlOf, sideOf } from './position';
+import { tradeQuote } from './quote';
+import type {
+  Account,
+  Command,
+  FlattenCommand,
+  Fill,
+  MarketOrderCommand,
+  Position,
+  RefusalReason,
+  RunEvent,
+  RunSettings,
+  RunState,
+  RunStep,
+  Trade,
+  TradeQuote,
+} from './types';
+
+/**
+ * The run reducer (ADR-0005): a run changes only through `advanceTo` (time)
+ * and `apply` (one player command at the cursor). Both are pure and return
+ * the new state plus events; `replay` folds a command log over a fresh run.
+ */
+
+/** $100,000, in cents. */
+export const STARTING_BALANCE = 10_000_000;
+
+/** The level that unlocks short selling. */
+export const SHORT_UNLOCK_LEVEL: Level = 7;
+
+/** The run settings the app derives from the player's level. */
+export function runSettingsFor(level: Level): RunSettings {
+  return { startingBalance: STARTING_BALANCE, allowShort: level >= SHORT_UNLOCK_LEVEL };
+}
+
+/** A fresh run: at the start cursor (last warm-up bar), all cash, flat. */
+export function newRun(
+  timeline: Pick<MarketTimeline, 'warmupWeeks' | 'runWeeks'>,
+  settings: RunSettings,
+): RunState {
+  return {
+    cursor: startCursor(timeline),
+    cash: settings.startingBalance,
+    positions: {},
+    trades: [],
+    fills: [],
+    nextFillId: 1,
+    nextTradeId: 1,
+    settings,
+  };
+}
+
+/**
+ * Moves the cursor forward to `bar`, clamped to the timeline; never back.
+ * Positions are valued at the mid on read (`account`), so M2 emits no events.
+ * M3: working orders are matched here, on every bar and substep crossed.
+ */
+export function advanceTo(state: RunState, timeline: MarketTimeline, bar: Cursor): RunStep {
+  const cursor = clampCursor(timeline, bar);
+  if (cursor <= state.cursor) return { state, events: [] };
+  return { state: { ...state, cursor }, events: [] };
+}
+
+/** Applies one command at the run's cursor. A refused command leaves the state unchanged. */
+export function apply(state: RunState, timeline: MarketTimeline, command: Command): RunStep {
+  if (command.at !== state.cursor) return refuse(state, command, 'wrongBar');
+  if (isAtEnd(timeline, state.cursor)) return refuse(state, command, 'marketEnded');
+  return command.type === 'flatten'
+    ? applyFlatten(state, timeline, command)
+    : applyMarketOrder(state, timeline, command, command);
+}
+
+/**
+ * Rebuilds a run from its settings and command log: for each command,
+ * advance to its bar and apply it; then advance to the final cursor.
+ * The cursor never moves back, so a command stamped before an earlier logged
+ * one is refused as `wrongBar`, exactly as it was live. The log holds no time
+ * (ADR-0005), so a command must carry the cursor it was applied at (the app's
+ * dispatch stamps it so): one stamped later than the previous command but
+ * before the live cursor was refused live yet would fill on replay.
+ */
+export function replay(
+  timeline: MarketTimeline,
+  settings: RunSettings,
+  log: readonly Command[],
+  finalCursor: Cursor,
+): RunState {
+  let state = newRun(timeline, settings);
+  for (const command of log) {
+    state = advanceTo(state, timeline, command.at).state;
+    state = apply(state, timeline, command).state;
+  }
+  return advanceTo(state, timeline, finalCursor).state;
+}
+
+/** The account valued at the mid of the bar at the run's cursor. */
+export function account(state: RunState, timeline: MarketTimeline): Account {
+  let marketValue = 0;
+  let openPnl = 0;
+  let exposure = 0;
+  for (const p of Object.values(state.positions)) {
+    const mid = midOf(timeline, p.ticker, state.cursor);
+    const value = p.shares * mid;
+    marketValue += value;
+    openPnl += openPnlOf(p, mid);
+    exposure += Math.abs(value);
+  }
+  const equity = state.cash + marketValue;
+  const realizedPnl = state.trades.reduce((sum, t) => sum + t.realizedPnl, 0);
+  return {
+    cash: state.cash,
+    equity,
+    openPnl,
+    realizedPnl,
+    exposure,
+    buyingPower: equity - exposure,
+  };
+}
+
+// ---------- internals ----------
+
+function refuse(state: RunState, command: Command, reason: RefusalReason): RunStep {
+  return { state, events: [{ type: 'refused', command, reason }] };
+}
+
+function applyFlatten(state: RunState, timeline: MarketTimeline, command: FlattenCommand): RunStep {
+  const position = state.positions[command.ticker];
+  if (!position) return refuse(state, command, 'noPosition');
+  const order: MarketOrderCommand = {
+    type: 'marketOrder',
+    at: command.at,
+    ticker: command.ticker,
+    side: sideOf(position) === 'long' ? 'sell' : 'buy',
+    shares: Math.abs(position.shares),
+  };
+  return applyMarketOrder(state, timeline, order, command);
+}
+
+/**
+ * Why a market order would be refused at the run's cursor, or `null`: the same
+ * check `apply` makes, so the trading view can disable a button with its reason.
+ */
+export function orderRefusal(
+  state: RunState,
+  timeline: MarketTimeline,
+  order: Omit<MarketOrderCommand, 'at'>,
+): RefusalReason | null {
+  return refusalOf(state, timeline, order, tradeQuote(timeline, order.ticker, state.cursor));
+}
+
+/**
+ * Why a market order can't fill, or `null`. Checks run in this order. After the
+ * last bar every order is refused; positions stay open at the final mid (no
+ * auto-flatten: that's a Challenge rule, M4).
+ */
+function refusalOf(
+  state: RunState,
+  timeline: MarketTimeline,
+  order: Omit<MarketOrderCommand, 'at'>,
+  quote: TradeQuote | null,
+): RefusalReason | null {
+  if (isAtEnd(timeline, state.cursor)) return 'marketEnded';
+  if (!Number.isInteger(order.shares) || order.shares <= 0) return 'invalidShares';
+  if (!quote) return 'notTradable';
+  const held = state.positions[order.ticker]?.shares ?? 0;
+  const delta = order.side === 'buy' ? order.shares : -order.shares;
+  if (held !== 0 && Math.sign(delta) !== Math.sign(held) && Math.abs(delta) > Math.abs(held))
+    return 'crossesZero';
+  if (delta < 0 && held <= 0 && !state.settings.allowShort) return 'shortNotAllowed';
+  if (Math.abs(held + delta) > Math.abs(held)) {
+    // Growing a position: exposure after the fill may not exceed equity after
+    // it. The fill moves equity by the spread paid, Δ × (mid − price), so
+    // short proceeds add nothing; closing shares is never refused for this.
+    const price = delta > 0 ? quote.ask : quote.bid;
+    const { equity, exposure } = account(state, timeline);
+    const exposureAfter = exposure + Math.abs(delta) * quote.mid;
+    const equityAfter = equity + delta * (quote.mid - price);
+    if (exposureAfter > equityAfter) return 'insufficientBuyingPower';
+  }
+  return null;
+}
+
+/** `refusedAs` is the command a refusal reports (a flatten reports itself). */
+function applyMarketOrder(
+  state: RunState,
+  timeline: MarketTimeline,
+  order: MarketOrderCommand,
+  refusedAs: Command,
+): RunStep {
+  const quote = tradeQuote(timeline, order.ticker, state.cursor);
+  const reason = refusalOf(state, timeline, order, quote);
+  if (reason || !quote) return refuse(state, refusedAs, reason ?? 'notTradable');
+
+  const price = order.side === 'buy' ? quote.ask : quote.bid;
+  const delta = order.side === 'buy' ? order.shares : -order.shares;
+  const held = state.positions[order.ticker];
+  const events: RunEvent[] = [];
+
+  // The trade this fill belongs to: the open one, or a new one from flat.
+  let trade: Trade;
+  let nextTradeId = state.nextTradeId;
+  if (held) {
+    trade = state.trades.find((t) => t.id === held.tradeId)!;
+  } else {
+    trade = {
+      id: nextTradeId++,
+      ticker: order.ticker,
+      side: delta > 0 ? 'long' : 'short',
+      fillIds: [],
+      openedAt: state.cursor,
+      closedAt: null,
+      realizedPnl: 0,
+    };
+  }
+
+  const fill: Fill = {
+    id: state.nextFillId,
+    ticker: order.ticker,
+    side: order.side,
+    shares: order.shares,
+    price,
+    at: state.cursor,
+    tradeId: trade.id,
+  };
+
+  let position: Position | null;
+  let realized = 0;
+  if (!held) {
+    position = {
+      ticker: order.ticker,
+      shares: delta,
+      costBasis: delta * price,
+      tradeId: trade.id,
+      openedAt: state.cursor,
+    };
+  } else if (Math.sign(delta) === Math.sign(held.shares)) {
+    position = { ...held, shares: held.shares + delta, costBasis: held.costBasis + delta * price };
+  } else {
+    // Closing `closed` shares (signed like the position): the removed basis is
+    // floored and the remainder stays with the shares left, so P&L sums exactly.
+    const closed = -delta;
+    const removed = Math.floor((held.costBasis * closed) / held.shares);
+    realized = closed * price - removed;
+    const shares = held.shares + delta;
+    position = shares === 0 ? null : { ...held, shares, costBasis: held.costBasis - removed };
+  }
+
+  const updatedTrade: Trade = {
+    ...trade,
+    fillIds: [...trade.fillIds, fill.id],
+    realizedPnl: trade.realizedPnl + realized,
+    closedAt: position ? null : state.cursor,
+  };
+
+  const positions = { ...state.positions };
+  if (position) positions[order.ticker] = position;
+  else delete positions[order.ticker];
+
+  const trades = held
+    ? state.trades.map((t) => (t.id === trade.id ? updatedTrade : t))
+    : [...state.trades, updatedTrade];
+
+  events.push({ type: 'fill', fill });
+  if (!held) events.push({ type: 'tradeOpened', trade: updatedTrade });
+  if (!position) events.push({ type: 'tradeClosed', trade: updatedTrade });
+
+  return {
+    state: {
+      ...state,
+      cash: state.cash - delta * price,
+      positions,
+      trades,
+      fills: [...state.fills, fill],
+      nextFillId: state.nextFillId + 1,
+      nextTradeId,
+    },
+    events,
+  };
+}

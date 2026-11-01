@@ -1,0 +1,160 @@
+/* ORDER panel and BANKROLL card. Values from design/design_handoff_investment_tycoon/README.md
+   ("Action buttons", "BANKROLL"); the stepper follows the loadout's tokens. */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 14px 14px;
+}
+
+.stepper {
+  display: grid;
+  grid-template-columns: 32px 1fr 32px;
+  align-items: center;
+  gap: 6px;
+}
+.stepBtn {
+  height: 28px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-btn);
+  background: var(--raised);
+  color: var(--text);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+.stepBtn:disabled {
+  color: var(--text-disabled);
+  cursor: default;
+}
+.shares {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 18px;
+}
+.sharesUnit {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+.cost {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 2px;
+}
+.buy,
+.secondary {
+  position: relative;
+  border: 0;
+  border-radius: var(--r-btn);
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+.buy {
+  height: 50px;
+  font-size: 17px;
+  color: var(--up-ink);
+  background: linear-gradient(180deg, var(--up-top), var(--up));
+  box-shadow: 0 4px 0 var(--up-shadow);
+}
+.secondary {
+  height: 36px;
+  font-size: 13px;
+  color: var(--text);
+  background: var(--raised);
+}
+.buy:disabled,
+.secondary:disabled {
+  filter: grayscale(1);
+  opacity: 0.5;
+  cursor: default;
+}
+.keycap {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  min-width: 18px;
+  padding: 1px 4px;
+  border: 1px solid currentColor;
+  border-radius: var(--r-chip);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+/* Refusal line under the buttons; keeps its height so the panel doesn't jump. */
+.refusal {
+  min-height: 14px;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* ---------- status row: BANKROLL ---------- */
+
+.statusRow {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: var(--gap);
+  padding: 0 var(--gutter) 10px;
+}
+.bankroll {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 14px;
+}
+.equity {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 24px;
+}
+.equityCents {
+  color: var(--text-dim);
+}
+.open {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ---------- HOLDING card ---------- */
+
+.holding {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 14px;
+}
+.holdingLine {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 14px;
+}
+.holdingPnl {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 13px;
+}
+.holdingHeld {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}

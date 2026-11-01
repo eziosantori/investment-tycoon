@@ -127,47 +127,62 @@ A bar is generated as a path of substeps, not just OHLC. That means order
 matching knows _the order in which prices happened inside the bar_. So if a stop
 and a target are both inside one bar's range, we know which was hit first. No
 "assume worst case" guessing. The chart only shows OHLC; the engine uses the path.
+M2 has only market orders, which fill at the bar at the cursor, so it does not
+walk substeps; matching working orders over substeps arrives in M3, inside
+`advanceTo` (§3.3).
 
-### 3.3 The step function
+### 3.3 The run reducer
 
-The engine is a pure reducer:
+The market is a precomputed timeline, read-only for the whole run
+([ADR-0001](adr/0001-precomputed-market-timeline.md)): nothing is generated while
+playing. The run state (cursor, cash, positions, trades, id counters, settings)
+is a plain serializable object that does not hold the market. It changes only
+through two pure functions over the timeline
+([ADR-0005](adr/0005-run-reducer-advance-and-apply.md)); each returns the new
+state plus the events it produced:
 
 ```ts
-function step(state: GameState, commands: Command[]): StepResult;
-// StepResult = { state: GameState; events: GameEvent[] }
+function advanceTo(state: RunState, timeline: Timeline, bar: number): RunResult;
+function apply(state: RunState, timeline: Timeline, command: Command): RunResult;
+// RunResult = { state: RunState; events: RunEvent[] }
 ```
 
-Order of operations for **each substep**:
+- **`advanceTo`** moves the cursor forward to `bar`, clamped to the end of the
+  timeline. Positions are valued at the mid (the close of the bar at the cursor)
+  whenever they are read, so nothing is stored per bar. In M3 this is also where
+  working orders (stop, limit, brackets) are matched on every bar and substep the
+  cursor crosses, and where gaps fill at the gap price; M2 has no working orders.
+- **`apply`** applies one player command at the current cursor. M2 commands:
+  market order (ticker, buy or sell, shares) and flatten (ticker). Each is
+  validated, then filled at the ask (buy) or bid (sell) of the bar at the cursor.
+- **Events:** fills, trade opened / closed, and refusals with a typed reason:
+  `insufficientBuyingPower`, `shortNotAllowed`, `crossesZero`, `marketEnded`,
+  `notTradable` (malformed commands, such as non-positive shares, are refused
+  too). A refused command leaves the state unchanged apart from the event.
+- **Replay** is a fold of the command log over a fresh run: for each command,
+  `advanceTo(command.at)` then `apply(command)`; finally `advanceTo(finalCursor)`.
+  The determinism test asserts that `replay(seed, log)` deep-equals the live state.
 
-1. **Apply commands** queued since the last substep (place/cancel/modify orders,
-   close position). Validate them (buying power, rule constraints) and emit
-   rejections as events.
-2. **Advance the market**: generate the next price point for each instrument
-   (see §5).
-3. **Match orders** against the new price: market → fill at current price plus
-   spread; stop/limit → fill if touched. If the price gapped through a stop, fill
-   at the gap price (this teaches gap risk and slippage).
-4. **Mark to market**: recompute unrealized P&L, equity, margin used, and
-   high-water mark.
-5. **Evaluate rules**: prop limits, margin call. A breach means immediate
-   liquidation, `run.status = 'failed'`, and a `failureReason`.
-6. **Run detectors**: behavior detectors check recent history
-   (see §4.6) and emit `BehaviorFlag` events.
-7. **Boundary hooks**: at the end of a bar, close the candle and update
-   indicators. At the end of a session, reset the daily loss baseline and
-   generate the overnight gap. At the end of a quarter, run firm updates (later).
+Mark-to-market is a derived read of the state against the timeline, not a step:
+equity = cash + Σ shares × mid. Rule evaluation (prop limits, liquidation) and
+the behavior detectors (§4.6) arrive in M4 and M5 as further readers of the same
+state and events; nothing in M2 evaluates rules.
 
 ### 3.4 Game loop (UI side)
 
 ```
 requestAnimationFrame → accumulate real time × speed
-  → run k substeps through engine.step()
-  → publish a snapshot to the Zustand store (throttled to frame rate)
+  → engine.advanceTo(run, timeline, bar)         (the cursor lives in the run)
+  → publish the new run state to the Zustand store (throttled to frame rate)
   → React renders the panels that subscribe to changed slices
 ```
 
-Commands from the UI are queued and applied at step 1 of the next substep, never
-applied to state directly.
+The UI store keeps the run state and its command log, plus speed, pause, selected
+ticker, timeframe and level. A player action is a command: the store applies it
+with `apply`, which returns the new state, and appends it to the command log
+stamped with the bar it was issued at. The UI never mutates accounting directly,
+and the playback loop writes nothing to the log. Trading works while the market
+plays, with no pause.
 
 ---
 
@@ -230,100 +245,133 @@ interface Clock {
 
 ### 4.2 Orders, positions, account
 
+As built in M2. Prices and money are integer cents, shares are integers; the
+average price is a derived float for display. Terms follow GLOSSARY.md.
+
 ```ts
 type Side = 'buy' | 'sell';
 
-interface Order {
-  id: string;
-  instrumentId: InstrumentId;
-  side: Side;
-  type: 'market' | 'limit' | 'stop';
-  qty: number;
-  price?: number; // limit/stop trigger
-  parentId?: string; // bracket children (stop-loss / take-profit)
-  ocoGroup?: string; // one-cancels-other
-  status: 'working' | 'filled' | 'cancelled' | 'rejected';
-  createdAt: number; // substep index
+// A stock of the universe carries a spread in basis points (about 5-15, wider on
+// small, volatile names). The index has none and is not tradable.
+interface Quote {
+  mid: number; // close of the bar at the cursor
+  bid: number; // mid - half spread, rounded down, at least 1 cent below mid
+  ask: number; // mid + half spread, rounded up, at least 1 cent above mid
 }
 
+// Player commands, stamped with the bar they were issued at. Time advances are
+// never logged. No fee, no margin, no leverage.
+type Command =
+  | { type: 'marketOrder'; at: number; ticker: string; side: Side; shares: number }
+  | { type: 'flatten'; at: number; ticker: string };
+
 interface Fill {
-  orderId: string;
-  qty: number;
-  price: number;
-  t: number;
-  fee: number;
+  id: number; // sequential counter, never random or wall-clock
+  tradeId: number;
+  ticker: string;
+  side: Side;
+  shares: number;
+  price: number; // ask for a buy, bid for a sell
+  at: number; // bar
 }
 
 interface Position {
-  instrumentId: InstrumentId;
-  qty: number; // signed: >0 long, <0 short
-  avgPrice: number;
+  ticker: string;
+  shares: number; // signed: > 0 long, < 0 short; at most one per stock
+  costBasis: number; // integer cents, not an average price
   openedAt: number;
-  initialStop?: number; // captured at entry, used for R-multiple and detectors
-  riskAtEntry?: number; // cents at risk if the initial stop is hit (Infinity if none)
 }
 
-interface Account {
-  startingBalance: number; // cents
-  cash: number;
-  equity: number; // cash + unrealized
-  highWaterMark: number;
-  sessionStartEquity: number; // baseline for daily loss
-  marginUsed: number;
-  leverage: number;
-}
-
-interface ClosedTrade {
-  id: string;
-  instrumentId: InstrumentId;
+interface Trade {
+  // a round trip in one stock, from flat back to flat
+  id: number;
+  ticker: string;
   side: 'long' | 'short';
-  entryPrice: number;
-  exitPrice: number;
-  qty: number;
+  fills: Fill[]; // adding and trimming stay in the same trade
   openedAt: number;
-  closedAt: number;
-  pnl: number; // cents, net of fees
-  rMultiple?: number; // pnl / riskAtEntry
-  regimeAtEntry: RegimeId; // hidden during play; used in post-game stats
-  flags: BehaviorFlagId[]; // detectors that fired on this trade
+  closedAt?: number; // absent while the trade is open
+  realizedPnl: number; // integer cents; settled as the position shrinks
+}
+// Entry and exit prices of a trade are derived: the volume-weighted prices of
+// its opening and closing fills.
+
+interface RunSettings {
+  startingBalance: number; // $100,000 = 10_000_000 cents
+  shortAllowed: boolean; // derived by the app from the level (Lv7+); the engine knows no levels
+}
+
+interface RunState {
+  cursor: number;
+  cash: number; // buys subtract; sells and short sale proceeds add
+  positions: Position[];
+  trades: Trade[]; // open and closed
+  nextFillId: number;
+  nextTradeId: number;
+  settings: RunSettings;
 }
 ```
 
+Rules:
+
+- **Fills:** a market order fills immediately at the ask (buy) or the bid (sell)
+  of the bar at the cursor; rounding always goes against the player. The spread
+  is the only cost of trading.
+- **Positions:** orders in the same direction add to the position; opposite
+  orders shrink it. An order that would take it past zero is refused
+  (`crossesZero`): there is no flip in one order.
+- **Cost basis:** on a partial close the removed basis is
+  `floor(costBasis × closedShares / shares)`; the remainder stays with the
+  remaining shares. Realized P&L is an integer and its sum over a run is exact.
+- **Equity** = cash + Σ shares × mid (a short is a liability). **Open P&L** =
+  Σ (shares × mid − costBasis), signed. Equity − starting balance = realized P&L
+  plus open P&L, to the cent.
+- **Buying power:** exposure = Σ |shares| × mid; an order is refused
+  (`insufficientBuyingPower`) if exposure after the fill would exceed equity.
+  Short proceeds do not add buying power. No margin, leverage, interest or
+  borrow fee.
+- **Shorting:** opening or adding to a short is refused (`shortNotAllowed`) when
+  `settings.shortAllowed` is false.
+- **End of market:** after the last bar every order is refused (`marketEnded`);
+  positions stay open and keep being valued at the final mid. No auto-flatten
+  (a Challenge rule, M4).
+
+Coming in M3: stop and limit orders, brackets and OCO groups, working-order
+matching inside `advanceTo`, the initial stop captured at entry, and the
+R-multiple (`riskAtEntry`, `rMultiple`). Coming in M4: the account's high-water
+mark, the session baseline for the daily loss, and liquidation. Coming in M5:
+the regime at entry and the behavior flags on a trade.
+
 ### 4.3 Run & rules (prop challenge)
+
+M2 has the `RunState` of §4.2 and nothing else. The rule set and the run status
+below are the M4 design; they will wrap the run state, not replace it.
 
 ```ts
 interface RuleSet {
   id: string; // e.g. "phase1-standard"
   profitTargetPct: number; // e.g. 10
-  maxDailyLossPct: number; // e.g. 5, measured from sessionStartEquity
+  maxDailyLossPct: number; // e.g. 5, measured from the session start equity
   maxTotalLossPct: number; // e.g. 10, from startingBalance (or trailing HWM)
   trailingDrawdown: boolean;
   minTradingSessions: number;
   maxSessions: number;
-  allowedInstruments: InstrumentId[];
+  allowedInstruments: string[];
 }
 
 interface Run {
+  // M4
   id: string;
   seed: number;
   mode: 'prop' | 'value' | 'macro' | 'sandbox' | 'backtest';
   ruleSet?: RuleSet;
   status: 'active' | 'passed' | 'failed';
   failure?: { rule: string; at: number; detail: string };
-  account: Account;
-  orders: Order[];
-  positions: Position[];
-  trades: ClosedTrade[];
-  equityCurve: { t: number; equity: number }[];
+  state: RunState;
   commandLog: Command[]; // enough to replay the run from its seed
 }
-
-interface GameState {
-  market: MarketState;
-  run: Run;
-  rngState: RngStreams;
-}
 ```
+
+---
 
 ### 4.4 Player progression (persists across runs)
 
@@ -373,14 +421,19 @@ interface Staff {
 ### 4.6 Events, concepts, advisor
 
 ```ts
+// M2 emits fill, tradeOpened / tradeClosed and refused; the rest arrive later.
 type GameEvent =
   | { type: 'fill'; fill: Fill }
-  | { type: 'orderRejected'; orderId: string; reason: string }
+  | { type: 'tradeOpened' | 'tradeClosed'; tradeId: number }
+  | { type: 'refused'; reason: RefusalReason } // typed refusal of a command
   | { type: 'ruleBreach'; rule: string; detail: string }
   | { type: 'conceptUsed'; conceptId: ConceptId } // drives first-use explanations
   | { type: 'behaviorFlag'; flag: BehaviorFlagId; tradeId?: string; detail: string }
   | { type: 'news'; headline: string; instrumentIds: InstrumentId[] }
   | { type: 'sessionEnd' | 'quarterEnd'; index: number };
+
+type RefusalReason =
+  'insufficientBuyingPower' | 'shortNotAllowed' | 'crossesZero' | 'marketEnded' | 'notTradable';
 
 interface Concept {
   // content/concepts/*.ts
@@ -451,15 +504,29 @@ driven by the generated fundamentals.
 
 ## 6. Save format
 
+A save is `seed + command log + final cursor`, with an optional snapshot
+([ADR-0005](adr/0005-run-reducer-advance-and-apply.md)). The market is never
+saved: it is regenerated from the seed.
+
 ```ts
 interface SaveFile {
   version: number; // with migrations
+  engineVersion: number; // a change in how commands resolve bumps it
   profile: Profile;
-  activeRun?: { seed: number; ruleSetId: string; commandLog: Command[]; snapshot?: GameState };
+  activeRun?: {
+    seed: number;
+    ruleSetId?: string; // M4
+    commandLog: Command[]; // commands only, each stamped with its bar
+    cursor: number; // final cursor
+    snapshot?: RunState; // optional, for fast loading
+  };
   history: RunSummary[]; // finished runs (summary only)
 }
 ```
 
 Load = restore the snapshot if one exists, otherwise replay the command log from
-the seed. Tests assert that `replay(seed, log)` matches the live state (this
-catches any non-determinism).
+the seed (§3.3). Tests assert that `replay(seed, log)` deep-equals the live
+state (this catches any non-determinism). Changing how a command resolves
+(spread, rounding) changes replays, so it bumps `ENGINE_VERSION` even when the
+market itself is unchanged. Persisting saves is M7; M2 keeps the log in the
+store only.

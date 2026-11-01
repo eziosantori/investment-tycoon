@@ -12,6 +12,11 @@ export interface InstrumentSpec {
   baseVolume: Shares;
   /** Multiplier on the instrument's volatility. */
   volScale: number;
+  /**
+   * Spread in basis points of the mid (stocks only). Run data, not market data:
+   * it never enters the timeline, so it doesn't change the market's hash.
+   */
+  spreadBps?: number;
   /** Overrides the kind's stage cycle (`MARKET_PARAMS`) for this instrument only. */
   stageCycle?: StageCycleParams;
 }

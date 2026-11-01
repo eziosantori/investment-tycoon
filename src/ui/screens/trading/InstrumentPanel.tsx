@@ -12,7 +12,7 @@ import s from './trading.module.css';
  */
 export function InstrumentPanel() {
   const timeline = useTimeline();
-  const cursor = useUiStore((st) => st.cursor);
+  const cursor = useUiStore((st) => st.run.cursor);
   const instrument = useUiStore((st) => st.instrument);
   const row = useMemo(
     () => watchlist(timeline, cursor, instrument).find((r) => r.selected),

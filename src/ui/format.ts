@@ -1,3 +1,5 @@
+import type { Duration } from '@investment-tycoon/engine';
+
 /** Unicode minus: aligns with + in monospace and reads better than a hyphen. */
 export const MINUS = '−';
 
@@ -40,3 +42,13 @@ export function price(x: number, decimals = 2): string {
 }
 
 export const arrow = (x: number) => (x < 0 ? '▼' : '▲');
+
+/**
+ * A held time in sessions (never days, GLOSSARY), weeks from five sessions:
+ * "1 session", "3 sessions", "2 wk" in full; "3 sess", "2 wk" compact.
+ */
+export function duration({ value, unit }: Duration, style: 'full' | 'compact' = 'full'): string {
+  if (unit === 'weeks') return `${value} wk`;
+  if (style === 'compact') return `${value} sess`;
+  return `${value} ${value === 1 ? 'session' : 'sessions'}`;
+}
