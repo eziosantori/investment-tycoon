@@ -1,7 +1,7 @@
 import type { Level } from '../chart/tools';
 import type { MarketTimeline, Shares, Ticker } from '../market/types';
 import { tradeQuote } from './quote';
-import { account } from './reducer';
+import { account, SHORT_UNLOCK_LEVEL } from './reducer';
 import type { Account, OrderButton, OrderPanel, RunState, TradeQuote, TradingView } from './types';
 
 export interface TradingViewInput {
@@ -53,7 +53,7 @@ function orderPanel(input: TradingViewInput, acc: Account, quote: TradeQuote): O
   const cost = shares * quote.ask;
   const held = run.positions[ticker]?.shares ?? 0;
 
-  const buttons: OrderButton[] = [
+  let buttons: OrderButton[] = [
     {
       id: 'buy',
       key: 'B',
@@ -63,8 +63,9 @@ function orderPanel(input: TradingViewInput, acc: Account, quote: TradeQuote): O
       disabledReason: shares > 0 ? null : 'insufficientBuyingPower',
     },
   ];
-  // #26: the Lv7+ variants (SHORT, SELL n, COVER n, FLATTEN) branch here on the level.
-  if (held > 0) {
+  if (input.level >= SHORT_UNLOCK_LEVEL) {
+    buttons = proButtons(ticker, shares, held, buttons[0]!);
+  } else if (held > 0) {
     buttons.push({
       id: 'sellAll',
       key: 'S',
@@ -85,4 +86,37 @@ function orderPanel(input: TradingViewInput, acc: Account, quote: TradeQuote): O
     costPctOfAccount: acc.equity > 0 ? (cost / acc.equity) * 100 : 0,
     buttons,
   };
+}
+
+/**
+ * The Lv7+ variants: flat → BUY n + SHORT n; long → BUY n + SELL n + FLATTEN;
+ * short → COVER n + SHORT n + FLATTEN. SELL and COVER are capped at the
+ * position, so one order never takes it past zero and the label is the real number.
+ */
+function proButtons(ticker: Ticker, shares: Shares, held: Shares, buy: OrderButton): OrderButton[] {
+  const closing = Math.min(Math.abs(held), Math.max(ORDER_STEP, shares));
+  const close = (id: 'sell' | 'cover', key: 'B' | 'S', side: 'buy' | 'sell'): OrderButton => ({
+    id,
+    key,
+    label: `${id.toUpperCase()} ${closing} ${ticker}`,
+    intent: { type: 'marketOrder', ticker, side, shares: closing },
+    disabledReason: null,
+  });
+  const short: OrderButton = {
+    id: 'short',
+    key: 'S',
+    label: `SHORT ${shares} ${ticker}`,
+    intent: { type: 'marketOrder', ticker, side: 'sell', shares },
+    disabledReason: buy.disabledReason,
+  };
+  const flatten: OrderButton = {
+    id: 'flatten',
+    key: 'F',
+    label: 'FLATTEN',
+    intent: { type: 'flatten', ticker },
+    disabledReason: null,
+  };
+  if (held > 0) return [buy, close('sell', 'S', 'sell'), flatten];
+  if (held < 0) return [close('cover', 'B', 'buy'), short, flatten];
+  return [buy, short];
 }

@@ -225,3 +225,130 @@ describe('replay', () => {
     expect(replayed.trades.map((t) => t.closedAt)).toEqual([start + 31, start + 64]);
   });
 });
+
+describe('apply: shorts at Lv7', () => {
+  const lv7 = runSettingsFor(7);
+  const fresh7 = () => newRun(timeline, lv7);
+
+  it('fills a short sale at the bid, adds the proceeds to cash and counts it as a liability', () => {
+    const run = fresh7();
+    const { bid, mid } = quote(run, 'OMNX');
+    const { state, events } = act(run, sell('OMNX', 300));
+    expect(state.cash).toBe(10_000_000 + 300 * bid);
+    expect(state.positions.OMNX).toMatchObject({ shares: -300, costBasis: -300 * bid });
+    expect(events[1]).toMatchObject({ type: 'tradeOpened', trade: { side: 'short' } });
+    expect(account(state, timeline)).toMatchObject({
+      equity: 10_000_000 - 300 * (mid - bid),
+      openPnl: -300 * (mid - bid),
+      exposure: 300 * mid,
+    });
+  });
+
+  it('covers part of a short: integer basis, remainder kept, exact realized P&L', () => {
+    let run = act(fresh7(), sell('KRVX', 7)).state;
+    run = advanceTo(run, timeline, start + 3).state;
+    run = act(run, sell('KRVX', 4)).state;
+    const basis = run.positions.KRVX!.costBasis;
+    run = advanceTo(run, timeline, start + 9).state;
+    const { ask } = quote(run, 'KRVX');
+    run = act(run, buy('KRVX', 3)).state;
+    // Covering 3 of 11 short shares removes floor(basis × −3 / −11) of the (negative) basis.
+    const removed = Math.floor((basis * -3) / -11);
+    expect(Number.isInteger(removed)).toBe(true);
+    expect(run.positions.KRVX).toMatchObject({ shares: -8, costBasis: basis - removed });
+    expect(run.trades[0]!.realizedPnl).toBe(-3 * ask - removed);
+    run = act(run, { type: 'flatten', ticker: 'KRVX' }).state;
+    expect(run.positions).toEqual({});
+    // Realized P&L is exactly the short proceeds minus the cover cost.
+    const net = run.fills.reduce(
+      (sum, f) => sum + (f.side === 'sell' ? 1 : -1) * f.shares * f.price,
+      0,
+    );
+    expect(run.trades[0]!.realizedPnl).toBe(net);
+    expect(run.cash - 10_000_000).toBe(net);
+  });
+
+  it('keeps equity − starting balance = realized + open P&L through shorts and partial closes', () => {
+    let run = fresh7();
+    const script: [number, CommandIntent][] = [
+      [0, sell('OMNX', 310)],
+      [3, buy('KRVX', 170)],
+      [9, sell('OMNX', 91)],
+      [17, buy('OMNX', 133)],
+      [25, sell('KRVX', 51)],
+      [33, { type: 'flatten', ticker: 'KRVX' }],
+      [48, buy('OMNX', 101)],
+      [60, { type: 'flatten', ticker: 'OMNX' }],
+    ];
+    for (const [offset, intent] of script) {
+      for (let bar = run.cursor + 1; bar <= start + offset; bar++) {
+        run = advanceTo(run, timeline, bar).state;
+        const a = account(run, timeline);
+        expect(a.equity - 10_000_000).toBe(a.realizedPnl + a.openPnl);
+      }
+      const step = act(run, intent);
+      expect(step.events[0]!.type).toBe('fill');
+      run = step.state;
+      const a = account(run, timeline);
+      expect(a.equity - 10_000_000).toBe(a.realizedPnl + a.openPnl);
+      for (const v of Object.values(a)) expect(Number.isInteger(v)).toBe(true);
+      for (const p of Object.values(run.positions))
+        expect(Number.isInteger(p.costBasis)).toBe(true);
+    }
+    expect(run.positions).toEqual({});
+    const a = account(run, timeline);
+    expect(a.equity - 10_000_000).toBe(a.realizedPnl);
+  });
+
+  it('refuses covering past zero, leaving the state unchanged', () => {
+    const short = act(fresh7(), sell('OMNX', 100)).state;
+    const command: Command = { ...buy('OMNX', 101), at: start };
+    const { state, events } = apply(short, timeline, command);
+    expect(state).toEqual(short);
+    expect(events).toEqual([{ type: 'refused', command, reason: 'crossesZero' }]);
+  });
+
+  it('refuses adding to a short when the run forbids it, leaving the state unchanged', () => {
+    const short = act(fresh7(), sell('OMNX', 100)).state;
+    const forbidden: RunState = { ...short, settings: lv1 };
+    const command: Command = { ...sell('OMNX', 10), at: start };
+    const { state, events } = apply(forbidden, timeline, command);
+    expect(state).toEqual(forbidden);
+    expect(events).toEqual([{ type: 'refused', command, reason: 'shortNotAllowed' }]);
+  });
+
+  it('flattens a short with a buy at the ask', () => {
+    const short = act(fresh7(), sell('OMNX', 100)).state;
+    const { ask } = quote(short, 'OMNX');
+    const { state, events } = act(short, { type: 'flatten', ticker: 'OMNX' });
+    expect(state.positions).toEqual({});
+    expect(state.fills.at(-1)).toMatchObject({ side: 'buy', shares: 100, price: ask });
+    expect(events.map((e) => e.type)).toEqual(['fill', 'tradeClosed']);
+  });
+
+  it('replays a log with shorts, covers and flattens to the live state', () => {
+    const log: Command[] = [
+      { type: 'marketOrder', at: start, ticker: 'OMNX', side: 'sell', shares: 300 },
+      { type: 'marketOrder', at: start + 2, ticker: 'KRVX', side: 'buy', shares: 120 },
+      { type: 'marketOrder', at: start + 9, ticker: 'OMNX', side: 'buy', shares: 110 },
+      { type: 'marketOrder', at: start + 9, ticker: 'OMNX', side: 'buy', shares: 999 },
+      { type: 'flatten', at: start + 20, ticker: 'OMNX' },
+      { type: 'marketOrder', at: start + 21, ticker: 'OMNX', side: 'sell', shares: 50 },
+      { type: 'flatten', at: start + 40, ticker: 'KRVX' },
+    ];
+    let live = fresh7();
+    for (const command of log) {
+      live = advanceTo(live, timeline, command.at).state;
+      live = apply(live, timeline, command).state;
+    }
+    live = advanceTo(live, timeline, start + 60).state;
+
+    const replayed = replay(generateMarketTimeline(48213), lv7, log, start + 60);
+    expect(replayed).toEqual(live);
+    expect(replayed.trades.map((t) => [t.side, t.closedAt])).toEqual([
+      ['short', start + 20],
+      ['long', start + 40],
+      ['short', null],
+    ]);
+  });
+});
